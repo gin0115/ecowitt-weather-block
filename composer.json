@@ -1,0 +1,79 @@
+{
+    "name": "pinkcrab/ecowitt-weather-block",
+    "type": "wordpress-plugin",
+
+    "description": "A block to display weather data from an Ecowitt weather station.",
+    "homepage": "https://github.com/gin0115/ecowitt-weather-block",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+        "name": "Contributors",
+        "homepage": "https://github.com/gin0115/ecowitt-weather-block/graphs/contributors"
+    }],
+
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/a8cteam51/team51-configs"
+    }],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5 || ^9.0",
+        "phpstan/phpstan": "1.*",
+        "szepeviktor/phpstan-wordpress": "<=1.3.2",
+        "php-stubs/wordpress-stubs": "6.6.*",
+        "roots/wordpress": "6.6.*",
+        "wp-phpunit/wp-phpunit": "6.6.*",
+        "wp-cli/i18n-command": "*",
+        "squizlabs/php_codesniffer": "3.*",
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "roave/security-advisories": "dev-latest",
+        "wp-coding-standards/wpcs": "^3",
+        "yoast/phpunit-polyfills": "^1.0.0 || ^2.0.0",
+        "symfony/var-dumper": "<=6.2.7",
+        "gin0115/wpunit-helpers": "1.1.*",
+        "vlucas/phpdotenv": "<=5.5.0",
+        "doctrine/instantiator": "^1.5",
+        "phpcompatibility/php-compatibility": "*"
+    },
+
+    "scripts": {
+        "test:php": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
+        "analyse:php": "./vendor/bin/phpstan analyse includes -l9",
+        "format:php": "phpcbf --standard=./.phpcs.xml --basepath=. -v",
+        "lint:php": "phpcs --standard=./.phpcs.xml --basepath=. -v",
+        "internationalize": [
+            "@makepot",
+            "@updatepo",
+            "@makejson"
+        ],
+        "makepot": "wp i18n make-pot ",
+        "updatepo": "wp i18n update-po /languages/ecowitt-weather-block.pot",
+        "makejson": "wp i18n make-json /languages --pretty-print --no-purge",
+        "makemo": "wp i18n make-mo /languages",
+        "packages-install": "@composer install --ignore-platform-reqs --no-interaction",
+        "packages-update": [
+            "@composer clear-cache",
+            "@composer update --prefer-stable --no-interaction"
+        ],
+        "all": [
+            "@packages-install",
+            "@test:php",
+            "@analyse:php",
+            "@format:php",
+            "@lint:php",
+            "@internationalize"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/*": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true,
+            "roots/wordpress-core-installer": true
+        }
+    },
+
+    "extra": {}
+}
