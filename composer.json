@@ -15,7 +15,7 @@
         "url": "https://github.com/a8cteam51/team51-configs"
     }],
     "require": {
-        "php": ">=8.1",
+        "php": ">=7.4",
         "ext-json": "*"
     },
     "require-dev": {
