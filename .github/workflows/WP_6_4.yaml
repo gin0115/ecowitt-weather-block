@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master, develop, feature/v2-sandbox ]
+    branches: [ master, develop]
 
 jobs:
   build:
