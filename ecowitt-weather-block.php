@@ -24,20 +24,23 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// Define plugin constants.
-function_exists( 'get_plugin_data' ) || require_once ABSPATH . 'wp-admin/includes/plugin.php';
-define( 'PC_ECOWITT_WEATHER_METADATA', get_plugin_data( __FILE__, false, false ) );
 
-define( 'PC_ECOWITT_WEATHER_DIR', plugin_dir_path( __FILE__ ) );
-define( 'PC_ECOWITT_WEATHER_URL', plugin_dir_url( __FILE__ ) );
+use PinkCrab\Perique\Application\App_Factory;
 
-// Include the rest of the blocks plugin's files if system requirements check out.
-if ( is_php_version_compatible( PC_ECOWITT_WEATHER_METADATA['RequiresPHP'] ) && is_wp_version_compatible( PC_ECOWITT_WEATHER_METADATA['RequiresWP'] ) ) {
-	foreach ( glob( __DIR__ . '/includes/*.php' ) as $pc_ecowitt_weather_filename ) {
-		if ( preg_match( '#/includes/_#i', $pc_ecowitt_weather_filename ) ) {
-			continue; // Ignore files prefixed with an underscore.
-		}
+require_once __DIR__ . '/vendor/autoload.php';
 
-		include $fse_pilot_blocks_filename;
-	}
-}
+/**
+ * Fires after WordPress has finished loading but before any headers are sent.
+ */
+add_action(
+	'init',
+	function (): void {
+		$app = ( new App_Factory( __DIR__ ) )
+            ->default_setup()
+            ->di_rules( require __DIR__ . '/config/dependencies.php' )
+            ->app_config( require __DIR__ . '/config/settings.php' )
+            ->registration_classes( require __DIR__ . '/config/registration.php' );
+		$app->boot();
+	},
+	0
+);
