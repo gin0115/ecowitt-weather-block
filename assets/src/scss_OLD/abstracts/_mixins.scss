@@ -1,0 +1,310 @@
+/**
+ * Mixins
+ * 
+ * Reusable mixins for common patterns and utilities.
+ */
+
+// ==========================================================================
+// LAYOUT MIXINS
+// ==========================================================================
+/// Clear floats
+@mixin clearfix {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+/// Center an element horizontally and vertically
+@mixin center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/// Center an element horizontally
+@mixin center-x {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/// Center an element vertically
+@mixin center-y {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/// Flexbox center alignment
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/// Container with max-width and padding
+@mixin container($max-width: $container-lg, $padding: $spacing-md) {
+    width: 100%;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding-left: $padding;
+    padding-right: $padding;
+}
+
+// ==========================================================================
+// BUTTON MIXINS
+// ==========================================================================
+/// Base button styles
+@mixin button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    line-height: 1;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: $border-width solid transparent;
+    border-radius: $border-radius-md;
+    padding: spacing(1) spacing(2);
+    transition: all $transition-fast $easing-ease;
+    &:focus {
+        outline: 2px solid $wp-admin-blue;
+        outline-offset: 2px;
+    }
+    &:disabled,
+    &.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}
+
+/// Button size variants
+@mixin button-sm {
+    font-size: $font-size-sm;
+    padding: spacing(0.5) spacing(1.5);
+}
+
+@mixin button-lg {
+    font-size: $font-size-md;
+    padding: spacing(1.5) spacing(3);
+}
+
+/// Button color variants
+@mixin button-variant($bg-color, $text-color: $white, $hover-bg: null, $hover-text: null) {
+    background-color: $bg-color;
+    color: $text-color;
+    border-color: $bg-color;
+    @if $hover-bg==null {
+        $hover-bg: darken($bg-color, 8%);
+    }
+    @if $hover-text==null {
+        $hover-text: $text-color;
+    }
+    &:hover,
+    &:focus {
+        background-color: $hover-bg;
+        color: $hover-text;
+        border-color: $hover-bg;
+        text-decoration: none;
+    }
+    &:active {
+        background-color: darken($hover-bg, 5%);
+        border-color: darken($hover-bg, 5%);
+    }
+}
+
+// ==========================================================================
+// FORM MIXINS
+// ==========================================================================
+/// Base form control styles
+@mixin form-control-base {
+    display: block;
+    width: 100%;
+    font-family: $font-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-normal;
+    color: $gray-700;
+    background-color: $white;
+    background-clip: padding-box;
+    border: $border-width solid $gray-300;
+    border-radius: $border-radius-md;
+    padding: spacing(1) spacing(1.5);
+    transition: border-color $transition-fast $easing-ease, box-shadow $transition-fast $easing-ease;
+    &:focus {
+        outline: 0;
+        border-color: $wp-admin-blue;
+        box-shadow: 0 0 0 2px alpha-color($wp-admin-blue, 0.2);
+    }
+    &:disabled,
+    &[readonly] {
+        background-color: $gray-100;
+        opacity: 1;
+    }
+    &::placeholder {
+        color: $gray-500;
+        opacity: 1;
+    }
+}
+
+/// Form group spacing
+@mixin form-group {
+    margin-bottom: $spacing-lg;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/// Form label styles
+@mixin form-label {
+    display: inline-block;
+    font-weight: $font-weight-medium;
+    color: $gray-700;
+    margin-bottom: spacing(0.5);
+}
+
+// ==========================================================================
+// CARD MIXINS
+// ==========================================================================
+/// Base card styles
+@mixin card-base {
+    background-color: $white;
+    border: $border-width solid $gray-200;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+}
+
+/// Card padding variants
+@mixin card-padding($size: 'md') {
+    @if $size=='sm' {
+        padding: $spacing-md;
+    }
+    @else if $size=='lg' {
+        padding: $spacing-xl;
+    }
+    @else {
+        padding: $spacing-lg;
+    }
+}
+
+// ==========================================================================
+// RESPONSIVE MIXINS
+// ==========================================================================
+/// Media query breakpoints
+@mixin mobile-up {
+    @media (min-width: 480px) {
+        @content;
+    }
+}
+
+@mixin tablet-up {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin desktop-up {
+    @media (min-width: 992px) {
+        @content;
+    }
+}
+
+@mixin large-up {
+    @media (min-width: 1200px) {
+        @content;
+    }
+}
+
+// ==========================================================================
+// ACCESSIBILITY MIXINS
+// ==========================================================================
+/// Screen reader only text
+@mixin sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/// Focus styles for keyboard navigation
+@mixin focus-visible {
+    &:focus-visible {
+        outline: 2px solid $wp-admin-blue;
+        outline-offset: 2px;
+    }
+}
+
+// ==========================================================================
+// ANIMATION MIXINS
+// ==========================================================================
+/// Fade in animation
+@mixin fade-in($duration: $transition-normal) {
+    opacity: 0;
+    animation: fadeIn $duration $easing-ease-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/// Slide in from top
+@mixin slide-in-top($duration: $transition-normal) {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideInTop $duration $easing-ease-out forwards;
+}
+
+@keyframes slideInTop {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ==========================================================================
+// RESPONSIVE MIXINS
+// ==========================================================================
+/// Mobile only (max-width: 767px)
+@mixin mobile-only {
+    @media (max-width: 767px) {
+        @content;
+    }
+}
+
+/// Tablet and up (min-width: 768px)
+@mixin tablet-up {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+/// Desktop and up (min-width: 1024px)
+@mixin desktop-up {
+    @media (min-width: 1024px) {
+        @content;
+    }
+}
+
+/// Large desktop and up (min-width: 1200px)
+@mixin desktop-large-up {
+    @media (min-width: 1200px) {
+        @content;
+    }
+}

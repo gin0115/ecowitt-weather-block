@@ -1,0 +1,42 @@
+/**
+ * Ecowitt Weather Block - Admin Styles
+ * 
+ * A modern, professional admin interface that respects WordPress
+ * admin design patterns while providing a clean, extensible foundation.
+ * 
+ * @package EcowittWeatherBlock
+ * @since 1.0.0
+ */
+
+// ==========================================================================
+// FOUNDATION
+// ==========================================================================
+// Core abstracts - order matters
+@import 'abstracts/functions';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+// ==========================================================================
+// VENDOR & BASE
+// ==========================================================================
+// WordPress admin compatibility
+@import 'base/wordpress-admin';
+@import 'base/reset';
+@import 'base/typography';
+// ==========================================================================
+// LAYOUT SYSTEMS
+// ==========================================================================
+@import 'layout/grid';
+@import 'layout/containers';
+@import 'layout/spacing';
+// ==========================================================================
+// UTILITIES
+// ==========================================================================
+@import 'utilities/display';
+@import 'utilities/flexbox';
+// ==========================================================================
+// COMPONENTS
+// ==========================================================================
+// Base components
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/connections';

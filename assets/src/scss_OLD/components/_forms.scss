@@ -1,0 +1,819 @@
+/**
+ * Form Components - Clean Weather Station UI
+ * 
+ * Professional form styling for weather data configuration.
+ */
+
+// ==========================================================================
+// FORM LAYOUTS
+// ==========================================================================
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  
+  .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+// ==========================================================================
+// LABELS
+// ==========================================================================
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.form-label--required {
+  &::after {
+    content: ' *';
+    color: #ef4444;
+  }
+}
+
+// ==========================================================================
+// INPUT FIELDS
+// ==========================================================================
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #374151;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  &:disabled {
+    background-color: #f9fafb;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  &::placeholder {
+    color: #9ca3af;
+  }
+}
+
+.form-input--small {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.form-input--large {
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+}
+
+// ==========================================================================
+// INPUT STATES
+// ==========================================================================
+
+.form-input--success {
+  border-color: #22c55e;
+  
+  &:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  }
+}
+
+.form-input--error {
+  border-color: #ef4444;
+  
+  &:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+}
+
+.form-input--warning {
+  border-color: #f59e0b;
+  
+  &:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  }
+}
+
+// ==========================================================================
+// TEXTAREA
+// ==========================================================================
+
+.form-textarea {
+  @extend .form-input;
+  resize: vertical;
+  min-height: 100px;
+}
+
+// ==========================================================================
+// SELECT
+// ==========================================================================
+
+.form-select {
+  @extend .form-input;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  appearance: none;
+}
+
+// ==========================================================================
+// CHECKBOX & RADIO
+// ==========================================================================
+
+.form-checkbox,
+.form-radio {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  transition: all 0.15s ease-in-out;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  &:checked {
+    border-color: #3b82f6;
+    background-color: #3b82f6;
+  }
+}
+
+.form-checkbox {
+  border-radius: 0.25rem;
+  
+  &:checked {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E");
+  }
+}
+
+.form-radio {
+  border-radius: 50%;
+  
+  &:checked {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E");
+  }
+}
+
+// ==========================================================================
+// CHECKBOX & RADIO LABELS
+// ==========================================================================
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  
+  .form-check-input {
+    flex-shrink: 0;
+  }
+  
+  .form-check-label {
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+  }
+}
+
+// ==========================================================================
+// HELP TEXT
+// ==========================================================================
+
+.form-help {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.form-help--success {
+  color: #22c55e;
+}
+
+.form-help--error {
+  color: #ef4444;
+}
+
+.form-help--warning {
+  color: #f59e0b;
+}
+
+// ==========================================================================
+// INPUT GROUPS
+// ==========================================================================
+
+.input-group {
+  display: flex;
+  
+  .form-input {
+    border-radius: 0;
+    
+    &:first-child {
+      border-radius: 6px 0 0 6px;
+    }
+    
+    &:last-child {
+      border-radius: 0 6px 6px 0;
+      border-left-width: 0;
+    }
+    
+    &:only-child {
+      border-radius: 6px;
+    }
+    
+    &:not(:first-child):not(:last-child) {
+      border-left-width: 0;
+      border-right-width: 0;
+    }
+  }
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6b7280;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  
+  &:first-child {
+    border-radius: 6px 0 0 6px;
+    border-right: 0;
+  }
+  
+  &:last-child {
+    border-radius: 0 6px 6px 0;
+    border-left: 0;
+  }
+}
+
+// ==========================================================================
+// FORM VALIDATION
+// ==========================================================================
+
+.form-error {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  
+  &::before {
+    content: '⚠';
+    font-size: 0.875rem;
+  }
+}
+
+.form-success {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #22c55e;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  
+  &::before {
+    content: '✓';
+    font-size: 0.875rem;
+  }
+}
+
+// ==========================================================================
+// FIELDSETS
+// ==========================================================================
+
+.form-fieldset {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  .form-legend {
+    font-weight: 600;
+    color: #374151;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+    background: #ffffff;
+  }
+}
+
+// ==========================================================================
+// FORM SECTIONS
+// ==========================================================================
+
+.form-section {
+  margin-bottom: 2rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-section-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  
+  .form-section-title {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .form-section-description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+}
+// FORM FOUNDATIONS - GORGEOUS BASICS! 🌟
+// ==========================================================================
+.ecowitt-admin {
+    .form-group {
+        position: relative;
+        margin-bottom: $spacing-lg;
+        &.form-group--floating {
+            .form-control {
+                padding-top: 20px;
+                padding-bottom: 8px;
+                &:focus~.form-label,
+                &:not(:placeholder-shown)~.form-label {
+                    transform: translateY(-12px) scale(0.85);
+                    color: #667eea;
+                }
+            }
+            .form-label {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                pointer-events: none;
+                z-index: 2;
+                background: white;
+                padding: 0 4px;
+                margin: 0;
+            }
+        }
+    }
+    // ==========================================================================
+    // LABELS - BEAUTIFUL TYPOGRAPHY! 📝
+    // ==========================================================================
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #334155;
+        position: relative;
+        // Required indicator with style!
+        &.form-label--required::after {
+            content: '*';
+            color: #ef4444;
+            margin-left: 4px;
+            font-size: 1.1rem;
+            animation: required-pulse 2s infinite;
+        }
+        // Optional indicator
+        &.form-label--optional::after {
+            content: '(optional)';
+            color: #64748b;
+            margin-left: 6px;
+            font-size: 0.8rem;
+            font-weight: 400;
+            font-style: italic;
+        }
+        // Icon support
+        &.form-label--icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            svg {
+                width: 16px;
+                height: 16px;
+                color: #667eea;
+            }
+        }
+    }
+    // ==========================================================================
+    // FORM CONTROLS - STUNNING INPUTS! 🎯
+    // ==========================================================================
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #1e293b;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        &::placeholder {
+            color: #94a3b8;
+            transition: opacity 0.3s ease;
+        }
+        &:hover {
+            border-color: #cbd5e1;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        &:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 20px rgba(102, 126, 234, 0.15);
+            transform: scale(1.02);
+            &::placeholder {
+                opacity: 0.7;
+            }
+        }
+        // Input states with vibrant colors!
+        &.form-control--success {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            &:focus {
+                border-color: #059669;
+                box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15), 0 8px 20px rgba(16, 185, 129, 0.2);
+            }
+        }
+        &.form-control--error {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+            animation: shake 0.5s ease-in-out;
+            &:focus {
+                border-color: #dc2626;
+                box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15), 0 8px 20px rgba(239, 68, 68, 0.2);
+            }
+        }
+        &.form-control--warning {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+            &:focus {
+                border-color: #d97706;
+                box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15), 0 8px 20px rgba(245, 158, 11, 0.2);
+            }
+        }
+        // Special input types
+        &[type="password"] {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            letter-spacing: 2px;
+        }
+        &[type="email"] {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+    }
+    // ==========================================================================
+    // TEXTAREAS - EXPANDABLE BEAUTY! 📝
+    // ==========================================================================
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+        padding: 16px;
+        line-height: 1.6;
+        &:focus {
+            transform: none; // Don't scale textareas
+        }
+    }
+    // ==========================================================================
+    // SELECT DROPDOWNS - STYLISH CHOICES! 🎨
+    // ==========================================================================
+    .form-select {
+        @extend .form-control;
+        cursor: pointer;
+        background-image: linear-gradient(45deg, transparent 50%, #667eea 50%), linear-gradient(135deg, #667eea 50%, transparent 50%);
+        background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px);
+        background-size: 5px 5px, 5px 5px;
+        background-repeat: no-repeat;
+        padding-right: 45px;
+        &:hover {
+            background-image: linear-gradient(45deg, transparent 50%, #5a6fd8 50%), linear-gradient(135deg, #5a6fd8 50%, transparent 50%);
+        }
+        &:focus {
+            background-image: linear-gradient(45deg, transparent 50%, #4e5bc6 50%), linear-gradient(135deg, #4e5bc6 50%, transparent 50%);
+        }
+    }
+    // ==========================================================================
+    // FORM GRID - ORGANIZED LAYOUTS! 📐
+    // ==========================================================================
+    .form-grid {
+        display: grid;
+        gap: $spacing-lg;
+        &.form-grid--2-col {
+            @include tablet-up {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        &.form-grid--3-col {
+            @include tablet-up {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @include desktop-up {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        &.form-grid--auto {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+        // Responsive single column override
+        &.form-grid--single {
+            grid-template-columns: 1fr;
+        }
+    }
+    // ==========================================================================
+    // FORM HELP TEXT - HELPFUL GUIDANCE! 💡
+    // ==========================================================================
+    .form-help {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #64748b;
+        padding: 8px 12px;
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+        &::before {
+            content: 'ℹ️';
+            font-size: 0.9rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        &.form-help--success {
+            color: #047857;
+            background: rgba(16, 185, 129, 0.05);
+            border-left-color: #10b981;
+            &::before {
+                content: '✅';
+            }
+        }
+        &.form-help--error {
+            color: #b91c1c;
+            background: rgba(239, 68, 68, 0.05);
+            border-left-color: #ef4444;
+            &::before {
+                content: '❌';
+            }
+        }
+        &.form-help--warning {
+            color: #92400e;
+            background: rgba(245, 158, 11, 0.05);
+            border-left-color: #f59e0b;
+            &::before {
+                content: '⚠️';
+            }
+        }
+    }
+    // ==========================================================================
+    // FORM ACTIONS - ORGANIZED BUTTONS! 🎯
+    // ==========================================================================
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        margin-top: $spacing-xl;
+        padding-top: $spacing-lg;
+        border-top: 2px dashed rgba(102, 126, 234, 0.2);
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            opacity: 0.3;
+        }
+        .ml-auto {
+            margin-left: auto;
+        }
+        @include mobile-only {
+            flex-direction: column;
+            .btn {
+                width: 100%;
+            }
+            .ml-auto {
+                margin-left: 0;
+                order: -1;
+            }
+        }
+    }
+    // ==========================================================================
+    // INPUT GROUPS - COMBINED CONTROLS! 🔗
+    // ==========================================================================
+    .input-group {
+        display: flex;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        .form-control {
+            border-radius: 0;
+            border-right: none;
+            box-shadow: none;
+            &:focus {
+                transform: none;
+                z-index: 2;
+                position: relative;
+            }
+            &:first-child {
+                border-radius: 12px 0 0 12px;
+            }
+            &:last-child {
+                border-radius: 0 12px 12px 0;
+                border-right: 2px solid #e2e8f0;
+            }
+        }
+        .input-group-text {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px solid #e2e8f0;
+            border-right: none;
+            color: #64748b;
+            font-weight: 500;
+            &:last-child {
+                border-right: 2px solid #e2e8f0;
+                border-left: none;
+            }
+            svg {
+                width: 16px;
+                height: 16px;
+                color: #667eea;
+            }
+        }
+    }
+    // ==========================================================================
+    // CHECKBOXES & RADIOS - BEAUTIFUL CHOICES! ✨
+    // ==========================================================================
+    .form-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: $spacing-md;
+        padding: 12px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        &:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .form-check-input {
+            margin: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+            &:checked {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                border-color: #667eea;
+                &::after {
+                    content: '✓';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            }
+            &[type="radio"] {
+                border-radius: 50%;
+                &:checked::after {
+                    content: '';
+                    width: 8px;
+                    height: 8px;
+                    background: white;
+                    border-radius: 50%;
+                }
+            }
+        }
+        .form-check-label {
+            flex: 1;
+            cursor: pointer;
+            line-height: 1.5;
+            color: #334155;
+            font-weight: 500;
+        }
+    }
+    // ==========================================================================
+    // STUNNING ANIMATIONS! 🎬
+    // ==========================================================================
+    @keyframes required-pulse {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+    }
+    @keyframes shake {
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-4px);
+        }
+        75% {
+            transform: translateX(4px);
+        }
+    }
+    // ==========================================================================
+    // LOADING OVERLAYS! ⚡
+    // ==========================================================================
+    .form-loading {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            z-index: 10;
+            border-radius: inherit;
+        }
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            margin: -16px 0 0 -16px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 11;
+        }
+    }
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

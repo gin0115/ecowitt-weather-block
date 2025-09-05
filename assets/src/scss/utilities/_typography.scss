@@ -1,0 +1,173 @@
+/**
+ * Typography Utilities
+ * 
+ * Additional typography utility classes beyond base typography.
+ */
+
+.ecowitt-admin {
+    // ==========================================================================
+    // FONT SIZES
+    // ==========================================================================
+    .text-xs {
+        font-size: var(--wp-font-size-xs) !important;
+    }
+    .text-sm {
+        font-size: var(--wp-font-size-sm) !important;
+    }
+    .text-base {
+        font-size: var(--wp-font-size-base) !important;
+    }
+    .text-md {
+        font-size: var(--wp-font-size-md) !important;
+    }
+    .text-lg {
+        font-size: var(--wp-font-size-lg) !important;
+    }
+    .text-xl {
+        font-size: var(--wp-font-size-xl) !important;
+    }
+    .text-xxl {
+        font-size: var(--wp-font-size-xxl) !important;
+    }
+    // ==========================================================================
+    // FONT WEIGHTS
+    // ==========================================================================
+    .font-normal {
+        font-weight: var(--wp-font-weight-normal) !important;
+    }
+    .font-medium {
+        font-weight: var(--wp-font-weight-medium) !important;
+    }
+    .font-semibold {
+        font-weight: var(--wp-font-weight-semibold) !important;
+    }
+    .font-bold {
+        font-weight: var(--wp-font-weight-bold) !important;
+    }
+    // ==========================================================================
+    // LINE HEIGHTS
+    // ==========================================================================
+    .leading-tight {
+        line-height: var(--wp-line-height-tight) !important;
+    }
+    .leading-normal {
+        line-height: var(--wp-line-height-normal) !important;
+    }
+    .leading-relaxed {
+        line-height: var(--wp-line-height-relaxed) !important;
+    }
+    // ==========================================================================
+    // TEXT ALIGNMENT
+    // ==========================================================================
+    .text-left {
+        text-align: left !important;
+    }
+    .text-center {
+        text-align: center !important;
+    }
+    .text-right {
+        text-align: right !important;
+    }
+    .text-justify {
+        text-align: justify !important;
+    }
+    // ==========================================================================
+    // TEXT TRANSFORM
+    // ==========================================================================
+    .uppercase {
+        text-transform: uppercase !important;
+    }
+    .lowercase {
+        text-transform: lowercase !important;
+    }
+    .capitalize {
+        text-transform: capitalize !important;
+    }
+    .normal-case {
+        text-transform: none !important;
+    }
+    // ==========================================================================
+    // TEXT DECORATION
+    // ==========================================================================
+    .underline {
+        text-decoration: underline !important;
+    }
+    .line-through {
+        text-decoration: line-through !important;
+    }
+    .no-underline {
+        text-decoration: none !important;
+    }
+    // ==========================================================================
+    // WHITE SPACE
+    // ==========================================================================
+    .whitespace-normal {
+        white-space: normal !important;
+    }
+    .whitespace-nowrap {
+        white-space: nowrap !important;
+    }
+    .whitespace-pre {
+        white-space: pre !important;
+    }
+    .whitespace-pre-line {
+        white-space: pre-line !important;
+    }
+    .whitespace-pre-wrap {
+        white-space: pre-wrap !important;
+    }
+    // ==========================================================================
+    // TEXT OVERFLOW
+    // ==========================================================================
+    .truncate {
+        @include truncate;
+    }
+    .text-ellipsis {
+        text-overflow: ellipsis !important;
+    }
+    .text-clip {
+        text-overflow: clip !important;
+    }
+    // ==========================================================================
+    // LINE CLAMPING
+    // ==========================================================================
+    .line-clamp-1 {
+        @include line-clamp(1);
+    }
+    .line-clamp-2 {
+        @include line-clamp(2);
+    }
+    .line-clamp-3 {
+        @include line-clamp(3);
+    }
+    .line-clamp-4 {
+        @include line-clamp(4);
+    }
+    .line-clamp-5 {
+        @include line-clamp(5);
+    }
+    .line-clamp-6 {
+        @include line-clamp(6);
+    }
+    // ==========================================================================
+    // LETTER SPACING
+    // ==========================================================================
+    .tracking-tighter {
+        letter-spacing: -0.05em !important;
+    }
+    .tracking-tight {
+        letter-spacing: -0.025em !important;
+    }
+    .tracking-normal {
+        letter-spacing: 0em !important;
+    }
+    .tracking-wide {
+        letter-spacing: 0.025em !important;
+    }
+    .tracking-wider {
+        letter-spacing: 0.05em !important;
+    }
+    .tracking-widest {
+        letter-spacing: 0.1em !important;
+    }
+}

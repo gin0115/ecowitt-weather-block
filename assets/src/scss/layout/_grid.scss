@@ -1,0 +1,244 @@
+/**
+ * Grid System
+ * 
+ * A flexible 12-column grid system for WordPress admin layouts.
+ */
+
+.ecowitt-admin {
+    // ==========================================================================
+    // GRID CONTAINER
+    // ==========================================================================
+    .grid {
+        display: grid;
+        gap: $grid-gutter;
+        // Auto-fit columns with minimum width
+        &--auto {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        // Specific column counts
+        &--1 {
+            grid-template-columns: 1fr;
+        }
+        &--2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        &--3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        &--4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        &--6 {
+            grid-template-columns: repeat(6, 1fr);
+        }
+        &--12 {
+            grid-template-columns: repeat(12, 1fr);
+        }
+        // Responsive grid variants
+        @include breakpoint('md') {
+            &--md-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            &--md-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            &--md-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @include breakpoint('lg') {
+            &--lg-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            &--lg-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            &--lg-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            &--lg-6 {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+        // Gap variants
+        &--gap-sm {
+            gap: var(--wp-spacing-sm);
+        }
+        &--gap-md {
+            gap: var(--wp-spacing-md);
+        }
+        &--gap-lg {
+            gap: var(--wp-spacing-lg);
+        }
+        &--gap-xl {
+            gap: var(--wp-spacing-xl);
+        }
+    }
+    // ==========================================================================
+    // GRID ITEMS
+    // ==========================================================================
+    .grid-item {
+        // Column spanning
+        &--span-2 {
+            grid-column: span 2;
+        }
+        &--span-3 {
+            grid-column: span 3;
+        }
+        &--span-4 {
+            grid-column: span 4;
+        }
+        &--span-6 {
+            grid-column: span 6;
+        }
+        &--span-full {
+            grid-column: 1 / -1;
+        }
+        // Row spanning
+        &--row-span-2 {
+            grid-row: span 2;
+        }
+        &--row-span-3 {
+            grid-row: span 3;
+        }
+        // Responsive spanning
+        @include breakpoint('md') {
+            &--md-span-2 {
+                grid-column: span 2;
+            }
+            &--md-span-3 {
+                grid-column: span 3;
+            }
+            &--md-span-4 {
+                grid-column: span 4;
+            }
+            &--md-span-6 {
+                grid-column: span 6;
+            }
+            &--md-span-full {
+                grid-column: 1 / -1;
+            }
+        }
+        @include breakpoint('lg') {
+            &--lg-span-2 {
+                grid-column: span 2;
+            }
+            &--lg-span-3 {
+                grid-column: span 3;
+            }
+            &--lg-span-4 {
+                grid-column: span 4;
+            }
+            &--lg-span-6 {
+                grid-column: span 6;
+            }
+            &--lg-span-full {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+    // ==========================================================================
+    // FLEXBOX GRID (Alternative)
+    // ==========================================================================
+    .flex-grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin: calc(#{$grid-gutter} / -2);
+        &--nowrap {
+            flex-wrap: nowrap;
+        }
+        &--gap-sm {
+            margin: calc(var(--wp-spacing-sm) / -2);
+            >* {
+                padding: calc(var(--wp-spacing-sm) / 2);
+            }
+        }
+        &--gap-lg {
+            margin: calc(var(--wp-spacing-lg) / -2);
+            >* {
+                padding: calc(var(--wp-spacing-lg) / 2);
+            }
+        }
+    }
+    .flex-grid>* {
+        padding: calc(#{$grid-gutter} / 2);
+        flex: 1 1 auto;
+    }
+    // Flex item sizes
+    .flex-item {
+        &--1 {
+            flex: 0 0 8.333333%;
+        }
+        &--2 {
+            flex: 0 0 16.666667%;
+        }
+        &--3 {
+            flex: 0 0 25%;
+        }
+        &--4 {
+            flex: 0 0 33.333333%;
+        }
+        &--5 {
+            flex: 0 0 41.666667%;
+        }
+        &--6 {
+            flex: 0 0 50%;
+        }
+        &--7 {
+            flex: 0 0 58.333333%;
+        }
+        &--8 {
+            flex: 0 0 66.666667%;
+        }
+        &--9 {
+            flex: 0 0 75%;
+        }
+        &--10 {
+            flex: 0 0 83.333333%;
+        }
+        &--11 {
+            flex: 0 0 91.666667%;
+        }
+        &--12 {
+            flex: 0 0 100%;
+        }
+        &--auto {
+            flex: 1 1 auto;
+        }
+        &--none {
+            flex: none;
+        }
+        // Responsive flex items
+        @include breakpoint('md') {
+            &--md-6 {
+                flex: 0 0 50%;
+            }
+            &--md-4 {
+                flex: 0 0 33.333333%;
+            }
+            &--md-3 {
+                flex: 0 0 25%;
+            }
+            &--md-auto {
+                flex: 1 1 auto;
+            }
+        }
+        @include breakpoint('lg') {
+            &--lg-6 {
+                flex: 0 0 50%;
+            }
+            &--lg-4 {
+                flex: 0 0 33.333333%;
+            }
+            &--lg-3 {
+                flex: 0 0 25%;
+            }
+            &--lg-2 {
+                flex: 0 0 16.666667%;
+            }
+            &--lg-auto {
+                flex: 1 1 auto;
+            }
+        }
+    }
+}

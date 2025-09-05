@@ -1,0 +1,72 @@
+/**
+ * Functions
+ * 
+ * SCSS functions for common calculations and utilities.
+ */
+
+// ==========================================================================
+// SPACING FUNCTIONS
+// ==========================================================================
+/// Calculate spacing based on the base unit
+/// @param {Number} $multiplier - Multiplier for the base spacing unit
+/// @return {Length} - Calculated spacing value
+@function spacing($multiplier) {
+    @return $spacing-unit * $multiplier;
+}
+
+/// Convert px to rem based on WordPress base font size (13px)
+/// @param {Number} $pixels - Pixel value to convert
+/// @param {Number} $base-font-size - Base font size (default: 13px)
+/// @return {Length} - Rem value
+@function px-to-rem($pixels, $base-font-size: 13px) {
+    @return ($pixels / $base-font-size) * 1rem;
+}
+
+// ==========================================================================
+// COLOR FUNCTIONS
+// ==========================================================================
+/// Lighten a color by a percentage
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to lighten
+/// @return {Color} - Lightened color
+@function lighten-color($color, $percentage) {
+    @return lighten($color, $percentage);
+}
+
+/// Darken a color by a percentage
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to darken
+/// @return {Color} - Darkened color
+@function darken-color($color, $percentage) {
+    @return darken($color, $percentage);
+}
+
+/// Create a transparent version of a color
+/// @param {Color} $color - Base color
+/// @param {Number} $alpha - Alpha value (0-1)
+/// @return {Color} - Color with transparency
+@function alpha-color($color, $alpha) {
+    @return rgba($color, $alpha);
+}
+
+// ==========================================================================
+// LAYOUT FUNCTIONS
+// ==========================================================================
+/// Calculate container max-width with padding
+/// @param {Length} $width - Base width
+/// @param {Length} $padding - Padding to subtract
+/// @return {Length} - Calculated width
+@function container-width($width, $padding: $spacing-md) {
+    @return $width - ($padding * 2);
+}
+
+/// Calculate grid column width
+/// @param {Number} $columns - Number of columns to span
+/// @param {Number} $total-columns - Total columns in grid (default: 12)
+/// @param {Length} $gutter - Gutter width (default: $grid-gutter)
+/// @return {Length} - Calculated width percentage
+@function grid-width($columns, $total-columns: $grid-columns, $gutter: $grid-gutter) {
+    $column-width: (100% - ($gutter * ($total-columns - 1))) / $total-columns;
+    $span-width: ($column-width * $columns) + ($gutter * ($columns - 1));
+    @return $span-width;
+}

@@ -1,0 +1,35 @@
+/**
+ * Admin Styles for Ecowitt Weather Block
+ * 
+ * Main entry point for all admin styles.
+ * This file imports all partial SCSS files in the correct order.
+ */
+
+// ==========================================================================
+// ABSTRACTS
+// ==========================================================================
+@import 'abstracts/variables';
+@import 'abstracts/functions';
+@import 'abstracts/mixins';
+// ==========================================================================
+// BASE
+// ==========================================================================
+@import 'base/reset';
+@import 'base/typography';
+// ==========================================================================
+// LAYOUT
+// ==========================================================================
+@import 'layout/admin-page';
+@import 'layout/settings-page';
+// ==========================================================================
+// COMPONENTS
+// ==========================================================================
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/connections';
+@import 'components/notifications';
+// ==========================================================================
+// UTILITIES
+// ==========================================================================
+@import 'utilities/spacing';
+@import 'utilities/helpers';

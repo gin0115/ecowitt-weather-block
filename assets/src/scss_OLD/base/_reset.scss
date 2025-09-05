@@ -1,0 +1,144 @@
+/**
+ * Reset
+ * 
+ * Admin-specific resets to ensure consistent styling across WordPress admin.
+ * These are scoped to avoid conflicts with WordPress core admin styles.
+ */
+
+// ==========================================================================
+// SCOPED ADMIN RESETS
+// ==========================================================================
+// Scope all styles to our plugin's admin pages
+.ecowitt-admin {
+    // Box sizing reset
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+    // Remove default margins and padding on specific elements
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul,
+    ol,
+    li,
+    blockquote,
+    figure,
+    figcaption {
+        margin: 0;
+        padding: 0;
+    }
+    // Reset list styles
+    ul,
+    ol {
+        list-style: none;
+    }
+    // Reset button styles
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+    }
+    // Reset input styles
+    input,
+    textarea,
+    select {
+        font: inherit;
+        color: inherit;
+    }
+    // Reset link styles within admin
+    a {
+        color: inherit;
+        text-decoration: none;
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+    }
+    // Reset table styles
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    // Reset image styles
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    // Reset fieldset and legend
+    fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    legend {
+        padding: 0;
+    }
+}
+
+// ==========================================================================
+// WORDPRESS ADMIN OVERRIDES
+// ==========================================================================
+// Ensure our components don't inherit unwanted WordPress admin styles
+.ecowitt-admin {
+    // Override WordPress admin form table styles for our forms
+    .form-table {
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+        width: 100%;
+        th,
+        td {
+            padding: $spacing-md;
+            vertical-align: top;
+            border: none;
+            background: none;
+        }
+        th {
+            font-weight: $font-weight-medium;
+            text-align: left;
+            width: auto;
+        }
+    }
+    // Override WordPress button styles for our buttons
+    .button {
+        @include button-base;
+        // Remove WordPress default styles
+        font-size: inherit;
+        line-height: inherit;
+        padding: inherit;
+        height: auto;
+        min-height: auto;
+        text-shadow: none;
+        box-shadow: none;
+        border-radius: $border-radius-md;
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+    }
+    // Ensure our inputs don't inherit WordPress admin styles
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="url"],
+    input[type="number"],
+    textarea,
+    select {
+        @include form-control-base;
+        // Remove WordPress default styles
+        box-shadow: none;
+        &:focus {
+            box-shadow: 0 0 0 2px alpha-color($wp-admin-blue, 0.2);
+        }
+    }
+}

@@ -1,0 +1,25 @@
+/**
+ * Admin Page Header Component
+ * 
+ * Reusable header styles for admin pages.
+ */
+
+.ecowitt-admin {
+    &__header {
+        padding-bottom: var(--wp-spacing-sm);
+    }
+    &__title {
+        margin: 0 0 var(--wp-spacing-xs) 0;
+        font-size: 23px;
+        font-weight: 600;
+        color: var(--wp-color-gray-900);
+    }
+    &__description {
+        margin: 0;
+        font-size: var(--wp-font-size-base);
+        color: var(--wp-color-gray-600);
+    }
+    &__content {
+        max-width: none;
+    }
+}

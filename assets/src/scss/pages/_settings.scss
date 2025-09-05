@@ -1,0 +1,32 @@
+/**
+ * Settings Page Styles
+ * 
+ * Settings-specific styles only.
+ */
+
+// ==========================================================================
+// SETTINGS SECTIONS
+// ==========================================================================
+.ecowitt-settings-section {
+    background: var(--wp-card-bg);
+    border: var(--wp-border-width) solid var(--wp-border-color);
+    border-radius: var(--wp-border-radius);
+    margin-bottom: var(--wp-spacing-xl);
+    overflow: hidden;
+    &__header {
+        padding: var(--wp-spacing-sm) var(--wp-spacing-md);
+        border-bottom: var(--wp-border-width) solid var(--wp-border-color);
+        background: var(--wp-color-primary);
+        color: #ffffff;
+    }
+    &__title {
+        margin: 0;
+        font-size: var(--wp-font-size-base);
+        font-weight: var(--wp-font-weight-semibold);
+        color: #ffffff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    &__content {
+        padding: var(--wp-spacing-lg);
+    }
+}
