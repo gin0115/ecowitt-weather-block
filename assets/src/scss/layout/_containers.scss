@@ -1,0 +1,141 @@
+/**
+ * Containers
+ * 
+ * Container components for layout structure.
+ */
+
+@use 'sass:map';
+.ecowitt-admin {
+    // ==========================================================================
+    // MAIN CONTAINERS
+    // ==========================================================================
+    .container {
+        @include container;
+        &--sm {
+            max-width: map.get($breakpoints, 'sm');
+        }
+        &--md {
+            max-width: map.get($breakpoints, 'md');
+        }
+        &--lg {
+            max-width: map.get($breakpoints, 'lg');
+        }
+        &--xl {
+            max-width: map.get($breakpoints, 'xl');
+        }
+        &--fluid {
+            max-width: none;
+        }
+    }
+    // ==========================================================================
+    // SECTIONS
+    // ==========================================================================
+    .section {
+        padding: var(--wp-spacing-xl) 0;
+        &--sm {
+            padding: var(--wp-spacing-lg) 0;
+        }
+        &--lg {
+            padding: var(--wp-spacing-xxl) 0;
+        }
+        &--no-padding {
+            padding: 0;
+        }
+        &--no-padding-top {
+            padding-top: 0;
+        }
+        &--no-padding-bottom {
+            padding-bottom: 0;
+        }
+    }
+    // ==========================================================================
+    // PANELS
+    // ==========================================================================
+    .panel {
+        background: var(--wp-color-white);
+        border: var(--wp-border-width) solid var(--wp-border-color);
+        border-radius: var(--wp-border-radius-lg);
+        box-shadow: var(--wp-shadow-sm);
+        &__header {
+            padding: var(--wp-spacing-lg);
+            border-bottom: var(--wp-border-width) solid var(--wp-border-color);
+            background: var(--wp-color-gray-50);
+            border-radius: var(--wp-border-radius-lg) var(--wp-border-radius-lg) 0 0;
+            &:last-child {
+                border-bottom: none;
+                border-radius: var(--wp-border-radius-lg);
+            }
+        }
+        &__body {
+            padding: var(--wp-spacing-lg);
+        }
+        &__footer {
+            padding: var(--wp-spacing-lg);
+            border-top: var(--wp-border-width) solid var(--wp-border-color);
+            background: var(--wp-color-gray-50);
+            border-radius: 0 0 var(--wp-border-radius-lg) var(--wp-border-radius-lg);
+            &:first-child {
+                border-top: none;
+                border-radius: var(--wp-border-radius-lg);
+            }
+        }
+        // Panel variants
+        &--bordered {
+            border: 2px solid var(--wp-border-color);
+        }
+        &--elevated {
+            box-shadow: var(--wp-shadow-lg);
+        }
+        &--flush {
+            border: none;
+            box-shadow: none;
+            .panel__header,
+            .panel__footer {
+                background: transparent;
+            }
+        }
+    }
+    // ==========================================================================
+    // CONTENT AREAS
+    // ==========================================================================
+    .content {
+        &--centered {
+            text-align: center;
+        }
+        &--padded {
+            padding: var(--wp-spacing-lg);
+        }
+        &--padded-sm {
+            padding: var(--wp-spacing-md);
+        }
+        &--padded-lg {
+            padding: var(--wp-spacing-xl);
+        }
+    }
+    // ==========================================================================
+    // SIDEBAR LAYOUTS
+    // ==========================================================================
+    .sidebar-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--wp-spacing-lg);
+        @include breakpoint('lg') {
+            grid-template-columns: 1fr 300px;
+            &--reverse {
+                grid-template-columns: 300px 1fr;
+            }
+            &--wide {
+                grid-template-columns: 1fr 400px;
+                &.sidebar-layout--reverse {
+                    grid-template-columns: 400px 1fr;
+                }
+            }
+        }
+    }
+    .sidebar-layout__main {
+        min-width: 0; // Prevent overflow
+    }
+    .sidebar-layout__sidebar {
+        min-width: 0; // Prevent overflow
+    }
+}

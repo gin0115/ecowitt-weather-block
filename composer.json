@@ -12,12 +12,15 @@
 
     "repositories": [{
         "type": "vcs",
-        "url": "https://github.com/a8cteam51/team51-configs"
+        "url": "https://github.com/Pink-Crab/codingstandards"
     }],
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "pinkcrab/perique-framework-core": "^2.1"
+        "pinkcrab/perique-framework-core": "^2.1",
+        "pinkcrab/perique-admin-menu": "^2.1",
+        "pinkcrab/enqueue": "^1.4",
+        "pinkcrab/http": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5 || ^9.0",
@@ -36,24 +39,26 @@
         "gin0115/wpunit-helpers": "1.1.*",
         "vlucas/phpdotenv": "<=5.5.0",
         "doctrine/instantiator": "^1.5",
-        "phpcompatibility/php-compatibility": "*"
+        "phpcompatibility/php-compatibility": "*",
+        "pinkcrab/coding-standards": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "PinkCrab\\Eccowit_Weather_Block\\": "src"
+            "PinkCrab\\Ecowitt_Weather_Block\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PinkCrab\\Eccowit_Weather_Block\\Tests\\": "tests/"
+            "PinkCrab\\Ecowitt_Weather_Block\\Tests\\": "tests/"
         }
     },
 
     "scripts": {
         "test:php": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
-        "analyse:php": "./vendor/bin/phpstan analyse includes -l9",
-        "format:php": "phpcbf --standard=./.phpcs.xml --basepath=. -v",
-        "lint:php": "phpcs --standard=./.phpcs.xml --basepath=. -v",
+        "analyse:php": "./vendor/bin/phpstan analyse src -l9",
+        "format:php": "phpcbf src/ --basepath=. -v",
+        "lint:php": "phpcs src/ --basepath=. -v",
+        "coverage": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
         "internationalize": [
             "@makepot",
             "@updatepo",
@@ -75,6 +80,12 @@
             "@format:php",
             "@lint:php",
             "@internationalize"
+        ],
+        "pipeline": [
+            "@packages-install",
+            "@test:php",
+            "@analyse:php",
+            "@lint:php"
         ]
     },
     "config": {

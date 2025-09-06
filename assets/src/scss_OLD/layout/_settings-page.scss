@@ -1,0 +1,285 @@
+/**
+ * Settings Page Layout
+ * 
+ * Specific layout styles for the settings page.
+ * Handles the settings form structure and organization.
+ */
+
+// ==========================================================================
+// SETTINGS PAGE WRAPPER
+// ==========================================================================
+.ecowitt-admin {
+    .settings-page {
+        max-width: 1200px;
+    }
+    // ==========================================================================
+    // SETTINGS TABS (if needed in future)
+    // ==========================================================================
+    .settings-tabs {
+        margin-bottom: $spacing-xl;
+        border-bottom: 1px solid $gray-200;
+        .tabs-nav {
+            display: flex;
+            gap: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            .tab-item {
+                .tab-link {
+                    display: block;
+                    padding: $spacing-md $spacing-lg;
+                    color: $gray-600;
+                    text-decoration: none;
+                    border-bottom: 3px solid transparent;
+                    transition: all $transition-fast $easing-ease;
+                    font-weight: $font-weight-medium;
+                    &:hover {
+                        color: $gray-800;
+                        background-color: $gray-50;
+                    }
+                    &.is-active {
+                        color: $wp-admin-blue;
+                        border-bottom-color: $wp-admin-blue;
+                        background-color: $white;
+                    }
+                }
+            }
+        }
+        .tab-content {
+            padding-top: $spacing-xl;
+        }
+    }
+    // ==========================================================================
+    // SETTINGS SECTIONS
+    // ==========================================================================
+    .settings-section {
+        @include card-base;
+        @include card-padding('xl');
+        margin-bottom: $spacing-xl;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        .settings-section__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: $spacing-lg;
+            padding-bottom: $spacing-md;
+            border-bottom: 1px solid $gray-200;
+            gap: $spacing-md;
+            .section-info {
+                flex: 1;
+            }
+            .section-title {
+                margin: 0 0 spacing(0.5) 0;
+                font-size: $font-size-lg;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+            }
+            .section-description {
+                margin: 0;
+                font-size: $font-size-sm;
+                color: $gray-600;
+                line-height: $line-height-relaxed;
+            }
+            .section-actions {
+                display: flex;
+                gap: spacing(0.5);
+                flex-shrink: 0;
+            }
+        }
+        // Content handled by components
+        // Section variants
+        &.settings-section--highlighted {
+            border-left: 4px solid $wp-admin-blue;
+            background-color: alpha-color($wp-admin-blue, 0.02);
+        }
+        &.settings-section--warning {
+            border-left: 4px solid $wp-warning;
+            background-color: alpha-color($wp-warning, 0.02);
+        }
+        &.settings-section--danger {
+            border-left: 4px solid $wp-error;
+            background-color: alpha-color($wp-error, 0.02);
+        }
+    }
+    // ==========================================================================
+    // SETTINGS FORM LAYOUT
+    // ==========================================================================
+    .settings-form {
+        .form-section {
+            margin-bottom: $spacing-xxxl;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .form-section__header {
+                margin-bottom: $spacing-lg;
+                .section-title {
+                    margin: 0 0 spacing(0.5) 0;
+                    font-size: $font-size-md;
+                    font-weight: $font-weight-medium;
+                    color: $gray-800;
+                }
+                .section-help {
+                    margin: 0;
+                    font-size: $font-size-sm;
+                    color: $gray-600;
+                    line-height: $line-height-relaxed;
+                }
+            }
+        }
+        // Two-column layout for larger screens
+        .form-row--columns {
+            @include tablet-up {
+                display: grid;
+                grid-template-columns: 200px 1fr;
+                gap: $spacing-lg;
+                align-items: start;
+                .form-label {
+                    margin-bottom: 0;
+                    padding-top: spacing(1);
+                }
+                .form-control-wrapper {
+                    .form-control {
+                        max-width: 400px;
+                    }
+                }
+            }
+        }
+    }
+    // ==========================================================================
+    // SETTINGS STATUS BAR
+    // ==========================================================================
+    .settings-status {
+        position: sticky;
+        top: 32px; // WordPress admin bar height
+        background-color: $white;
+        border: 1px solid $gray-200;
+        border-radius: $border-radius-lg;
+        padding: $spacing-md $spacing-lg;
+        margin-bottom: $spacing-lg;
+        box-shadow: $shadow-sm;
+        z-index: $z-sticky;
+        .status-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: $spacing-md;
+        }
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            font-size: $font-size-sm;
+            .status-icon {
+                width: 16px;
+                height: 16px;
+            }
+            &.status--saved {
+                color: $wp-success;
+            }
+            &.status--unsaved {
+                color: $wp-warning;
+            }
+            &.status--error {
+                color: $wp-error;
+            }
+        }
+        .status-actions {
+            display: flex;
+            gap: spacing(0.5);
+        }
+    }
+    // ==========================================================================
+    // SETTINGS SIDEBAR
+    // ==========================================================================
+    .settings-layout {
+        @include desktop-up {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: $spacing-xl;
+            align-items: start;
+        }
+    }
+    .settings-sidebar {
+        @include desktop-up {
+            position: sticky;
+            top: 100px; // Account for admin bar and status bar
+        }
+        .sidebar-widget {
+            @include card-base;
+            @include card-padding('md');
+            margin-bottom: $spacing-lg;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .widget-title {
+                margin: 0 0 $spacing-md 0;
+                font-size: $font-size-md;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+            }
+            .widget-content {
+                font-size: $font-size-sm;
+                line-height: $line-height-relaxed;
+                color: $gray-600;
+                ul {
+                    margin: 0;
+                    padding-left: $spacing-md;
+                    li {
+                        margin-bottom: spacing(0.5);
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                        a {
+                            color: $wp-admin-blue;
+                            text-decoration: none;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // ==========================================================================
+    // SETTINGS ACTIONS
+    // ==========================================================================
+    .settings-actions {
+        position: sticky;
+        bottom: 0;
+        background-color: $white;
+        border-top: 1px solid $gray-200;
+        padding: $spacing-lg;
+        margin: $spacing-xl (-$spacing-lg) (-$spacing-lg);
+        border-radius: 0 0 $border-radius-lg $border-radius-lg;
+        .actions-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: $spacing-md;
+            max-width: 1200px;
+            margin: 0 auto;
+            @include mobile-up {
+                justify-content: flex-end;
+            }
+        }
+        .actions-primary {
+            display: flex;
+            gap: $spacing-sm;
+            .btn {
+                @include mobile-up {
+                    min-width: 120px;
+                }
+            }
+        }
+        .actions-secondary {
+            display: flex;
+            gap: spacing(0.5);
+            @include mobile-up {
+                order: -1;
+            }
+        }
+    }
+}

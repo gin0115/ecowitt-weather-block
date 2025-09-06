@@ -1,0 +1,256 @@
+/**
+ * Display Utilities
+ * 
+ * Display and visibility utilities.
+ */
+
+.ecowitt-admin {
+    // ==========================================================================
+    // DISPLAY
+    // ==========================================================================
+    .d-none {
+        display: none;
+    }
+    .d-inline {
+        display: inline;
+    }
+    .d-inline-block {
+        display: inline-block;
+    }
+    .d-block {
+        display: block;
+    }
+    .d-grid {
+        display: grid;
+    }
+    .d-inline-grid {
+        display: inline-grid;
+    }
+    .d-table {
+        display: table;
+    }
+    .d-table-row {
+        display: table-row;
+    }
+    .d-table-cell {
+        display: table-cell;
+    }
+    .d-flex {
+        display: flex;
+    }
+    .d-inline-flex {
+        display: inline-flex;
+    }
+    // Responsive display utilities
+    @include breakpoint('sm') {
+        .d-sm-none {
+            display: none;
+        }
+        .d-sm-inline {
+            display: inline;
+        }
+        .d-sm-inline-block {
+            display: inline-block;
+        }
+        .d-sm-block {
+            display: block;
+        }
+        .d-sm-grid {
+            display: grid;
+        }
+        .d-sm-flex {
+            display: flex;
+        }
+        .d-sm-inline-flex {
+            display: inline-flex;
+        }
+    }
+    @include breakpoint('md') {
+        .d-md-none {
+            display: none;
+        }
+        .d-md-inline {
+            display: inline;
+        }
+        .d-md-inline-block {
+            display: inline-block;
+        }
+        .d-md-block {
+            display: block;
+        }
+        .d-md-grid {
+            display: grid;
+        }
+        .d-md-flex {
+            display: flex;
+        }
+        .d-md-inline-flex {
+            display: inline-flex;
+        }
+    }
+    @include breakpoint('lg') {
+        .d-lg-none {
+            display: none;
+        }
+        .d-lg-inline {
+            display: inline;
+        }
+        .d-lg-inline-block {
+            display: inline-block;
+        }
+        .d-lg-block {
+            display: block;
+        }
+        .d-lg-grid {
+            display: grid;
+        }
+        .d-lg-flex {
+            display: flex;
+        }
+        .d-lg-inline-flex {
+            display: inline-flex;
+        }
+    }
+    // ==========================================================================
+    // VISIBILITY
+    // ==========================================================================
+    .visible {
+        visibility: visible;
+    }
+    .invisible {
+        visibility: hidden;
+    }
+    // ==========================================================================
+    // OVERFLOW
+    // ==========================================================================
+    .overflow-auto {
+        overflow: auto;
+    }
+    .overflow-hidden {
+        overflow: hidden;
+    }
+    .overflow-visible {
+        overflow: visible;
+    }
+    .overflow-scroll {
+        overflow: scroll;
+    }
+    .overflow-x-auto {
+        overflow-x: auto;
+    }
+    .overflow-x-hidden {
+        overflow-x: hidden;
+    }
+    .overflow-x-visible {
+        overflow-x: visible;
+    }
+    .overflow-x-scroll {
+        overflow-x: scroll;
+    }
+    .overflow-y-auto {
+        overflow-y: auto;
+    }
+    .overflow-y-hidden {
+        overflow-y: hidden;
+    }
+    .overflow-y-visible {
+        overflow-y: visible;
+    }
+    .overflow-y-scroll {
+        overflow-y: scroll;
+    }
+    // ==========================================================================
+    // POSITION
+    // ==========================================================================
+    .position-static {
+        position: static;
+    }
+    .position-relative {
+        position: relative;
+    }
+    .position-absolute {
+        position: absolute;
+    }
+    .position-fixed {
+        position: fixed;
+    }
+    .position-sticky {
+        position: sticky;
+    }
+    // ==========================================================================
+    // Z-INDEX
+    // ==========================================================================
+    .z-0 {
+        z-index: 0;
+    }
+    .z-10 {
+        z-index: 10;
+    }
+    .z-20 {
+        z-index: 20;
+    }
+    .z-30 {
+        z-index: 30;
+    }
+    .z-40 {
+        z-index: 40;
+    }
+    .z-50 {
+        z-index: 50;
+    }
+    .z-dropdown {
+        z-index: var(--wp-z-dropdown);
+    }
+    .z-sticky {
+        z-index: var(--wp-z-sticky);
+    }
+    .z-fixed {
+        z-index: var(--wp-z-fixed);
+    }
+    .z-modal-backdrop {
+        z-index: var(--wp-z-modal-backdrop);
+    }
+    .z-modal {
+        z-index: var(--wp-z-modal);
+    }
+    .z-popover {
+        z-index: var(--wp-z-popover);
+    }
+    .z-tooltip {
+        z-index: var(--wp-z-tooltip);
+    }
+    // ==========================================================================
+    // OPACITY
+    // ==========================================================================
+    .opacity-0 {
+        opacity: 0;
+    }
+    .opacity-25 {
+        opacity: 0.25;
+    }
+    .opacity-50 {
+        opacity: 0.5;
+    }
+    .opacity-75 {
+        opacity: 0.75;
+    }
+    .opacity-100 {
+        opacity: 1;
+    }
+    // ==========================================================================
+    // SCREEN READERS
+    // ==========================================================================
+    .sr-only {
+        @include sr-only;
+    }
+    .not-sr-only {
+        position: static;
+        width: auto;
+        height: auto;
+        padding: inherit;
+        margin: inherit;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+    }
+}

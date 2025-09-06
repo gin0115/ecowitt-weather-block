@@ -1,0 +1,250 @@
+/**
+ * Admin Page Layout
+ * 
+ * Base layout styles for WordPress admin pages.
+ * Provides consistent structure and spacing.
+ */
+
+// ==========================================================================
+// ADMIN PAGE WRAPPER
+// ==========================================================================
+.ecowitt-admin {
+    // Main admin page container
+    &.wrap {
+        margin: $spacing-lg $spacing-md 0 0;
+        @include tablet-up {
+            margin-right: $spacing-lg;
+        }
+    }
+    // Page header
+    .page-header {
+        // margin-bottom: $spacing-xl;
+        // padding-bottom: $spacing-lg;
+        // border-bottom: 1px solid $gray-200;
+        .page-title {
+            margin: 0 0 $spacing-sm 0;
+            font-size: $font-size-xxl;
+            font-weight: $font-weight-bold;
+            color: $gray-800;
+            line-height: $line-height-tight;
+        }
+        .page-subtitle {
+            margin: 0 0 $spacing-md 0;
+            font-size: $font-size-md;
+            color: $gray-600;
+            line-height: $line-height-relaxed;
+        }
+        .page-actions {
+            display: flex;
+            gap: $spacing-sm;
+            margin-top: $spacing-md;
+            @include tablet-up {
+                margin-top: 0;
+                align-items: center;
+            }
+        }
+        // Header with actions
+        &.page-header--with-actions {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: $spacing-md;
+            .page-info {
+                flex: 1;
+                min-width: 300px;
+            }
+            .page-actions {
+                margin-top: 0;
+                flex-shrink: 0;
+            }
+        }
+    }
+    // ==========================================================================
+    // CONTENT AREAS
+    // ==========================================================================
+    .page-content {
+        margin-bottom: $spacing-xl;
+        // Content sections
+        .content-section {
+            margin-bottom: $spacing-xxxl;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .section-header {
+                margin-bottom: $spacing-lg;
+                .section-title {
+                    margin: 0 0 spacing(0.5) 0;
+                    font-size: $font-size-lg;
+                    font-weight: $font-weight-semibold;
+                    color: $gray-800;
+                }
+                .section-description {
+                    margin: 0;
+                    font-size: $font-size-sm;
+                    color: $gray-600;
+                    line-height: $line-height-relaxed;
+                }
+            }
+            // Content styles handled by individual components
+        }
+    }
+    // ==========================================================================
+    // GRID LAYOUTS
+    // ==========================================================================
+    .admin-grid {
+        display: grid;
+        gap: $spacing-lg;
+        &.admin-grid--2-col {
+            @include tablet-up {
+                grid-template-columns: 1fr 300px;
+            }
+        }
+        &.admin-grid--3-col {
+            @include desktop-up {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        &.admin-grid--auto {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+    }
+    // ==========================================================================
+    // SIDEBAR
+    // ==========================================================================
+    .admin-sidebar {
+        .sidebar-section {
+            @include card-base;
+            @include card-padding('md');
+            margin-bottom: $spacing-lg;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .sidebar-title {
+                margin: 0 0 $spacing-md 0;
+                font-size: $font-size-md;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+            }
+            .sidebar-content {
+                font-size: $font-size-sm;
+                line-height: $line-height-relaxed;
+                color: $gray-600;
+                ul {
+                    margin: 0;
+                    padding-left: $spacing-md;
+                    li {
+                        margin-bottom: spacing(0.5);
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+                .btn {
+                    width: 100%;
+                    margin-top: $spacing-sm;
+                }
+            }
+        }
+    }
+    // ==========================================================================
+    // RESPONSIVE UTILITIES
+    // ==========================================================================
+    // Show/hide on different screen sizes
+    .show-mobile {
+        @include tablet-up {
+            display: none !important;
+        }
+    }
+    .show-tablet {
+        display: none !important;
+        @include tablet-up {
+            display: block !important;
+        }
+        @include desktop-up {
+            display: none !important;
+        }
+    }
+    .show-desktop {
+        display: none !important;
+        @include desktop-up {
+            display: block !important;
+        }
+    }
+    .hide-mobile {
+        @include tablet-up {
+            display: block !important;
+        }
+    }
+    .hide-tablet {
+        @include tablet-up {
+            display: none !important;
+        }
+        @include desktop-up {
+            display: block !important;
+        }
+    }
+    .hide-desktop {
+        @include desktop-up {
+            display: none !important;
+        }
+    }
+    // ==========================================================================
+    // LOADING STATES
+    // ==========================================================================
+    .page-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        color: $gray-500;
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid $gray-200;
+            border-top-color: $wp-admin-blue;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: $spacing-md;
+        }
+        .loading-text {
+            font-size: $font-size-sm;
+        }
+    }
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    // ==========================================================================
+    // ERROR STATES
+    // ==========================================================================
+    .page-error {
+        text-align: center;
+        padding: $spacing-xxxl $spacing-lg;
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto $spacing-lg;
+            color: $wp-error;
+            opacity: 0.6;
+        }
+        .error-title {
+            font-size: $font-size-lg;
+            font-weight: $font-weight-semibold;
+            color: $gray-800;
+            margin-bottom: $spacing-sm;
+        }
+        .error-message {
+            color: $gray-600;
+            margin-bottom: $spacing-lg;
+            line-height: $line-height-relaxed;
+        }
+        .error-actions {
+            display: flex;
+            gap: $spacing-sm;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    }
+}

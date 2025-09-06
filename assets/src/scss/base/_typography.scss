@@ -1,0 +1,222 @@
+/**
+ * Typography
+ * 
+ * Typography styles that complement WordPress admin interface.
+ */
+
+.ecowitt-admin {
+    // ==========================================================================
+    // HEADINGS
+    // ==========================================================================
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--wp-font-family);
+        font-weight: var(--wp-font-weight-semibold);
+        line-height: var(--wp-line-height-tight);
+        color: var(--wp-color-gray-800);
+        margin-bottom: var(--wp-spacing-sm);
+    }
+    h1 {
+        font-size: var(--wp-font-size-xxl);
+        margin-bottom: var(--wp-spacing-lg);
+    }
+    h2 {
+        font-size: var(--wp-font-size-xl);
+        margin-bottom: var(--wp-spacing-md);
+    }
+    h3 {
+        font-size: var(--wp-font-size-lg);
+        margin-bottom: var(--wp-spacing-md);
+    }
+    h4 {
+        font-size: var(--wp-font-size-md);
+        margin-bottom: var(--wp-spacing-sm);
+    }
+    h5,
+    h6 {
+        font-size: var(--wp-font-size-base);
+        margin-bottom: var(--wp-spacing-sm);
+    }
+    // ==========================================================================
+    // BODY TEXT
+    // ==========================================================================
+    p {
+        margin-bottom: var(--wp-spacing-md);
+        line-height: var(--wp-line-height-relaxed);
+        &:last-child {
+            margin-bottom: 0;
+        }
+        &.lead {
+            font-size: var(--wp-font-size-md);
+            font-weight: var(--wp-font-weight-normal);
+            color: var(--wp-color-gray-600);
+        }
+        &.small {
+            font-size: var(--wp-font-size-sm);
+            color: var(--wp-color-gray-500);
+        }
+    }
+    // ==========================================================================
+    // LINKS
+    // ==========================================================================
+    a {
+        color: var(--wp-color-primary);
+        text-decoration: none;
+        transition: color var(--wp-transition);
+        &:hover {
+            color: var(--wp-color-primary-hover);
+            text-decoration: underline;
+        }
+        @include focus-visible {
+            outline: 2px solid var(--wp-color-primary);
+            outline-offset: 2px;
+            border-radius: var(--wp-border-radius-sm);
+        }
+    }
+    // ==========================================================================
+    // LISTS
+    // ==========================================================================
+    ul,
+    ol {
+        margin-bottom: var(--wp-spacing-md);
+        padding-left: var(--wp-spacing-lg);
+        li {
+            margin-bottom: var(--wp-spacing-xs);
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    dl {
+        margin-bottom: var(--wp-spacing-md);
+        dt {
+            font-weight: var(--wp-font-weight-semibold);
+            margin-bottom: var(--wp-spacing-xs);
+        }
+        dd {
+            margin-bottom: var(--wp-spacing-sm);
+            margin-left: var(--wp-spacing-md);
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    // ==========================================================================
+    // INLINE ELEMENTS
+    // ==========================================================================
+    strong,
+    b {
+        font-weight: var(--wp-font-weight-bold);
+    }
+    em,
+    i {
+        font-style: italic;
+    }
+    code {
+        font-family: var(--wp-font-family-mono);
+        font-size: 0.875em;
+        background-color: var(--wp-color-gray-100);
+        color: var(--wp-color-gray-800);
+        padding: 0.125em 0.25em;
+        border-radius: var(--wp-border-radius-sm);
+    }
+    pre {
+        font-family: var(--wp-font-family-mono);
+        font-size: var(--wp-font-size-sm);
+        background-color: var(--wp-color-gray-100);
+        color: var(--wp-color-gray-800);
+        padding: var(--wp-spacing-md);
+        border-radius: var(--wp-border-radius);
+        overflow-x: auto;
+        margin-bottom: var(--wp-spacing-md);
+        code {
+            background: none;
+            padding: 0;
+        }
+    }
+    // ==========================================================================
+    // UTILITY CLASSES
+    // ==========================================================================
+    .text-xs {
+        font-size: var(--wp-font-size-xs);
+    }
+    .text-sm {
+        font-size: var(--wp-font-size-sm);
+    }
+    .text-base {
+        font-size: var(--wp-font-size-base);
+    }
+    .text-md {
+        font-size: var(--wp-font-size-md);
+    }
+    .text-lg {
+        font-size: var(--wp-font-size-lg);
+    }
+    .text-xl {
+        font-size: var(--wp-font-size-xl);
+    }
+    .text-xxl {
+        font-size: var(--wp-font-size-xxl);
+    }
+    .font-normal {
+        font-weight: var(--wp-font-weight-normal);
+    }
+    .font-medium {
+        font-weight: var(--wp-font-weight-medium);
+    }
+    .font-semibold {
+        font-weight: var(--wp-font-weight-semibold);
+    }
+    .font-bold {
+        font-weight: var(--wp-font-weight-bold);
+    }
+    .leading-tight {
+        line-height: var(--wp-line-height-tight);
+    }
+    .leading-normal {
+        line-height: var(--wp-line-height-normal);
+    }
+    .leading-relaxed {
+        line-height: var(--wp-line-height-relaxed);
+    }
+    .text-left {
+        text-align: left;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-primary {
+        color: var(--wp-color-primary);
+    }
+    .text-success {
+        color: var(--wp-color-success);
+    }
+    .text-warning {
+        color: var(--wp-color-warning);
+    }
+    .text-danger {
+        color: var(--wp-color-danger);
+    }
+    .text-info {
+        color: var(--wp-color-info);
+    }
+    .text-muted {
+        color: var(--wp-color-gray-500);
+    }
+    .truncate {
+        @include truncate;
+    }
+    .line-clamp-2 {
+        @include line-clamp(2);
+    }
+    .line-clamp-3 {
+        @include line-clamp(3);
+    }
+}

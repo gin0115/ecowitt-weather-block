@@ -1,0 +1,149 @@
+/**
+ * Variables
+ * 
+ * WordPress-compatible design tokens that respect user preferences
+ * and provide a solid foundation for the admin interface.
+ */
+
+// ==========================================================================
+// WORDPRESS ADMIN INTEGRATION
+// ==========================================================================
+:root {
+    // WordPress admin colors (these are available in WP admin)
+    --wp-color-primary: #2271b1;
+    --wp-color-primary-hover: #135e96;
+    --wp-color-primary-focus: #043959;
+    --wp-color-success: #00a32a;
+    --wp-color-success-hover: #008a20;
+    --wp-color-warning: #dba617;
+    --wp-color-warning-hover: #c9a214;
+    --wp-color-danger: #d63638;
+    --wp-color-danger-hover: #b32d2e;
+    --wp-color-info: #72aee6;
+    --wp-color-info-hover: #3582c4;
+    // WordPress neutral colors
+    --wp-color-white: #ffffff;
+    --wp-color-gray-50: #f6f7f7;
+    --wp-color-gray-100: #f0f0f1;
+    --wp-color-gray-200: #dcdcde;
+    --wp-color-gray-300: #c3c4c7;
+    --wp-color-gray-400: #a7aaad;
+    --wp-color-gray-500: #8c8f94;
+    --wp-color-gray-600: #646970;
+    --wp-color-gray-700: #3c434a;
+    --wp-color-gray-800: #1d2327;
+    --wp-color-gray-900: #000000;
+    // WordPress typography
+    --wp-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    --wp-font-family-mono: Consolas, Monaco, monospace;
+    // WordPress spacing (8px grid)
+    --wp-spacing-unit: 8px;
+    --wp-spacing-xs: calc(var(--wp-spacing-unit) * 0.5); // 4px
+    --wp-spacing-sm: var(--wp-spacing-unit); // 8px
+    --wp-spacing-md: calc(var(--wp-spacing-unit) * 2); // 16px
+    --wp-spacing-lg: calc(var(--wp-spacing-unit) * 3); // 24px
+    --wp-spacing-xl: calc(var(--wp-spacing-unit) * 4); // 32px
+    --wp-spacing-xxl: calc(var(--wp-spacing-unit) * 6); // 48px
+    // WordPress font sizes
+    --wp-font-size-xs: 11px;
+    --wp-font-size-sm: 12px;
+    --wp-font-size-base: 13px;
+    --wp-font-size-md: 14px;
+    --wp-font-size-lg: 18px;
+    --wp-font-size-xl: 24px;
+    --wp-font-size-xxl: 32px;
+    // WordPress font weights
+    --wp-font-weight-normal: 400;
+    --wp-font-weight-medium: 500;
+    --wp-font-weight-semibold: 600;
+    --wp-font-weight-bold: 700;
+    // WordPress line heights
+    --wp-line-height-tight: 1.2;
+    --wp-line-height-normal: 1.4;
+    --wp-line-height-relaxed: 1.6;
+    // WordPress borders & radius
+    --wp-border-width: 1px;
+    --wp-border-color: var(--wp-color-gray-300);
+    --wp-border-radius-sm: 3px;
+    --wp-border-radius: 4px;
+    --wp-border-radius-lg: 6px;
+    --wp-border-radius-xl: 8px;
+    // WordPress shadows
+    --wp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.13);
+    --wp-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+    --wp-shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16);
+    --wp-shadow-lg: 0 5px 15px rgba(0, 0, 0, 0.08);
+    // WordPress cards
+    --wp-card-bg: #ffffff;
+    --wp-card-border: var(--wp-border-width) solid var(--wp-border-color);
+    --wp-card-border-radius: var(--wp-border-radius);
+    --wp-card-shadow: var(--wp-shadow);
+    --wp-card-padding: var(--wp-spacing-lg);
+    // WordPress transitions
+    --wp-transition: 0.15s ease-in-out;
+    --wp-transition-slow: 0.3s ease-in-out;
+    // WordPress z-index scale
+    --wp-z-dropdown: 1000;
+    --wp-z-sticky: 1020;
+    --wp-z-fixed: 1030;
+    --wp-z-modal-backdrop: 1040;
+    --wp-z-modal: 1050;
+    --wp-z-popover: 1060;
+    --wp-z-tooltip: 1070;
+}
+
+// ==========================================================================
+// PLUGIN-SPECIFIC VARIABLES
+// ==========================================================================
+:root {
+    // Plugin branding colors (subtle, professional)
+    --ecowitt-primary: var(--wp-color-primary);
+    --ecowitt-primary-hover: var(--wp-color-primary-hover);
+    --ecowitt-accent: var(--wp-color-info);
+    // Connection status colors
+    --ecowitt-status-connected: var(--wp-color-success);
+    --ecowitt-status-disconnected: var(--wp-color-gray-400);
+    --ecowitt-status-error: var(--wp-color-danger);
+    --ecowitt-status-warning: var(--wp-color-warning);
+    // Component-specific variables
+    --ecowitt-card-bg: var(--wp-color-white);
+    --ecowitt-card-border: var(--wp-border-color);
+    --ecowitt-card-shadow: var(--wp-shadow);
+    --ecowitt-card-radius: var(--wp-border-radius-lg);
+    // Form field sizing
+    --ecowitt-field-height-sm: 30px;
+    --ecowitt-field-height: 32px;
+    --ecowitt-field-height-lg: 40px;
+    // Animation timing
+    --ecowitt-animation-fast: 0.15s;
+    --ecowitt-animation-normal: 0.25s;
+    --ecowitt-animation-slow: 0.35s;
+}
+
+// ==========================================================================
+// BREAKPOINTS
+// ==========================================================================
+$breakpoints: ( 'xs': 480px, 'sm': 640px, 'md': 768px, 'lg': 1024px, 'xl': 1280px, 'xxl': 1536px);
+// ==========================================================================
+// COMPONENT DEFAULTS
+// ==========================================================================
+// Button defaults
+$button-padding-x: var(--wp-spacing-md);
+$button-padding-y: var(--wp-spacing-sm);
+$button-border-radius: var(--wp-border-radius);
+$button-font-weight: var(--wp-font-weight-medium);
+// Card defaults
+$card-padding: var(--wp-spacing-lg);
+$card-border-radius: var(--ecowitt-card-radius);
+$card-border: var(--wp-border-width) solid var(--ecowitt-card-border);
+$card-shadow: var(--ecowitt-card-shadow);
+// Form defaults
+$form-field-padding-x: var(--wp-spacing-sm);
+$form-field-padding-y: var(--wp-spacing-xs);
+$form-field-border: var(--wp-border-width) solid var(--wp-border-color);
+$form-field-border-radius: var(--wp-border-radius);
+$form-field-font-size: var(--wp-font-size-base);
+// Grid defaults
+$grid-columns: 12;
+$grid-gutter: var(--wp-spacing-md);
+$container-max-width: 1200px;

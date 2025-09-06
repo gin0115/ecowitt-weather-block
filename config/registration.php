@@ -8,4 +8,8 @@
  *
  * @return array<class-string>
  */
-return array();
+
+return array(
+	\PinkCrab\Ecowitt_Weather_Block\Settings\Page\Settings_Page::class,
+	\PinkCrab\Ecowitt_Weather_Block\Admin\Asset_Loader::class,
+);

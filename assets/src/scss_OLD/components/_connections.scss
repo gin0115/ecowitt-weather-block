@@ -1,0 +1,356 @@
+/**
+ * Connections Component - SLEEK & PROFESSIONAL EDITION 🖤
+ * 
+ * Modern, minimalist design with sophisticated colors and clean animations.
+ */
+
+// ==========================================================================
+// CONNECTIONS CONTAINER - CLEAN & MODERN
+// ==========================================================================
+
+.ecowitt-admin {
+
+  .connections-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $spacing-xl;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  .connections-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
+  // ==========================================================================
+  // CONNECTION CARD - SOPHISTICATED CARDS
+  // ==========================================================================
+
+  .connection-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: $spacing-lg;
+    transition: all 0.2s ease;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 8px 8px 0 0;
+      background: #6b7280;
+    }
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-color: #d1d5db;
+    }
+
+    &.connection--active {
+      &::before {
+        background: #10b981;
+      }
+      
+      .connection__status {
+        background: #d1fae5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+      }
+    }
+
+    &.connection--inactive {
+      &::before {
+        background: #f59e0b;
+      }
+      
+      .connection__status {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+      }
+    }
+
+    &.connection--editing {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      
+      &::before {
+        background: #3b82f6;
+      }
+    }
+  }
+
+  .connection__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-md;
+    gap: $spacing-md;
+  }
+
+  .connection__title-group {
+    flex: 1;
+  }
+
+  .connection__title {
+    margin: 0 0 $spacing-xs 0;
+    color: #111827;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .connection__status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .connection__actions {
+    display: flex;
+    gap: $spacing-xs;
+  }
+
+  .connection__content {
+    margin-bottom: $spacing-md;
+    
+    .connection__description {
+      margin: 0 0 $spacing-md 0;
+      color: #6b7280;
+      font-style: italic;
+      padding: $spacing-sm;
+      background: #f9fafb;
+      border-radius: 6px;
+      border-left: 3px solid #e5e7eb;
+    }
+  }
+
+  .connection__details {
+    display: grid;
+    gap: $spacing-sm;
+  }
+
+  .connection__detail {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-xs;
+    
+    .detail__label {
+      min-width: 100px;
+      font-weight: 500;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+    
+    .detail__value {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      background: #f3f4f6;
+      color: #1f2937;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      border: 1px solid #e5e7eb;
+      
+      &--masked {
+        background: #fee2e2;
+        color: #991b1b;
+        border-color: #fecaca;
+      }
+    }
+  }
+
+  .connection__footer {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid #f3f4f6;
+    
+    .connection__meta {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+  }
+
+  // ==========================================================================
+  // NEW CONNECTION SECTION - CLEAN CALL-TO-ACTION
+  // ==========================================================================
+
+  .new-connection {
+    text-align: center;
+    padding: $spacing-xl;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background: #fafafa;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: #3b82f6;
+      background: #f8faff;
+    }
+
+    .new-connection__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #3b82f6;
+      border-radius: 8px;
+      margin-bottom: $spacing-md;
+      
+      svg {
+        color: white;
+      }
+    }
+
+    .new-connection__title {
+      margin: 0 0 $spacing-sm 0;
+      color: #111827;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .new-connection__description {
+      margin: 0 0 $spacing-lg 0;
+      color: #6b7280;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .new-connection-form {
+    margin-top: $spacing-lg;
+    padding: $spacing-xl;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    
+    &.is-active {
+      animation: slideDown 0.3s ease;
+    }
+    
+    .form-header {
+      margin-bottom: $spacing-lg;
+      text-align: center;
+      
+      .form-title {
+        margin: 0 0 $spacing-sm 0;
+        color: #111827;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      
+      .form-description {
+        margin: 0;
+        color: #6b7280;
+      }
+    }
+  }
+
+  // ==========================================================================
+  // EMPTY STATE - ELEGANT PLACEHOLDER
+  // ==========================================================================
+
+  .connections-empty {
+    text-align: center;
+    padding: $spacing-xxl;
+    color: #6b7280;
+
+    .empty-icon {
+      margin-bottom: $spacing-lg;
+      opacity: 0.5;
+
+      svg {
+        color: #9ca3af;
+      }
+    }
+
+    .empty-title {
+      margin: 0 0 $spacing-sm 0;
+      color: #374151;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .empty-description {
+      margin: 0;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+}
+// CONNECTIONS CONTAINER - MAGICAL GRADIENT PARADISE
+// ==========================================================================
+.ecowitt-admin {
+    .connections-container {
+        position: relative;
+        padding: $spacing-xxl;
+        margin-bottom: $spacing-xl;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(102, 126, 234, 0.3);
+        overflow: hidden;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 0;
+        }
+        >* {
+            position: relative;
+            z-index: 1;
+        }
+        &::after {
+            content: '🌤️⛈️🌈';
+            position: absolute;
+            top: $spacing-lg;
+            right: $spacing-lg;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: weather-float 4s ease-in-out infinite;
+            z-index: 1;
+        }
+    }
+    .connections-list {
+        display: grid;
+        gap: $spacing-xl;
+        margin-bottom: $spacing-xxl;
+        @include tablet-up {
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        }
+}
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);

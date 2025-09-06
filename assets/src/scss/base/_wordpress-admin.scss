@@ -1,0 +1,150 @@
+/**
+ * WordPress Admin Integration
+ * 
+ * Ensures our styles work harmoniously with WordPress admin styles
+ * and respect user preferences.
+ */
+
+// ==========================================================================
+// WORDPRESS ADMIN CONTEXT
+// ==========================================================================
+// Ensure our styles only apply within our admin context
+.ecowitt-admin {
+    // Reset any potential conflicts with WP admin styles
+    box-sizing: border-box;
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+    }
+    // Use WordPress admin font stack
+    font-family: var(--wp-font-family);
+    font-size: var(--wp-font-size-base);
+    line-height: var(--wp-line-height-normal);
+    color: var(--wp-color-gray-800);
+    // Ensure proper text rendering
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+// ==========================================================================
+// WORDPRESS ADMIN OVERRIDES
+// ==========================================================================
+// Ensure our content doesn't interfere with WP admin layout
+.ecowitt-admin {
+    // Remove any inherited margins that might break layout
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-top: 0;
+    }
+    // Ensure proper spacing for WordPress admin context
+    .wrap & {
+        margin-top: var(--wp-spacing-md);
+    }
+}
+
+// ==========================================================================
+// WORDPRESS FORM COMPATIBILITY
+// ==========================================================================
+// Ensure our forms work with WordPress admin form styles
+.ecowitt-admin {
+    // Reset WordPress form table styles within our components
+    .form-table {
+        // Keep WordPress form table styles where appropriate
+        border-collapse: collapse;
+        margin-top: var(--wp-spacing-md);
+        width: 100%;
+        th {
+            font-weight: var(--wp-font-weight-semibold);
+            text-align: left;
+            padding: var(--wp-spacing-lg) var(--wp-spacing-sm) var(--wp-spacing-lg) 0;
+            width: 200px;
+            vertical-align: top;
+        }
+        td {
+            padding: var(--wp-spacing-md) 0;
+            vertical-align: top;
+        }
+    }
+    // WordPress notice compatibility
+    .notice {
+        background: var(--wp-color-white);
+        border-left: 4px solid var(--wp-color-primary);
+        padding: var(--wp-spacing-md);
+        margin: var(--wp-spacing-md) 0;
+        box-shadow: var(--wp-shadow-sm);
+        &.notice-success {
+            border-left-color: var(--wp-color-success);
+        }
+        &.notice-warning {
+            border-left-color: var(--wp-color-warning);
+        }
+        &.notice-error {
+            border-left-color: var(--wp-color-danger);
+        }
+        &.notice-info {
+            border-left-color: var(--wp-color-info);
+        }
+    }
+}
+
+// ==========================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// ==========================================================================
+// Respect user preferences
+.ecowitt-admin {
+    @include reduced-motion {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    @include high-contrast {
+        // Enhanced contrast for high contrast mode
+        --wp-border-color: var(--wp-color-gray-600);
+        --ecowitt-card-border: var(--wp-color-gray-600);
+    }
+}
+
+// ==========================================================================
+// ADMIN COLOR SCHEME SUPPORT
+// ==========================================================================
+// Support for WordPress admin color schemes
+// These will automatically use the user's selected admin color scheme
+.ecowitt-admin {
+    // Primary actions should use the admin color scheme
+    .button-primary,
+    .btn--primary {
+        background-color: var(--wp-color-primary);
+        border-color: var(--wp-color-primary);
+        &:hover {
+            background-color: var(--wp-color-primary-hover);
+            border-color: var(--wp-color-primary-hover);
+        }
+        &:focus {
+            background-color: var(--wp-color-primary-focus);
+            border-color: var(--wp-color-primary-focus);
+            box-shadow: 0 0 0 1px var(--wp-color-primary-focus);
+        }
+    }
+    // Links should use admin color scheme
+    a:not(.button):not(.btn) {
+        color: var(--wp-color-primary);
+        &:hover {
+            color: var(--wp-color-primary-hover);
+        }
+        &:focus {
+            color: var(--wp-color-primary-focus);
+            outline: 2px solid var(--wp-color-primary-focus);
+            outline-offset: 2px;
+        }
+    }
+}

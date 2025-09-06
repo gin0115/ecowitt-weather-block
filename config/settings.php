@@ -8,4 +8,11 @@
  *
  * @return array<string, mixed>
  */
-return array();
+return array(
+	'url'  => array(
+		'assets' => plugins_url( '/', __DIR__ ) . 'assets/build/',
+	),
+	'path' => array(
+		'assets' => dirname( __DIR__, 1 ) . '/assets/build/',
+	),
+);
