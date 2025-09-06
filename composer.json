@@ -1,7 +1,6 @@
 {
     "name": "pinkcrab/ecowitt-weather-block",
     "type": "wordpress-plugin",
-
     "description": "A block to display weather data from an Ecowitt weather station.",
     "homepage": "https://github.com/gin0115/ecowitt-weather-block",
     "license": "GPL-3.0-or-later",
@@ -9,7 +8,6 @@
         "name": "Contributors",
         "homepage": "https://github.com/gin0115/ecowitt-weather-block/graphs/contributors"
     }],
-
     "repositories": [{
         "type": "vcs",
         "url": "https://github.com/Pink-Crab/codingstandards"
@@ -52,7 +50,6 @@
             "PinkCrab\\Ecowitt_Weather_Block\\Tests\\": "tests/"
         }
     },
-
     "scripts": {
         "test:php": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
         "analyse:php": "./vendor/bin/phpstan analyse src -l9",
@@ -77,17 +74,22 @@
             "@packages-install",
             "@test:php",
             "@analyse:php",
-            "@lint:php"
-        ]
-    },
-    "config": {
-        "allow-plugins": {
-            "composer/*": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true,
-            "roots/wordpress-core-installer": true
-        }
-    },
-
-    "extra": {}
-}
+            "@format:php",
+            "@lint:php",
+            "@internationalize"
+        ],
+        "pipeline": [
+            "@packages-install",
+            "@test:php",
+            "@analyse:php"
+        ],
+        "config": {
+            "allow-plugins": {
+                "composer/*": true,
+                "dealerdirect/phpcodesniffer-composer-installer": true,
+                "phpstan/extension-installer": true,
+                "roots/wordpress-core-installer": true
+            }
+        },
+        "extra": {}
+    }
