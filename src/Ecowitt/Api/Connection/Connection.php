@@ -135,7 +135,9 @@ class Connection implements JsonSerializable {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Simple serialisation of the connection.
+	 *
+	 * @return array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}
 	 */
 	public function jsonSerialize(): array {
 		return array(

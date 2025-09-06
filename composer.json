@@ -55,9 +55,9 @@
 
     "scripts": {
         "test:php": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
-        "analyse:php": "./vendor/bin/phpstan analyse includes -l9",
-        "format:php": "./vendor/bin/phpcbf --standard=./.phpcs.xml --basepath=. -v",
-        "lint:php": "./vendor/bin/phpcs --standard=./.phpcs.xml --basepath=. -v",
+        "analyse:php": "./vendor/bin/phpstan analyse src -l9",
+        "format:php": "phpcbf src/ --basepath=. -v",
+        "lint:php": "phpcs src/ --basepath=. -v",
         "coverage": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
         "internationalize": [
             "@makepot",

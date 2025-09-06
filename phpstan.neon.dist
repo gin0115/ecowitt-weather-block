@@ -8,7 +8,7 @@ parameters:
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
     paths:
-        - %currentWorkingDirectory%/includes/
+        - %currentWorkingDirectory%/src/
     excludePaths:
         - %currentWorkingDirectory%/tests/*
     bootstrapFiles:

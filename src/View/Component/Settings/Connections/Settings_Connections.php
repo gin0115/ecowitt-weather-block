@@ -23,14 +23,14 @@ class Settings_Connections extends Component {
 	/**
 	 * The connections.
 	 *
-	 * @var array<int, Connection>
+	 * @var array<int, Settings_Connection>
 	 */
 	protected array $connections = array();
 
 	/**
 	 * Creates an instance of the Setting_Connections_Component.
 	 *
-	 * @param array<int, Connection> $connections
+	 * @param array<int, mixed> $connections
 	 */
 	public function __construct( array $connections = array() ) {
 		$connections       = array_filter( $connections, fn( $connection ) => $connection instanceof Connection );

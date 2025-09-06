@@ -13,6 +13,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\Admin;
 use PinkCrab\Enqueue\Enqueue;
 use PinkCrab\Perique\Interfaces\Hookable;
 use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Application\Config;
 
 class Asset_Loader implements Hookable {
 
@@ -25,6 +26,18 @@ class Asset_Loader implements Hookable {
 
 	public function __construct( \PinkCrab\Perique\Application\App_Config $app_config ) {
 		$this->app_config = $app_config;
+	}
+
+	/**
+	 * Get assets url.
+	 *
+	 * @return string
+	 */
+	public static function assets_url(): string {
+		$assets = Config::url( 'assets' ); // @phpstan-ignore-line, this is a magic method.
+		return is_string( $assets )
+			? $assets
+			: wp_upload_dir()['baseurl'];
 	}
 
 	/**
@@ -44,7 +57,7 @@ class Asset_Loader implements Hookable {
 	 */
 	public function enqueue_assets(): void {
 		Enqueue::style( 'ecowitt-admin-styles' )
-			->src( $this->app_config->url( 'assets' ) . 'css/admin.scss.css' )
+			->src( self::assets_url() . '/css/admin.scss.css' )
 			->ver( $this->app_config->version() )
 			->register();
 	}

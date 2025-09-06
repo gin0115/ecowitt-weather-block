@@ -45,11 +45,11 @@ class Page_Handler {
 	 */
 	private Notifications $notifications;
 
-    /**
-     * Backup of settings before changes.
-     * 
-     * @var Settings|null
-     */
+	/**
+	 * Backup of settings before changes.
+	 *
+	 * @var Settings|null
+	 */
 	private ?Settings $backup_settings = null;
 
 	/**
@@ -65,14 +65,14 @@ class Page_Handler {
 		$this->notifications = $notifications;
 	}
 
-    /**
-     * Get the notifications instance.
-     * 
-     * @return Notifications
-     */
-    public function get_notifications(): Notifications {
-        return $this->notifications;
-    }
+	/**
+	 * Get the notifications instance.
+	 *
+	 * @return Notifications
+	 */
+	public function get_notifications(): Notifications {
+		return $this->notifications;
+	}
 
 	/**
 	 * Handle the save action.
@@ -80,11 +80,11 @@ class Page_Handler {
 	 * @param Page $page
 	 * @return void
 	 */
-	public function handle_form_submission( Page $page ): void {
+	public function handle_form_submission( Page $page ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found, required as extending.
 		// Check that form has been submitted (use ServerRequestInterface to get POST data
-		$post_data = $this->request->getParsedBody();
-		// \dd('post data', $post_data, $this, $_POST);
-        if ( ! isset( $post_data[ self::SUBMISSION_KEY ] ) ) {
+		$post_data = (array) $this->request->getParsedBody();
+
+		if ( ! isset( $post_data[ self::SUBMISSION_KEY ] ) ) {
 			throw new Validation_Failed( array( 'No submission key found.' ) );
 		}
 		// Verify nonce.
@@ -92,22 +92,21 @@ class Page_Handler {
 			throw new Validation_Failed( array( 'Invalid nonce.' ) );
 		}
 
-        // Backup current settings in case of failure.
-        $this->backup_settings = $this->settings->load();
+		// Backup current settings in case of failure.
+		$this->backup_settings = $this->settings->load();
 
 		// Process connections.
-		$connections = $this->get_connections($post_data);
+		$connections = $this->get_connections( $post_data );
 		$connections = Connections::from_array( $connections );
 		$settings    = new Settings( $connections );
-		
-        // If the settings are the same, no need to save.
-        if ( md5( json_encode( $settings ) ) === md5( json_encode( $this->backup_settings ) ) ) {
-            $this->notifications->add_info( 'No changes detected, settings not updated.' );
-            return;
-        }
-        
-        
-        $updated_settings = $this->settings->save( $settings );
+
+		// If the settings are the same, no need to save.
+		if ( md5( \wp_json_encode( $settings ) ?: 'new_settings' ) === md5( \wp_json_encode( $this->backup_settings ) ?: 'cached_settings' ) ) {
+			$this->notifications->add_info( 'No changes detected, settings not updated.' );
+			return;
+		}
+
+		$updated_settings = $this->settings->save( $settings );
 		if ( ! $updated_settings ) {
 			$this->notifications->add_error( 'Failed to save settings, reverting' );
 			if ( $this->backup_settings ) {
@@ -115,20 +114,24 @@ class Page_Handler {
 			}
 			return;
 		}
-
-        // If 
 		$this->notifications->add_success( 'Updated Connections' );
-
-		// $updated_connections = $this->settings->upsert_connections( $connections );
-		// if( $updated_connections ) {
-		//     $this->notifications->add_success( 'Connections updated successfully.' );
-		// }
 	}
 
 	/**
 	 * Get the connections from the request.
 	 *
-	 * @return array<string, array<string, string>>
+	 * @template RequestData of array{
+	 *  connection_key?: array<string, string>,
+	 *  connection_name?: array<string, string>,
+	 *  connection_description?: array<string, string>,
+	 *  connection_api_key?: array<string, string>,
+	 *  connection_api_secret?: array<string, string>,
+	 *  connection_mac_address?: array<string, string>,
+	 * }
+	 *
+	 * @param RequestData $post_data The post data from the request.
+	 *
+	 * @return array<string, array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}>
 	 */
 	public function get_connections( array $post_data ): array {
 		$keys          = $post_data['connection_key'] ?? array();
@@ -142,15 +145,14 @@ class Page_Handler {
 			return array();
 		}
 
-		// Itterate over the keys and build the connections array.
+		// Iterate over the keys and build the connections array.
 		$connections = array();
 		foreach ( $keys as $id => $key ) {
-            // If id starts with __new_, generate a unique key.
-            if ( str_starts_with( (string) $id, '__new_' ) ) {
-                $key = $this->get_unique_key( $names[ $id ] ?? 'connection', $connections );
-            }
-            
-            // dd($key);
+			// If id starts with __new_, generate a unique key.
+			if ( str_starts_with( (string) $id, '__new_' ) ) {
+				$key = $this->get_unique_key( $names[ $id ] ?? 'connection', $connections );
+			}
+
 			$connections[ $key ] = array(
 				'key'         => \esc_attr( $key ),
 				'name'        => \esc_attr( $names[ $id ] ?? '' ),
@@ -164,22 +166,22 @@ class Page_Handler {
 		return $connections;
 	}
 
-    /**
-     * Get a unique key for a new connection.
-     *
-     * @param string $name The name of the connection.
-     * @param array<string, array<string, string>> $connections
-     * 
-     * @return string
-     */
-    private function get_unique_key( string $name, array $connections ): string {
-        $base_key = sanitize_title( $name );
-        $key = $base_key;
-        $i = 1;
-        while ( isset( $connections[ $key ] ) ) {
-            $key = $base_key . '_' . $i;
-            $i++;
-        }
-        return $key;
-    }
+	/**
+	 * Get a unique key for a new connection.
+	 *
+	 * @param string                               $name        The name of the connection.
+	 * @param array<string, array<string, string>> $connections
+	 *
+	 * @return string
+	 */
+	private function get_unique_key( string $name, array $connections ): string {
+		$base_key = sanitize_title( $name );
+		$key      = $base_key;
+		$i        = 1;
+		while ( isset( $connections[ $key ] ) ) {
+			$key = $base_key . '_' . $i;
+			++$i;
+		}
+		return $key;
+	}
 }

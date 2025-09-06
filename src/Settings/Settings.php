@@ -44,7 +44,10 @@ class Settings implements JsonSerializable {
 	 */
 	public static function from_json( string $json ): self {
 		$data        = json_decode( $json, true );
-		$connections = Connections::from_array( $data['connections'] ?? array() );
+		$connections = is_array( $data ) && isset( $data['connections'] ) && is_array( $data['connections'] )
+			? $data['connections']
+			: array();
+		$connections = Connections::from_array( $connections );
 
 		return new self( $connections );
 	}

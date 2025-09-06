@@ -9,6 +9,7 @@
  * @param string                                                     $form_nonce_key The nonce for the form.
  * @param string                                                     $submission_key The submission key for the form.
  */
+dump( get_defined_vars() );
 ?>
 <div class="wrap ecowitt-admin">
 	<div class="ecowitt-admin__header">
@@ -17,8 +18,8 @@
 	
 	<form method="post" action="<?php echo esc_url( menu_page_url( $page->slug(), false ) ); ?>">
 		<input type="hidden" name="page" value="<?php echo esc_attr( $page->slug() ); ?>" />
-        <input type="hidden" name="<?php echo esc_attr( $submission_key ); ?>" value="1" />
-        <?php wp_nonce_field( $form_nonce_key, $form_nonce_key ); ?>
+		<input type="hidden" name="<?php echo esc_attr( $submission_key ); ?>" value="1" />
+		<?php wp_nonce_field( $form_nonce_key, $form_nonce_key ); ?>
 		<div class="ecowitt-admin__content">
 			<?php $this->component( $connections ); ?> 
 			

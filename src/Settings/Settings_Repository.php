@@ -33,7 +33,7 @@ class Settings_Repository {
 	 * @return Settings|null
 	 */
 	public function save( Settings $settings ): ?Settings {
-		update_option( $this->settings_key, json_encode( $settings ) );
+		update_option( $this->settings_key, wp_json_encode( $settings ) );
 		return $this->load();
 	}
 
@@ -44,6 +44,7 @@ class Settings_Repository {
 	 */
 	public function load(): ?Settings {
 		$settings = get_option( $this->settings_key, null );
+		$settings = is_string( $settings ) ? $settings : null;
 		return $settings ? Settings::from_json( $settings ) : null;
 	}
 }

@@ -23,14 +23,14 @@ class Connections implements JsonSerializable {
 	/**
 	 * Holds the connection data.
 	 *
-	 * @var array<int, array{key: string, api_key: string, api_secret: string, mac_address: string}>
+	 * @var array<int, Connection>
 	 */
 	protected array $connections = array();
 
 	/**
 	 * Create a new instance of the connections.
 	 *
-	 * @param array<int, Connection> $connections
+	 * @param array<int, mixed> $connections
 	 */
 	public function __construct( array $connections = array() ) {
 		$this->connections = array_filter( $connections, fn( $connection ) => $connection instanceof Connection );
@@ -39,7 +39,7 @@ class Connections implements JsonSerializable {
 	/**
 	 * Creates an instance of the Connections from arrays
 	 *
-	 * @param array<int, array{key: string, api_key: string, api_secret: string, mac_address: string, ?de}> $connections
+	 * @param array<int|string, array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}|mixed> $connections
 	 *
 	 * @return self
 	 */
@@ -59,16 +59,19 @@ class Connections implements JsonSerializable {
 				}
 
 				return new Connection(
-					esc_attr( $data['key'] ),
-					esc_attr( $data['api_key'] ),
-					esc_attr( $data['api_secret'] ),
-					esc_attr( $data['mac_address'] ),
-					isset( $data['description'] ) ? esc_attr( $data['description'] ) : '',
-					isset( $data['name'] ) ? esc_attr( $data['name'] ) : ''
+					esc_attr( is_string( $data['key'] ) ? $data['key'] : '' ),
+					esc_attr( is_string( $data['api_key'] ) ? $data['api_key'] : '' ),
+					esc_attr( is_string( $data['api_secret'] ) ? $data['api_secret'] : '' ),
+					esc_attr( is_string( $data['mac_address'] ) ? $data['mac_address'] : '' ),
+					isset( $data['description'] ) ? esc_attr( is_string( $data['description'] ) ? $data['description'] : '' ) : '',
+					isset( $data['name'] ) ? esc_attr( is_string( $data['name'] ) ? $data['name'] : '' ) : ''
 				);
 			},
 			$connections
 		);
+
+		// Remove any null values.
+		$connections = array_values( array_filter( $connections ) );
 
 		return new self( $connections );
 	}
@@ -142,7 +145,7 @@ class Connections implements JsonSerializable {
 	/**
 	 * Gets all connections.
 	 *
-	 * @return array<int, array{key: string, api_key: string, api_secret: string, mac_address: string}>
+	 * @return array<int, Connection>
 	 */
 	public function all(): array {
 		return $this->connections;
@@ -163,9 +166,9 @@ class Connections implements JsonSerializable {
 	}
 
 	/**
-	 * Returns the settings as an array.
+	 * Returns the connections as an array for JSON serialization.
 	 *
-	 * @return array<int, array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}>
+	 * @return array<int, Connection>
 	 */
 	public function jsonSerialize(): array {
 		return $this->connections;

@@ -1,15 +1,32 @@
 <?xml version="1.0"?>
-<ruleset name="ecowitt-weather-block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./vendor/squizlabs/php_codesniffer/phpcs.xsd">
-	<description>Custom ruleset for Ecowitt Weather Block plugin</description>
+<ruleset name="ecowitt-weather-block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../vendor/squizlabs/php_codesniffer/phpcs.xsd">
+	<description>Custom ruleset for all PinkCrab blocks</description>
 
-	<!-- Extend the PinkCrab Standards ruleset. -->
-	<rule ref="./vendor/pinkcrab/coding-standards/PinkCrabStandards/ruleset.xml"/>
+	<!-- Include the WordPress-Extra standard. -->
+	<rule ref="WordPress-Extra">		
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_getinfo"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_setopt"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_exec"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_init"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.curl_curl_close"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents"/>
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
+		<exclude name="PSR12.Files.FileHeader.IncorrectOrder" />
+	</rule>
+
+	<!-- Add in some extra rules from other standards. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+	<rule ref="Generic.Commenting.Todo"/>
 
 	<!-- Check that the proper text domain(s) is used everywhere. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="ecowitt-weather-block"/> <!-- Updated to match your plugin slug -->
+				<element value="pinkcrab-weather-block"/> <!-- Change this value to your plugin slug. -->
 			</property>
 		</properties>
 	</rule>
@@ -18,16 +35,11 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="PinkCrab"/>
-				<element value="Ecowitt_Weather_Block"/>
+				<element value="pinkcrab"/>
+				<element value="pc_weather"/>
 			</property>
 		</properties>
 	</rule>
 
-	<!-- Exclude test files from certain rules -->
-	<rule ref="Squiz.Commenting.FunctionComment.Missing">
-		<exclude-pattern>*/tests/*</exclude-pattern>
-	</rule>
-	
 	<!-- Add any other custom rules here. -->
 </ruleset>

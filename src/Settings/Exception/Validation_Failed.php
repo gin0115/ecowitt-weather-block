@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
@@ -16,14 +16,30 @@ namespace PinkCrab\Ecowitt_Weather_Block\Settings\Exception;
  * Validation failed exception.
  */
 class Validation_Failed extends \RuntimeException {
-    protected array $errors;
 
-    public function __construct( array $errors ) {
-        parent::__construct('Validation failed');
-        $this->errors = $errors;
-    }
+	/**
+	 * The validation errors.
+	 *
+	 * @var string[]
+	 */
+	protected array $errors;
 
-    public function get_errors(): array {
-        return $this->errors;
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param mixed[] $errors
+	 */
+	public function __construct( array $errors ) {
+		parent::__construct( 'Validation failed' );
+		$this->errors = \array_filter( $errors, fn( $error ) => is_string( $error ) );
+	}
+
+	/**
+	 * Gets the validation errors.
+	 *
+	 * @return string[]
+	 */
+	public function get_errors(): array {
+		return $this->errors;
+	}
 }

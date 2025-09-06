@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Settings\Page;
 
+use PinkCrab\Ecowitt_Weather_Block\Admin\Asset_Loader;
 use PinkCrab\Enqueue\Enqueue;
 use PinkCrab\Perique_Admin_Menu\Page\Page;
 use PinkCrab\Perique\Application\App_Config;
@@ -54,8 +55,8 @@ class Settings_Page extends Menu_Page {
 	 * @param Page_Handler $page_handler
 	 */
 	public function __construct( App_Config $app_config, Settings $settings, Page_Handler $page_handler ) {
-		$this->app_config = $app_config;
-		$this->settings   = $settings;
+		$this->app_config   = $app_config;
+		$this->settings     = $settings;
 		$this->page_handler = $page_handler;
 
 		// Set the page details.
@@ -66,13 +67,13 @@ class Settings_Page extends Menu_Page {
 
 		$this->view_template = 'admin.settings.page';
 		$this->view_data     = array(
-			'app_config'  => $this->app_config,
-			'settings'    => $this->settings,
-			'page'        => $this,
-			'connections' => new Settings_Connections( $this->settings->connections()->all() ),
-			'form_nonce_key'  => $this->page_handler::FORM_NONCE_KEY,
+			'app_config'     => $this->app_config,
+			'settings'       => $this->settings,
+			'page'           => $this,
+			'connections'    => new Settings_Connections( $this->settings->connections()->all() ),
+			'form_nonce_key' => $this->page_handler::FORM_NONCE_KEY,
 			'submission_key' => $this->page_handler::SUBMISSION_KEY,
-			'notifications' => $this->page_handler->get_notifications(),
+			'notifications'  => $this->page_handler->get_notifications(),
 		);
 	}
 
@@ -83,27 +84,34 @@ class Settings_Page extends Menu_Page {
 	 * @return void
 	 */
 	public function enqueue( Page $page ): void {
+
+		// Assert that the view is set.
+		assert( $this->view instanceof \PinkCrab\Perique\Services\View\View );
+
 		Enqueue::script( 'ecowittSettings' )
-			->src( $this->app_config->url( 'assets' ) . 'js/settings.js' )
+			->src( Asset_Loader::assets_url() . 'js/settings.js' )
 			->ver( $this->app_config->version() )
-			->localize( array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'ecowitt_settings_nonce' ),
-				'connectionTemplate' => $this->view->render(
-					'components.admin.settings.connection',
-					array(
-						'key'               => '{key}',
-						'connection_id'     => '{key}',  // Add this for template compatibility
-						'api_key'           => '{api_key}',
-						'api_secret'        => '{api_secret}',
-						'mac_address'       => '{mac_address}',
-						'description'       => '{description}',
-						'name'              => '{name}',
-						'api_key_masked'    => '{api_key_masked}',
-						'api_secret_masked' => '{api_secret_masked}',
-					), false
+			->localize(
+				array(
+					'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
+					'nonce'              => wp_create_nonce( 'ecowitt_settings_nonce' ),
+					'connectionTemplate' => $this->view->render(
+						'components.admin.settings.connection',
+						array(
+							'key'               => '{key}',
+							'connection_id'     => '{key}',  // Add this for template compatibility
+							'api_key'           => '{api_key}',
+							'api_secret'        => '{api_secret}',
+							'mac_address'       => '{mac_address}',
+							'description'       => '{description}',
+							'name'              => '{name}',
+							'api_key_masked'    => '{api_key_masked}',
+							'api_secret_masked' => '{api_secret_masked}',
+						),
+						false
+					),
 				)
-			) )
+			)
 			->register();
 	}
 
@@ -115,7 +123,7 @@ class Settings_Page extends Menu_Page {
 	 */
 	public function load( Page $page ): void {
 		// Check if the form was submitted.
-		if ( isset($_POST[$this->page_handler::SUBMISSION_KEY]) ) {
+		if ( isset( $_POST[ $this->page_handler::SUBMISSION_KEY ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, Only checking if set.
 			$this->page_handler->handle_form_submission( $this );
 		}
 	}

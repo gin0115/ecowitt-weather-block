@@ -29,7 +29,7 @@ class Notifications {
 	 *
 	 * @param string $type    The type of notification.
 	 * @param string $message The message to display.
-     * 
+	 *
 	 * @return void
 	 */
 	public function add_notification( string $type, string $message ): void {
@@ -43,7 +43,7 @@ class Notifications {
 	 * Add a success notification.
 	 *
 	 * @param string $message The message to display.
-     * 
+	 *
 	 * @return void
 	 */
 	public function add_success( string $message ): void {
@@ -54,7 +54,7 @@ class Notifications {
 	 * Add an error notification.
 	 *
 	 * @param string $message The message to display.
-     *
+	 *
 	 * @return void
 	 */
 	public function add_error( string $message ): void {
@@ -65,7 +65,7 @@ class Notifications {
 	 * Add an info notification.
 	 *
 	 * @param string $message The message to display.
-     *
+	 *
 	 * @return void
 	 */
 	public function add_info( string $message ): void {
@@ -83,7 +83,7 @@ class Notifications {
 
 	/**
 	 * Get all notifications.
-	 * 
+	 *
 	 * @return array<int, array{type: string, message: string}>
 	 */
 	public function get_notifications(): array {
@@ -94,14 +94,17 @@ class Notifications {
 	 * Render all notifications.
 	 *
 	 * @param boolean $is_dismissible If the notifications should be dismissible.
-     * 
+	 *
 	 * @return void
 	 */
 	public function render_notifications( bool $is_dismissible = true ): void {
 		$notifications = $this->notifications;
-		$notifications = array_filter( $notifications, function( $n ) {
-			return ! empty( $n['message'] );
-		} );
+		$notifications = array_filter(
+			$notifications,
+			function ( $n ) {
+				return ! empty( $n['message'] );
+			}
+		);
 		if ( $this->has_notifications() ) {
 			foreach ( $notifications as $notification ) {
 				printf(
