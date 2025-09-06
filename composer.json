@@ -77,8 +77,7 @@
             "@packages-install",
             "@test:php",
             "@analyse:php",
-            "@lint:php",
-            "@internationalize"
+            "@lint:php"
         ]
     },
     "config": {
