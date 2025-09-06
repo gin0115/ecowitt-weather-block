@@ -77,7 +77,6 @@
             "@packages-install",
             "@test:php",
             "@analyse:php",
-            "@format:php",
             "@lint:php",
             "@internationalize"
         ]
