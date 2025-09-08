@@ -55,21 +55,24 @@ class WordPress_Client implements Client_Interface {
 		// Sanitize headers for the request.
 		$sanitized_headers = Http_Sanitizer::sanitize_headers( $headers );
 
-		// Make the request using WordPress HTTP API.
-		$response = wp_remote_request(
-			$sanitized_url,
-			array(
-				'method'  => $sanitized_method,
-				'headers' => $sanitized_headers,
-				'body'    => $body,
-				'timeout' => absint( $options['timeout'] ?? 15 ),
-			)
+		// Prepare request arguments.
+		$args = array(
+			'method'  => $sanitized_method,
+			'headers' => $sanitized_headers,
+			'timeout' => absint( is_scalar( $options['timeout'] ?? 15 ) ? $options['timeout'] ?? 15 : 15 ),
 		);
+
+		// Only include body if it's not null (WordPress doesn't accept null for body).
+		if ( null !== $body ) {
+			$args['body'] = $body;
+		}
+
+		// Make the request using WordPress HTTP API.
+		$response = wp_remote_request( $sanitized_url, $args );
 
 		if ( is_wp_error( $response ) ) {
 			return new Response( $response->get_error_message(), 500 );
 		}
-
-		return new Response( $response['body'], $response['response']['code'], $response['headers'] );
+		return new Response( $response['body'], $response['response']['code'], $response['headers']->getAll() );
 	}
 }

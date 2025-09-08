@@ -184,7 +184,7 @@ class Test_WordPress_Client extends HTTP_Request_TestCase {
 					'code'    => 200,
 					'message' => 'OK',
 				),
-				'headers'  => array(),
+				'headers'  => $this->create_mock_headers( array() ),
 				'cookies'  => array(),
 			);
 		};
@@ -213,7 +213,7 @@ class Test_WordPress_Client extends HTTP_Request_TestCase {
 					'code'    => 201,
 					'message' => 'Created',
 				),
-				'headers'  => array(),
+				'headers'  => $this->create_mock_headers( array() ),
 				'cookies'  => array(),
 			);
 		};
@@ -249,7 +249,7 @@ class Test_WordPress_Client extends HTTP_Request_TestCase {
 					'code'    => 200,
 					'message' => 'OK',
 				),
-				'headers'  => array(),
+				'headers'  => $this->create_mock_headers( array() ),
 				'cookies'  => array(),
 			);
 		};
@@ -282,7 +282,7 @@ class Test_WordPress_Client extends HTTP_Request_TestCase {
 					'code'    => 200,
 					'message' => 'OK',
 				),
-				'headers'  => array(),
+				'headers'  => $this->create_mock_headers( array() ),
 				'cookies'  => array(),
 			);
 		};
@@ -326,5 +326,35 @@ class Test_WordPress_Client extends HTTP_Request_TestCase {
 
 			$this->assertSame( $status_code, $response->status_code() );
 		}
+	}
+
+	/**
+	 * Data provider for invalid URLs.
+	 *
+	 * @return array<string, array<string>>
+	 */
+	public function invalid_urls_provider(): array {
+		return array(
+			'not a URL'         => array( 'not-a-url' ),
+			'empty string'      => array( '' ),
+			'FTP scheme'        => array( 'ftp://example.com' ),
+			'JavaScript scheme' => array( 'javascript:alert()' ),
+			'file scheme'       => array( 'file:///etc/passwd' ),
+			'malformed URL'     => array( 'http://' ),
+			'missing protocol'  => array( 'example.com' ),
+		);
+	}
+
+	/**
+	 * @testdox It should reject invalid URLs: $url
+	 * @dataProvider invalid_urls_provider
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\WordPress_Client::request
+	 */
+	public function test_invalid_urls( string $url ): void {
+		$client   = new WordPress_Client();
+		$response = $client->request( 'GET', $url );
+		$this->assertInstanceOf( Response::class, $response );
+		$this->assertSame( 'Invalid URL', $response->body() );
+		$this->assertSame( 400, $response->status_code() );
 	}
 }

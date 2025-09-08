@@ -20,7 +20,7 @@ class Http_Sanitizer {
 	/**
 	 * Sanitize headers to ensure they contain valid HTTP header characters.
 	 *
-	 * @param array<string, string> $headers The headers to sanitize.
+	 * @param array<string, string|array<string>> $headers The headers to sanitize.
 	 * @return array<string, string>
 	 */
 	public static function sanitize_headers( array $headers ): array {
@@ -29,9 +29,22 @@ class Http_Sanitizer {
 		foreach ( $headers as $name => $value ) {
 			// Sanitize header name: remove invalid characters
 			$clean_name = self::sanitize_header_name( (string) $name );
-			
-			// Sanitize header value: remove control characters and validate
-			$clean_value = self::sanitize_header_value( (string) $value );
+
+			// Handle both string and array values
+			if ( is_array( $value ) ) {
+				// For arrays, sanitize each element and join with ", "
+				$sanitized_values = array();
+				foreach ( $value as $single_value ) {
+					$clean_single_value = self::sanitize_header_value( (string) $single_value );
+					if ( $clean_single_value !== false ) {
+						$sanitized_values[] = $clean_single_value;
+					}
+				}
+				$clean_value = ! empty( $sanitized_values ) ? implode( ', ', $sanitized_values ) : false;
+			} else {
+				// For strings, sanitize directly
+				$clean_value = self::sanitize_header_value( (string) $value );
+			}
 
 			// Only include if both name and value are valid
 			if ( ! empty( $clean_name ) && $clean_value !== false ) {
@@ -57,7 +70,7 @@ class Http_Sanitizer {
 	public static function sanitize_header_name( string $name ): string {
 		// Remove any characters that aren't letters, numbers, hyphens, or underscores
 		$sanitized = preg_replace( '/[^a-zA-Z0-9\-_]/', '', $name );
-		
+
 		// Convert to lowercase for consistency (HTTP headers are case-insensitive)
 		return $sanitized ? strtolower( $sanitized ) : '';
 	}
@@ -75,10 +88,10 @@ class Http_Sanitizer {
 		// Remove control characters except TAB (0x09)
 		// Control characters are 0x00-0x1F and 0x7F
 		$sanitized = preg_replace( '/[\x00-\x08\x0A-\x1F\x7F]/', '', $value );
-		
+
 		// Trim leading and trailing whitespace
-		$sanitized = trim( $sanitized );
-		
+		$sanitized = trim( $sanitized ?? '' );
+
 		// Return false if empty after sanitization
 		return $sanitized !== '' ? $sanitized : false;
 	}
@@ -114,7 +127,7 @@ class Http_Sanitizer {
 	public static function sanitize_url( string $url ): string|false {
 		// Basic URL validation and sanitization
 		$sanitized = filter_var( trim( $url ), FILTER_SANITIZE_URL );
-		
+
 		// Validate it's a proper URL
 		if ( ! $sanitized || ! filter_var( $sanitized, FILTER_VALIDATE_URL ) ) {
 			return false;
@@ -137,10 +150,10 @@ class Http_Sanitizer {
 	 */
 	public static function sanitize_http_method( string $method ): string|false {
 		$method = strtoupper( trim( $method ) );
-		
+
 		// List of valid HTTP methods
 		$valid_methods = array( 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS' );
-		
+
 		return in_array( $method, $valid_methods, true ) ? $method : false;
 	}
 }

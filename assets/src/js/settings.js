@@ -86,8 +86,8 @@ function getConnectionFormData(connection) {
         connectionId: connectionId,
         name: getFieldValue('connection_name'),
         description: getFieldValue('connection_description'),
+        applicationKey: getFieldValue('connection_application_key'),
         apiKey: getFieldValue('connection_api_key'),
-        apiSecret: getFieldValue('connection_api_secret'),
         macAddress: getFieldValue('connection_mac_address')
     };
 }
@@ -113,8 +113,8 @@ function setConnectionFormData(connection, data) {
     
     setFieldValue('connection_name', data.name);
     setFieldValue('connection_description', data.description);
+    setFieldValue('connection_application_key', data.applicationKey);
     setFieldValue('connection_api_key', data.apiKey);
-    setFieldValue('connection_api_secret', data.apiSecret);
     setFieldValue('connection_mac_address', data.macAddress);
 }
 
@@ -330,16 +330,16 @@ function createNewConnection(newConnectionElement) {
     const formData = {
         name: getFieldValue('connection_name'),
         description: getFieldValue('connection_description'),
+        applicationKey: getFieldValue('connection_application_key'),
         apiKey: getFieldValue('connection_api_key'),
-        apiSecret: getFieldValue('connection_api_secret'),
         macAddress: getFieldValue('connection_mac_address')
     };
     
     console.log('Form data:', formData);
     
     // Validate required fields
-    if (!formData.name || !formData.apiKey || !formData.apiSecret || !formData.macAddress) {
-        alert('Please fill in all required fields (Name, API Key, API Secret, and MAC Address)');
+    if (!formData.name || !formData.applicationKey || !formData.apiKey || !formData.macAddress) {
+        alert('Please fill in all required fields (Name, Application Key, API Key, and MAC Address)');
         return;
     }
     
@@ -354,17 +354,17 @@ function createNewConnection(newConnectionElement) {
         .replace(/{key}/g, uniqueId)
         .replace(/{name}/g, formData.name || 'Unnamed Connection')
         .replace(/{description}/g, formData.description || '')
+        .replace(/{application_key}/g, formData.applicationKey)
         .replace(/{api_key}/g, formData.apiKey)
-        .replace(/{api_secret}/g, formData.apiSecret)
         .replace(/{mac_address}/g, formData.macAddress);
     
     // Create masked versions for display
+    const maskedApplicationKey = formData.applicationKey ? formData.applicationKey.substring(0, 4) + '••••••••' : '';
     const maskedApiKey = formData.apiKey ? formData.apiKey.substring(0, 4) + '••••••••' : '';
-    const maskedApiSecret = formData.apiSecret ? formData.apiSecret.substring(0, 4) + '••••••••' : '';
     
     // Replace masked placeholders
+    connectionHtml = connectionHtml.replace(/{application_key_masked}/g, maskedApplicationKey);
     connectionHtml = connectionHtml.replace(/{api_key_masked}/g, maskedApiKey);
-    connectionHtml = connectionHtml.replace(/{api_secret_masked}/g, maskedApiSecret);
     
     // Find the connections container and add the new connection
     const connectionsContainer = document.querySelector(SELECTORS.connectionsContainer);
@@ -417,8 +417,8 @@ function updateConnectionFieldNames(connectionElement, uniqueId) {
         'connection_key',
         'connection_name', 
         'connection_description',
+        'connection_application_key',
         'connection_api_key',
-        'connection_api_secret', 
         'connection_mac_address'
     ];
     

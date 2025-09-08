@@ -27,10 +27,13 @@ class Utils {
 	/**
 	 * Maps both array keys and values using the provided callable(s).
 	 *
-	 * @param array<string, mixed> $input         The array to transform.
-	 * @param callable             $value_callable The callable to apply to values.
-	 * @param callable|null        $key_callable   Optional. The callable to apply to keys. If null, uses value_callable.
-	 * @return array<string, mixed>
+	 * @template TKey of array-key
+	 * @template TValue
+	 * @template TNewValue
+	 * @param array<TKey, TValue> $input         The array to transform.
+	 * @param callable(TValue): TNewValue $value_callable The callable to apply to values.
+	 * @param callable(TKey): array-key|null $key_callable   Optional. The callable to apply to keys. If null, uses value_callable.
+	 * @return array<array-key, TNewValue>
 	 */
 	public static function map_keys_and_values( array $input, callable $value_callable, ?callable $key_callable = null ): array {
 		// If no key callable provided, use the same callable for both

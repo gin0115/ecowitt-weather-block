@@ -56,5 +56,4 @@ class Http_Exception extends Ecowitt_Exception {
 	public static function rate_limited(): self {
 		return new self( 'API rate limit exceeded. Please try again later.' );
 	}
-
 }

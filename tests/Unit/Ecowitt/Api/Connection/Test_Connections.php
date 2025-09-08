@@ -38,7 +38,7 @@ class Test_Connections extends \WP_UnitTestCase {
             'connection1' => array(
                 'key'         => 'conn_1',
                 'api_key'     => 'api_key_1',
-                'api_secret'  => 'api_secret_1',
+                'application_key'  => 'application_key_1',
                 'mac_address' => '00:11:22:33:44:55',
                 'description' => 'First weather station',
                 'name'        => 'Station One',
@@ -46,7 +46,7 @@ class Test_Connections extends \WP_UnitTestCase {
             'connection2' => array(
                 'key'         => 'conn_2',
                 'api_key'     => 'api_key_2',
-                'api_secret'  => 'api_secret_2',
+                'application_key'  => 'application_key_2',
                 'mac_address' => 'aa:bb:cc:dd:ee:ff',
                 'description' => 'Second weather station',
                 'name'        => 'Station Two',
@@ -71,8 +71,8 @@ class Test_Connections extends \WP_UnitTestCase {
     public function test_can_create_connections_with_objects(): void {
         $connection1 = new Connection(
             $this->sample_connections['connection1']['key'],
+            $this->sample_connections['connection1']['application_key'],
             $this->sample_connections['connection1']['api_key'],
-            $this->sample_connections['connection1']['api_secret'],
             $this->sample_connections['connection1']['mac_address'],
             $this->sample_connections['connection1']['description'],
             $this->sample_connections['connection1']['name']
@@ -118,7 +118,7 @@ class Test_Connections extends \WP_UnitTestCase {
             array(
                 'key'         => 'test_key',
                 'api_key'     => 'test_api',
-                'api_secret'  => 'test_secret',
+                'application_key'  => 'test_application_key',
                 'mac_address' => '00:11:22:33:44:55',
                 // Missing description and name
             ),
@@ -145,7 +145,7 @@ class Test_Connections extends \WP_UnitTestCase {
             array(                                     // Invalid - missing required fields
                 'key'        => 'test',
                 'api_key'    => 'test',
-                // Missing api_secret and mac_address
+                // Missing application_key and mac_address
             ),
             $this->sample_connections['connection2'], // Valid
         );
@@ -163,8 +163,8 @@ class Test_Connections extends \WP_UnitTestCase {
         
         $connections->add(
             $this->sample_connections['connection1']['key'],
-            $this->sample_connections['connection1']['api_key'],
-            $this->sample_connections['connection1']['api_secret'],
+            $this->sample_connections['connection1']['application_key'],
+            $this->sample_connections['connection1']['application_key'],
             $this->sample_connections['connection1']['mac_address'],
             $this->sample_connections['connection1']['description'],
             $this->sample_connections['connection1']['name']
@@ -181,7 +181,7 @@ class Test_Connections extends \WP_UnitTestCase {
     public function test_can_add_connection_with_defaults(): void {
         $connections = new Connections();
         
-        $connections->add( 'key', 'api', 'secret', 'mac' );
+        $connections->add( 'key', 'application_key', 'api_key', 'mac' );
 
         $this->assertCount( 1, $connections->all() );
         $connection = $connections->get( 'key' );
@@ -223,8 +223,8 @@ class Test_Connections extends \WP_UnitTestCase {
         $connections = new Connections();
         $connections->add(
             $this->sample_connections['connection1']['key'],
+            $this->sample_connections['connection1']['application_key'],
             $this->sample_connections['connection1']['api_key'],
-            $this->sample_connections['connection1']['api_secret'],
             $this->sample_connections['connection1']['mac_address'],
             $this->sample_connections['connection1']['description'],
             $this->sample_connections['connection1']['name']
@@ -326,8 +326,8 @@ class Test_Connections extends \WP_UnitTestCase {
         $connections = new Connections();
         $connections->add(
             $this->sample_connections['connection1']['key'],
+            $this->sample_connections['connection1']['application_key'],
             $this->sample_connections['connection1']['api_key'],
-            $this->sample_connections['connection1']['api_secret'],
             $this->sample_connections['connection1']['mac_address'],
             $this->sample_connections['connection1']['description'],
             $this->sample_connections['connection1']['name']
@@ -345,7 +345,7 @@ class Test_Connections extends \WP_UnitTestCase {
         $connection_data = $decoded[0];
         $this->assertArrayHasKey( 'key', $connection_data );
         $this->assertArrayHasKey( 'api_key', $connection_data );
-        $this->assertArrayHasKey( 'api_secret', $connection_data );
+        $this->assertArrayHasKey( 'api_key', $connection_data );
         $this->assertArrayHasKey( 'mac_address', $connection_data );
         $this->assertArrayHasKey( 'description', $connection_data );
         $this->assertArrayHasKey( 'name', $connection_data );
@@ -383,7 +383,7 @@ class Test_Connections extends \WP_UnitTestCase {
             array(
                 'key'         => '<script>alert("xss")</script>',
                 'api_key'     => '">alert("xss")<',
-                'api_secret'  => '&lt;script&gt;',
+                'application_key'  => '&lt;script&gt;',
                 'mac_address' => '"onclick="alert(1)"',
                 'description' => '<img src=x onerror=alert(1)>',
                 'name'        => '<b>bold</b>',
@@ -397,7 +397,7 @@ class Test_Connections extends \WP_UnitTestCase {
         // Verify all values are properly escaped
         $this->assertSame( esc_attr( $malicious_data[0]['key'] ), $connection->key() );
         $this->assertSame( esc_attr( $malicious_data[0]['api_key'] ), $connection->api_key() );
-        $this->assertSame( esc_attr( $malicious_data[0]['api_secret'] ), $connection->api_secret() );
+        $this->assertSame( esc_attr( $malicious_data[0]['application_key'] ), $connection->application_key() );
         $this->assertSame( esc_attr( $malicious_data[0]['mac_address'] ), $connection->mac_address() );
         $this->assertSame( esc_attr( $malicious_data[0]['description'] ), $connection->description() );
         $this->assertSame( esc_attr( $malicious_data[0]['name'] ), $connection->name() );
@@ -417,8 +417,8 @@ class Test_Connections extends \WP_UnitTestCase {
         foreach ( $this->sample_connections as $data ) {
             $connections->add(
                 $data['key'],
+                $data['application_key'],
                 $data['api_key'],
-                $data['api_secret'],
                 $data['mac_address'],
                 $data['description'],
                 $data['name']
@@ -443,13 +443,13 @@ class Test_Connections extends \WP_UnitTestCase {
         $this->assertTrue( $connections->has( 'conn_2' ) );
 
         // Add it back
-        $connections->add( 'conn_1', 'new_api', 'new_secret', 'new_mac', 'Updated desc', 'Updated name' );
+        $connections->add( 'conn_1', 'application_key', 'api_key', 'new_mac', 'Updated desc', 'Updated name' );
         $this->assertCount( 2, $connections->all() );
         $this->assertTrue( $connections->has( 'conn_1' ) );
 
         // Verify updated connection
         $updated_conn = $connections->get( 'conn_1' );
-        $this->assertSame( 'new_api', $updated_conn->api_key() );
+        $this->assertSame( 'api_key', $updated_conn->api_key() );
         $this->assertSame( 'Updated desc', $updated_conn->description() );
     }
 }

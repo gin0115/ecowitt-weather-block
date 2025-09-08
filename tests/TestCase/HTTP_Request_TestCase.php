@@ -60,6 +60,26 @@ class HTTP_Request_TestCase extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Create a mock headers object that mimics CaseInsensitiveDictionary.
+	 *
+	 * @param array<string, string> $headers The headers array.
+	 * @return object Mock headers object with getAll() method.
+	 */
+	protected function create_mock_headers( array $headers ): object {
+		return new class( $headers ) {
+			private array $headers;
+
+			public function __construct( array $headers ) {
+				$this->headers = $headers;
+			}
+
+			public function getAll(): array {
+				return $this->headers;
+			}
+		};
+	}
+
+	/**
 	 * Setup the test case.
 	 */
 	public function set_up() {
@@ -74,7 +94,7 @@ class HTTP_Request_TestCase extends WP_UnitTestCase {
 	 * @param $args
 	 * @param $url
 	 *
-	 * @return array{body: string, response: array{code: int, message: string}, headers: array<string, string>, cookies: array}|\WP_Error
+	 * @return array{body: string, response: array{code: int, message: string}, headers: object, cookies: array}|\WP_Error
 	 */
 	public function mock_request_response( $response, $args, $url ) {
 		// If we have a callable set, use that to generate the response.
@@ -82,13 +102,26 @@ class HTTP_Request_TestCase extends WP_UnitTestCase {
 			return call_user_func( $this->response_callable, $response, $args, $url );
 		}
 
+		// Create a mock headers object that mimics CaseInsensitiveDictionary
+		$headers_mock = new class( $this->mock_response_headers ) {
+			private array $headers;
+
+			public function __construct( array $headers ) {
+				$this->headers = $headers;
+			}
+
+			public function getAll(): array {
+				return $this->headers;
+			}
+		};
+
 		return array(
 			'body'     => $this->mock_response_body,
 			'response' => array(
 				'code'    => $this->mock_response_status,
 				'message' => get_status_header_desc( $this->mock_response_status ),
 			),
-			'headers'  => $this->mock_response_headers,
+			'headers'  => $headers_mock,
 			'cookies'  => array(),
 		);
 	}

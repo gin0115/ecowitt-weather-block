@@ -49,5 +49,4 @@ class Device_Exception extends Ecowitt_Exception {
 	public static function operation_failed( string $operation, string $reason ): self {
 		return new self( "Device operation '{$operation}' failed: {$reason}" );
 	}
-
 }

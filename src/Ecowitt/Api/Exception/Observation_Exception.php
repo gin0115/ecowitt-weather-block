@@ -48,5 +48,4 @@ class Observation_Exception extends Ecowitt_Exception {
 	public static function retrieval_failed( string $reason ): self {
 		return new self( "Failed to retrieve observations: {$reason}" );
 	}
-
 }

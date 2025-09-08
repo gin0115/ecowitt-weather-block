@@ -37,5 +37,4 @@ class Connection_Exception extends Ecowitt_Exception {
 	public static function invalid_connection( string $reason ): self {
 		return new self( "Invalid connection: {$reason}" );
 	}
-
 }

@@ -124,22 +124,22 @@ class Page_Handler {
 	 *  connection_key?: array<string, string>,
 	 *  connection_name?: array<string, string>,
 	 *  connection_description?: array<string, string>,
+	 *  connection_application_key?: array<string, string>,
 	 *  connection_api_key?: array<string, string>,
-	 *  connection_api_secret?: array<string, string>,
 	 *  connection_mac_address?: array<string, string>,
 	 * }
 	 *
 	 * @param RequestData $post_data The post data from the request.
 	 *
-	 * @return array<string, array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}>
+	 * @return array<string, array{key: string, application_key: string, api_key: string, mac_address: string, description: string, name: string}>
 	 */
 	public function get_connections( array $post_data ): array {
-		$keys          = $post_data['connection_key'] ?? array();
-		$names         = $post_data['connection_name'] ?? array();
-		$descriptions  = $post_data['connection_description'] ?? array();
-		$api_keys      = $post_data['connection_api_key'] ?? array();
-		$api_secrets   = $post_data['connection_api_secret'] ?? array();
-		$mac_addresses = $post_data['connection_mac_address'] ?? array();
+		$keys             = $post_data['connection_key'] ?? array();
+		$names            = $post_data['connection_name'] ?? array();
+		$descriptions     = $post_data['connection_description'] ?? array();
+		$application_keys = $post_data['connection_application_key'] ?? array();
+		$api_keys         = $post_data['connection_api_key'] ?? array();
+		$mac_addresses    = $post_data['connection_mac_address'] ?? array();
 
 		if ( 0 === count( $keys ) ) {
 			return array();
@@ -154,12 +154,12 @@ class Page_Handler {
 			}
 
 			$connections[ $key ] = array(
-				'key'         => \esc_attr( $key ),
-				'name'        => \esc_attr( $names[ $id ] ?? '' ),
-				'description' => \esc_attr( $descriptions[ $id ] ?? '' ),
-				'api_key'     => \esc_attr( $api_keys[ $id ] ?? '' ),
-				'api_secret'  => \esc_attr( $api_secrets[ $id ] ?? '' ),
-				'mac_address' => \esc_attr( $mac_addresses[ $id ] ?? '' ),
+				'key'             => \esc_attr( $key ),
+				'name'            => \esc_attr( $names[ $id ] ?? '' ),
+				'description'     => \esc_attr( $descriptions[ $id ] ?? '' ),
+				'application_key' => \esc_attr( $application_keys[ $id ] ?? '' ),
+				'api_key'         => \esc_attr( $api_keys[ $id ] ?? '' ),
+				'mac_address'     => \esc_attr( $mac_addresses[ $id ] ?? '' ),
 			);
 		}
 
@@ -183,5 +183,14 @@ class Page_Handler {
 			++$i;
 		}
 		return $key;
+	}
+
+	/**
+	 * Get the settings.
+	 *
+	 * @return Settings
+	 */
+	public function get_settings(): Settings {
+		return $this->settings->load() ?? new Settings( new Connections() );
 	}
 }

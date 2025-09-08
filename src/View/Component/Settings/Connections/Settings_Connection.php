@@ -1,7 +1,12 @@
 <?php
 
 /**
- * The settings page, connection component.
+ * The sett public string $key             = '';
+	public string $application_key = '';
+	public string $api_key         = '';
+	public string $mac_address     = '';
+	public string $description     = '';
+	public string $name            = '';age, connection component.
  *
  * @since 0.1.0
  */
@@ -20,12 +25,12 @@ use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
  */
 class Settings_Connection extends Component {
 
-	public string $key         = '';
-	public string $api_key     = '';
-	public string $api_secret  = '';
-	public string $mac_address = '';
-	public string $description = '';
-	public string $name        = '';
+	public string $key             = '';
+	public string $application_key = '';
+	public string $api_key         = '';
+	public string $mac_address     = '';
+	public string $description     = '';
+	public string $name            = '';
 
 	/**
 	 * Creates an instance of the Setting_Connection_Component.
@@ -37,11 +42,11 @@ class Settings_Connection extends Component {
 			return;
 		}
 
-		$this->key         = $connection->key();
-		$this->api_key     = $connection->api_key();
-		$this->api_secret  = $connection->api_secret();
-		$this->mac_address = $connection->mac_address();
-		$this->description = $connection->description();
-		$this->name        = $connection->name();
+		$this->key             = $connection->key();
+		$this->application_key = $connection->application_key();
+		$this->api_key         = $connection->api_key();
+		$this->mac_address     = $connection->mac_address();
+		$this->description     = $connection->description();
+		$this->name            = $connection->name();
 	}
 }
