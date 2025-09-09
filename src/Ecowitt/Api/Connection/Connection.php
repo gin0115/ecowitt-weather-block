@@ -27,18 +27,18 @@ class Connection implements JsonSerializable {
 	protected string $key;
 
 	/**
+	 * Holds the Application key.
+	 *
+	 * @var string
+	 */
+	protected string $application_key;
+
+	/**
 	 * Holds the API key.
 	 *
 	 * @var string
 	 */
 	protected string $api_key;
-
-	/**
-	 * Holds the API secret.
-	 *
-	 * @var string
-	 */
-	protected string $api_secret;
 
 	/**
 	 * Holds the MAC address.
@@ -64,20 +64,20 @@ class Connection implements JsonSerializable {
 	/**
 	 * Creates an instance of the Credential.
 	 *
-	 * @param string $key         The key.
-	 * @param string $api_key     The API key.
-	 * @param string $api_secret  The API secret.
-	 * @param string $mac_address The MAC address.
-	 * @param string $description The description.
-	 * @param string $name        The name.
+	 * @param string $key             The key.
+	 * @param string $application_key The Application key.
+	 * @param string $api_key         The API key.
+	 * @param string $mac_address     The MAC address.
+	 * @param string $description     The description.
+	 * @param string $name            The name.
 	 */
-	public function __construct( string $key, string $api_key, string $api_secret, string $mac_address, string $description, string $name ) {
-		$this->key         = \esc_attr( $key );
-		$this->api_key     = \esc_attr( $api_key );
-		$this->api_secret  = \esc_attr( $api_secret );
-		$this->mac_address = \esc_attr( $mac_address );
-		$this->description = \esc_attr( $description );
-		$this->name        = \esc_attr( $name );
+	public function __construct( string $key, string $application_key, string $api_key, string $mac_address, string $description, string $name ) {
+		$this->key             = \esc_attr( $key );
+		$this->application_key = \esc_attr( $application_key );
+		$this->api_key         = \esc_attr( $api_key );
+		$this->mac_address     = \esc_attr( $mac_address );
+		$this->description     = \esc_attr( $description );
+		$this->name            = \esc_attr( $name );
 	}
 
 	/**
@@ -90,21 +90,21 @@ class Connection implements JsonSerializable {
 	}
 
 	/**
+	 * Access to the Application key.
+	 *
+	 * @return string
+	 */
+	public function application_key(): string {
+		return $this->application_key;
+	}
+
+	/**
 	 * Access to the API key.
 	 *
 	 * @return string
 	 */
 	public function api_key(): string {
 		return $this->api_key;
-	}
-
-	/**
-	 * Access to the API secret.
-	 *
-	 * @return string
-	 */
-	public function api_secret(): string {
-		return $this->api_secret;
 	}
 
 	/**
@@ -137,16 +137,16 @@ class Connection implements JsonSerializable {
 	/**
 	 * Simple serialisation of the connection.
 	 *
-	 * @return array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}
+	 * @return array{key: string, application_key: string, api_key: string, mac_address: string, description: string, name: string}
 	 */
 	public function jsonSerialize(): array {
 		return array(
-			'key'         => $this->key,
-			'api_key'     => $this->api_key,
-			'api_secret'  => $this->api_secret,
-			'mac_address' => $this->mac_address,
-			'description' => $this->description,
-			'name'        => $this->name,
+			'key'             => $this->key,
+			'application_key' => $this->application_key,
+			'api_key'         => $this->api_key,
+			'mac_address'     => $this->mac_address,
+			'description'     => $this->description,
+			'name'            => $this->name,
 		);
 	}
 }

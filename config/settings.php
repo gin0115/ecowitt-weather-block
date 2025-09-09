@@ -9,10 +9,13 @@
  * @return array<string, mixed>
  */
 return array(
-	'url'  => array(
+	'url'        => array(
 		'assets' => plugins_url( '/', __DIR__ ) . 'assets/build/',
 	),
-	'path' => array(
+	'path'       => array(
 		'assets' => dirname( __DIR__, 1 ) . '/assets/build/',
+	),
+	'additional' => array(
+		'ecowitt_api_base' => 'https://api.ecowitt.net/api/v3/',
 	),
 );

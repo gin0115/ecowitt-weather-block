@@ -7,7 +7,7 @@
  */
 
 // Determine connection status (you can enhance this logic based on your needs)
-$connection_status = !empty($api_key) && !empty($api_secret) && !empty($mac_address) ? 'active' : 'inactive';
+$connection_status = !empty($application_key) && !empty($api_key) && !empty($mac_address) ? 'active' : 'inactive';
 $connection_id = !empty($key) ? $key : '__new_';
 ?>
 
@@ -57,20 +57,20 @@ $connection_id = !empty($key) ? $key : '__new_';
             <?php endif; ?>
 
             <div class="connection__details">
+                <?php if (!empty($application_key)) : ?>
+                    <div class="connection__detail">
+                        <span class="detail__label"><?php esc_html_e('Application Key:', 'ecowitt-weather-block'); ?></span>
+                        <code class="detail__value detail__value--masked" title="<?php echo esc_attr(substr($application_key, 0, 4) . '••••••••'); ?>">
+                            <?php echo esc_html(substr($application_key, 0, 4) . '••••••••'); ?>
+                        </code>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (!empty($api_key)) : ?>
                     <div class="connection__detail">
                         <span class="detail__label"><?php esc_html_e('API Key:', 'ecowitt-weather-block'); ?></span>
                         <code class="detail__value detail__value--masked" title="<?php echo esc_attr(substr($api_key, 0, 4) . '••••••••'); ?>">
                             <?php echo esc_html(substr($api_key, 0, 4) . '••••••••'); ?>
-                        </code>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (!empty($api_secret)) : ?>
-                    <div class="connection__detail">
-                        <span class="detail__label"><?php esc_html_e('API Secret:', 'ecowitt-weather-block'); ?></span>
-                        <code class="detail__value detail__value--masked" title="<?php echo esc_attr(substr($api_secret, 0, 4) . '••••••••'); ?>">
-                            <?php echo esc_html(substr($api_secret, 0, 4) . '••••••••'); ?>
                         </code>
                     </div>
                 <?php endif; ?>
@@ -129,32 +129,32 @@ $connection_id = !empty($key) ? $key : '__new_';
 
             <div class="form-grid">
                 <div class="form-group">
+                    <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-application_key">
+                        <?php esc_html_e('Application Key', 'ecowitt-weather-block'); ?>
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="connection-<?php echo esc_attr($connection_id); ?>-application_key" 
+                           name="connection_application_key[<?php echo esc_attr($connection_id); ?>]" 
+                           value="<?php echo esc_attr($application_key); ?>"
+                           placeholder="<?php esc_attr_e('Your Ecowitt Application Key', 'ecowitt-weather-block'); ?>">
+                    <p class="form-help">
+                        <?php esc_html_e('Get your Application key from your Ecowitt account dashboard.', 'ecowitt-weather-block'); ?>
+                    </p>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-api_key">
                         <?php esc_html_e('API Key', 'ecowitt-weather-block'); ?>
                     </label>
-                    <input type="text" 
+                    <input type="password" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-api_key" 
                            name="connection_api_key[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($api_key); ?>"
                            placeholder="<?php esc_attr_e('Your Ecowitt API Key', 'ecowitt-weather-block'); ?>">
                     <p class="form-help">
-                        <?php esc_html_e('Get your API key from your Ecowitt account dashboard.', 'ecowitt-weather-block'); ?>
-                    </p>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-api_secret">
-                        <?php esc_html_e('API Secret', 'ecowitt-weather-block'); ?>
-                    </label>
-                    <input type="password" 
-                           class="form-control" 
-                           id="connection-<?php echo esc_attr($connection_id); ?>-api_secret" 
-                           name="connection_api_secret[<?php echo esc_attr($connection_id); ?>]" 
-                           value="<?php echo esc_attr($api_secret); ?>"
-                           placeholder="<?php esc_attr_e('Your Ecowitt API Secret', 'ecowitt-weather-block'); ?>">
-                    <p class="form-help">
-                        <?php esc_html_e('Keep your API secret secure and do not share it publicly.', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Keep your API key secure and do not share it publicly.', 'ecowitt-weather-block'); ?>
                     </p>
                 </div>
             </div>

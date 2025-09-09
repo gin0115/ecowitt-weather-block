@@ -48,7 +48,6 @@ class Settings implements JsonSerializable {
 			? $data['connections']
 			: array();
 		$connections = Connections::from_array( $connections );
-
 		return new self( $connections );
 	}
 

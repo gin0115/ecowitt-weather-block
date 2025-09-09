@@ -39,7 +39,7 @@ class Connections implements JsonSerializable {
 	/**
 	 * Creates an instance of the Connections from arrays
 	 *
-	 * @param array<int|string, array{key: string, api_key: string, api_secret: string, mac_address: string, description: string, name: string}|mixed> $connections
+	 * @param array<int|string, array{key: string, application_key: string, api_key: string, mac_address: string, description: string, name: string}|mixed> $connections
 	 *
 	 * @return self
 	 */
@@ -53,15 +53,14 @@ class Connections implements JsonSerializable {
 				}
 
 				// If dont have the required keys, return null.
-				$required = array( 'key', 'api_key', 'api_secret', 'mac_address' );
+				$required = array( 'key', 'application_key', 'api_key', 'mac_address' );
 				if ( count( array_intersect( $required, array_keys( $data ) ) ) !== count( $required ) ) {
 					return null;
 				}
-
 				return new Connection(
 					esc_attr( is_string( $data['key'] ) ? $data['key'] : '' ),
+					esc_attr( is_string( $data['application_key'] ) ? $data['application_key'] : '' ),
 					esc_attr( is_string( $data['api_key'] ) ? $data['api_key'] : '' ),
-					esc_attr( is_string( $data['api_secret'] ) ? $data['api_secret'] : '' ),
 					esc_attr( is_string( $data['mac_address'] ) ? $data['mac_address'] : '' ),
 					isset( $data['description'] ) ? esc_attr( is_string( $data['description'] ) ? $data['description'] : '' ) : '',
 					isset( $data['name'] ) ? esc_attr( is_string( $data['name'] ) ? $data['name'] : '' ) : ''
@@ -72,31 +71,30 @@ class Connections implements JsonSerializable {
 
 		// Remove any null values.
 		$connections = array_values( array_filter( $connections ) );
-
 		return new self( $connections );
 	}
 
 	/**
 	 * Adds a connection.
 	 *
-	 * @param string $key         The key for the connection.
-	 * @param string $api_key     The API key.
-	 * @param string $api_secret  The API secret.
-	 * @param string $mac_address The MAC address.
-	 * @param string $description The description.
-	 * @param string $name        The name.
+	 * @param string $key             The key for the connection.
+	 * @param string $application_key The Application key.
+	 * @param string $api_key         The API key.
+	 * @param string $mac_address     The MAC address.
+	 * @param string $description     The description.
+	 * @param string $name            The name.
 	 *
 	 * @return void
 	 */
 	public function add(
 		string $key,
+		string $application_key,
 		string $api_key,
-		string $api_secret,
 		string $mac_address,
 		string $description = '',
 		string $name = ''
 	): void {
-		$this->connections[] = new Connection( $key, $api_key, $api_secret, $mac_address, $description, $name );
+		$this->connections[] = new Connection( $key, $application_key, $api_key, $mac_address, $description, $name );
 	}
 
 	/**

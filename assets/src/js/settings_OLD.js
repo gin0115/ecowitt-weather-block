@@ -207,8 +207,8 @@ class SettingsManager {
             .replace(/\{key\}/g, newConnectionId)
             .replace(/\{name\}/g, formData[`connection_name[${connectionId}]`] || '')
             .replace(/\{description\}/g, formData[`connection_description[${connectionId}]`] || '')
+            .replace(/\{application_key\}/g, formData[`connection_application_key[${connectionId}]`] || '')
             .replace(/\{api_key\}/g, formData[`connection_api_key[${connectionId}]`] || '')
-            .replace(/\{api_secret\}/g, formData[`connection_api_secret[${connectionId}]`] || '')
             .replace(/\{mac_address\}/g, formData[`connection_mac_address[${connectionId}]`] || '');
 
         // Find or create the connections list

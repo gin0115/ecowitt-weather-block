@@ -19,7 +19,7 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique_Admin_Menu\Page\Menu_Page;
 use PinkCrab\Ecowitt_Weather_Block\Settings\Settings;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_Connections;
-
+use PinkCrab\Perique\Application\App;
 
 /**
  * The Settings_Page class.
@@ -98,15 +98,15 @@ class Settings_Page extends Menu_Page {
 					'connectionTemplate' => $this->view->render(
 						'components.admin.settings.connection',
 						array(
-							'key'               => '{key}',
-							'connection_id'     => '{key}',  // Add this for template compatibility
-							'api_key'           => '{api_key}',
-							'api_secret'        => '{api_secret}',
-							'mac_address'       => '{mac_address}',
-							'description'       => '{description}',
-							'name'              => '{name}',
-							'api_key_masked'    => '{api_key_masked}',
-							'api_secret_masked' => '{api_secret_masked}',
+							'key'                    => '{key}',
+							'connection_id'          => '{key}',
+							'application_key'        => '{application_key}',
+							'api_key'                => '{api_key}',
+							'mac_address'            => '{mac_address}',
+							'description'            => '{description}',
+							'name'                   => '{name}',
+							'application_key_masked' => '{application_key_masked}',
+							'api_key_masked'         => '{api_key_masked}',
 						),
 						false
 					),
@@ -125,6 +125,8 @@ class Settings_Page extends Menu_Page {
 		// Check if the form was submitted.
 		if ( isset( $_POST[ $this->page_handler::SUBMISSION_KEY ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, Only checking if set.
 			$this->page_handler->handle_form_submission( $this );
+			// Reload the settings.
+			$this->settings = $this->page_handler->get_settings();
 		}
 	}
 }
