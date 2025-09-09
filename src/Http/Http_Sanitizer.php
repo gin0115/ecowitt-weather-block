@@ -36,7 +36,7 @@ class Http_Sanitizer {
 				$sanitized_values = array();
 				foreach ( $value as $single_value ) {
 					$clean_single_value = self::sanitize_header_value( (string) $single_value );
-					if ( $clean_single_value !== false ) {
+					if ( $clean_single_value !== null ) {
 						$sanitized_values[] = $clean_single_value;
 					}
 				}
@@ -47,7 +47,7 @@ class Http_Sanitizer {
 			}
 
 			// Only include if both name and value are valid
-			if ( ! empty( $clean_name ) && $clean_value !== false ) {
+			if ( ! empty( $clean_name ) && $clean_value !== null ) {
 				$sanitized[ $clean_name ] = $clean_value;
 			}
 		}
@@ -82,7 +82,7 @@ class Http_Sanitizer {
 	 * This removes control characters and trims whitespace.
 	 *
 	 * @param string $value The header value.
-	 * @return string|false The sanitized value, or false if invalid/empty.
+	 * @return string|null The sanitized value, or false if invalid/empty.
 	 */
 	public static function sanitize_header_value( string $value ): ?string {
 		// Remove control characters except TAB (0x09)

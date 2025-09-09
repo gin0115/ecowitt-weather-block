@@ -64,9 +64,9 @@ class Test_Http_Sanitizer extends \WP_UnitTestCase {
 		$this->assertSame( "hello\tworld", Http_Sanitizer::sanitize_header_value( "hello\tworld" ) );
 
 		// Empty values should return false
-		$this->assertFalse( Http_Sanitizer::sanitize_header_value( '' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_header_value( '   ' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_header_value( "\x00\x01\x02" ) );
+		$this->assertNull( Http_Sanitizer::sanitize_header_value( '' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_header_value( '   ' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_header_value( "\x00\x01\x02" ) );
 	}
 
 	/**
@@ -146,10 +146,10 @@ class Test_Http_Sanitizer extends \WP_UnitTestCase {
 		$this->assertSame( 'https://example.com/path?param=value', Http_Sanitizer::sanitize_url( 'https://example.com/path?param=value' ) );
 
 		// Invalid URLs
-		$this->assertFalse( Http_Sanitizer::sanitize_url( 'not-a-url' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_url( '' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_url( 'ftp://example.com' ) ); // Wrong scheme
-		$this->assertFalse( Http_Sanitizer::sanitize_url( 'javascript:alert()' ) ); // Wrong scheme
+		$this->assertNull( Http_Sanitizer::sanitize_url( 'not-a-url' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_url( '' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_url( 'ftp://example.com' ) ); // Wrong scheme
+		$this->assertNull( Http_Sanitizer::sanitize_url( 'javascript:alert()' ) ); // Wrong scheme
 	}
 
 	/**
@@ -167,10 +167,10 @@ class Test_Http_Sanitizer extends \WP_UnitTestCase {
 		$this->assertSame( 'OPTIONS', Http_Sanitizer::sanitize_http_method( 'options' ) );
 
 		// Invalid methods
-		$this->assertFalse( Http_Sanitizer::sanitize_http_method( 'INVALID' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_http_method( '' ) );
-		$this->assertFalse( Http_Sanitizer::sanitize_http_method( 'TRACE' ) ); // Not in allowed list
-		$this->assertFalse( Http_Sanitizer::sanitize_http_method( 'CONNECT' ) ); // Not in allowed list
+		$this->assertNull( Http_Sanitizer::sanitize_http_method( 'INVALID' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_http_method( '' ) );
+		$this->assertNull( Http_Sanitizer::sanitize_http_method( 'TRACE' ) ); // Not in allowed list
+		$this->assertNull( Http_Sanitizer::sanitize_http_method( 'CONNECT' ) ); // Not in allowed list
 	}
 
 	/**
