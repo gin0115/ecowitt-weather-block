@@ -84,7 +84,7 @@ class Http_Sanitizer {
 	 * @param string $value The header value.
 	 * @return string|false The sanitized value, or false if invalid/empty.
 	 */
-	public static function sanitize_header_value( string $value ): string|false {
+	public static function sanitize_header_value( string $value ): ?string {
 		// Remove control characters except TAB (0x09)
 		// Control characters are 0x00-0x1F and 0x7F
 		$sanitized = preg_replace( '/[\x00-\x08\x0A-\x1F\x7F]/', '', $value );
@@ -93,7 +93,7 @@ class Http_Sanitizer {
 		$sanitized = trim( $sanitized ?? '' );
 
 		// Return false if empty after sanitization
-		return $sanitized !== '' ? $sanitized : false;
+		return $sanitized !== '' ? $sanitized : null;
 	}
 
 	/**
@@ -122,21 +122,21 @@ class Http_Sanitizer {
 	 * Sanitize a URL to ensure it's safe for HTTP requests.
 	 *
 	 * @param string $url The URL to sanitize.
-	 * @return string|false The sanitized URL, or false if invalid.
+	 * @return string|null The sanitized URL, or null if invalid.
 	 */
-	public static function sanitize_url( string $url ): string|false {
+	public static function sanitize_url( string $url ): ?string {
 		// Basic URL validation and sanitization
 		$sanitized = filter_var( trim( $url ), FILTER_SANITIZE_URL );
 
 		// Validate it's a proper URL
 		if ( ! $sanitized || ! filter_var( $sanitized, FILTER_VALIDATE_URL ) ) {
-			return false;
+			return null;
 		}
 
 		// Only allow HTTP and HTTPS schemes
 		$scheme = wp_parse_url( $sanitized, PHP_URL_SCHEME );
 		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
-			return false;
+			return null;
 		}
 
 		return $sanitized;
@@ -146,14 +146,14 @@ class Http_Sanitizer {
 	 * Sanitize HTTP method to ensure it's valid.
 	 *
 	 * @param string $method The HTTP method to sanitize.
-	 * @return string|false The sanitized method, or false if invalid.
+	 * @return string|null The sanitized method, or null if invalid.
 	 */
-	public static function sanitize_http_method( string $method ): string|false {
+	public static function sanitize_http_method( string $method ): ?string {
 		$method = strtoupper( trim( $method ) );
 
 		// List of valid HTTP methods
 		$valid_methods = array( 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS' );
 
-		return in_array( $method, $valid_methods, true ) ? $method : false;
+		return in_array( $method, $valid_methods, true ) ? $method : \null;
 	}
 }
