@@ -40,7 +40,7 @@ class Http_Sanitizer {
 						$sanitized_values[] = $clean_single_value;
 					}
 				}
-				$clean_value = ! empty( $sanitized_values ) ? implode( ', ', $sanitized_values ) : false;
+				$clean_value = ! empty( $sanitized_values ) ? implode( ', ', $sanitized_values ) : null;
 			} else {
 				// For strings, sanitize directly
 				$clean_value = self::sanitize_header_value( (string) $value );

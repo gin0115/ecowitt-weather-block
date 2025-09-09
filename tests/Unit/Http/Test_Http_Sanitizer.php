@@ -180,7 +180,7 @@ class Test_Http_Sanitizer extends \WP_UnitTestCase {
 	 */
 	public function header_scenarios_provider(): array {
 		return array(
-			'standard headers' => array(
+			'standard headers'                => array(
 				array(
 					'Content-Type'  => 'application/json',
 					'Authorization' => 'Bearer token123',

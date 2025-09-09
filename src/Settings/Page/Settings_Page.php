@@ -128,11 +128,5 @@ class Settings_Page extends Menu_Page {
 			// Reload the settings.
 			$this->settings = $this->page_handler->get_settings();
 		}
-
-		$dev = App::make( \PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Device_Service::class );
-		dd(
-			$this->settings->connections()->all(),
-			$dev->get_all_devices( $this->settings->connections()->all()[2] )
-		);
 	}
 }
