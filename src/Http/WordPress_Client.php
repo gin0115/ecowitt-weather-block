@@ -18,9 +18,11 @@ use WP_HTTP_Requests_Response;
 use PinkCrab\Ecowitt_Weather_Block\Http\Client_Interface;
 use PinkCrab\Ecowitt_Weather_Block\Utilities\Utils;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * WordPress HTTP Client.

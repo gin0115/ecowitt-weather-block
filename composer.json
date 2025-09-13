@@ -21,7 +21,8 @@
         "pinkcrab/perique-admin-menu": "^2.1",
         "pinkcrab/enqueue": "^1.4",
         "pinkcrab/http": "^1.1",
-        "pinkcrab/function-constructors": "^0.2.0"
+        "pinkcrab/function-constructors": "^0.2.0",
+        "pinkcrab/ajax": "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5 || ^9.0",

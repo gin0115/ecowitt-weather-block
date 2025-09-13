@@ -11,9 +11,11 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * Device DTO class for Ecowitt API v3.
@@ -141,7 +143,7 @@ class Device {
 	/**
 	 * Create Device from API v3 response array.
 	 *
-	 * @param array<string, mixed> $data Device data from API v3 response.
+	 * @param array<mixed> $data Device data from API v3 response.
 	 * @return Device Device instance.
 	 */
 	public static function from_array( array $data ): Device {
@@ -190,6 +192,39 @@ class Device {
 			$latitude,
 			$stationtype,
 			$iot_devices
+		);
+	}
+
+	/**
+	 * Convert Device to array with proper PHPStan array shape.
+	 *
+	 * @return array{id: int, name: string, mac: string, imei: string, type: int, date_zone_id: string, createtime: int, longitude: float, latitude: float, stationtype: string, iotdevice_list: array<int, array{name: string, default_title: string, device_id: string, version: string, createtime: string, additional_data: array<string, mixed>}>}
+	 */
+	public function to_array(): array {
+		$iot_arrays = array();
+		foreach ( $this->iotdevice_list as $iot ) {
+			$iot_arrays[] = array(
+				'name'            => $iot->name,
+				'default_title'   => $iot->default_title,
+				'device_id'       => $iot->device_id,
+				'version'         => $iot->version,
+				'createtime'      => $iot->createtime,
+				'additional_data' => $iot->additional_data,
+			);
+		}
+
+		return array(
+			'id'             => $this->id,
+			'name'           => $this->name,
+			'mac'            => $this->mac,
+			'imei'           => $this->imei,
+			'type'           => $this->type,
+			'date_zone_id'   => $this->date_zone_id,
+			'createtime'     => $this->createtime,
+			'longitude'      => $this->longitude,
+			'latitude'       => $this->latitude,
+			'stationtype'    => $this->stationtype,
+			'iotdevice_list' => $iot_arrays,
 		);
 	}
 }

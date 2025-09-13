@@ -228,4 +228,152 @@ class Test_Http_Sanitizer extends \WP_UnitTestCase {
 		$result = Http_Sanitizer::sanitize_headers( $input );
 		$this->assertSame( $expected, $result );
 	}
+
+	/**
+	 * @testdox It should sanitize array header values by joining with commas
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_array_values(): void {
+		$headers = array(
+			'Content-Type'    => 'application/json',
+			'Accept'          => array( 'application/json', 'text/html', 'application/xml' ),
+			'X-Custom-Header' => array( 'value1', 'value2', 'value3' ),
+			'Authorization'   => array( 'Bearer token1', 'Bearer token2' ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'content-type'    => 'application/json',
+			'accept'          => 'application/json, text/html, application/xml',
+			'x-custom-header' => 'value1, value2, value3',
+			'authorization'   => 'Bearer token1, Bearer token2',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should sanitize array header values and filter out invalid ones
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_mixed_array_values(): void {
+		$headers = array(
+			'Accept'           => array( 'application/json', '', 'text/html', '   ', 'application/xml' ),
+			'X-Test-Header'    => array( 'valid-value', "invalid\x00value", 'another-valid' ),
+			'X-Control-Header' => array( "value\x01with\x02control", 'normal-value', '' ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'accept'           => 'application/json, text/html, application/xml',
+			'x-test-header'    => 'valid-value, invalidvalue, another-valid',
+			'x-control-header' => 'valuewithcontrol, normal-value',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should handle arrays with all invalid values by excluding the header
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_all_invalid_array_values(): void {
+		$headers = array(
+			'Valid-Header'  => 'valid-value',
+			'X-All-Empty'   => array( '', '   ', "\x00\x01\x02" ),
+			'X-All-Control' => array( "value\x00with\x01control", "another\x7Finvalid" ),
+			'X-Mixed-Valid' => array( 'valid', '', 'also-valid' ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'valid-header'  => 'valid-value',
+			'x-all-control' => 'valuewithcontrol, anotherinvalid',
+			'x-mixed-valid' => 'valid, also-valid',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should handle empty arrays by excluding the header
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_empty_arrays(): void {
+		$headers = array(
+			'Valid-Header'  => 'valid-value',
+			'X-Empty-Array' => array(),
+			'X-Another'     => array( 'valid-value' ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'valid-header' => 'valid-value',
+			'x-another'    => 'valid-value',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should handle arrays with numeric keys correctly
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_numeric_array_keys(): void {
+		$headers = array(
+			'Accept' => array(
+				0 => 'application/json',
+				1 => 'text/html',
+				2 => 'application/xml',
+			),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'accept' => 'application/json, text/html, application/xml',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should handle arrays with mixed data types by converting to strings
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_mixed_data_types(): void {
+		$headers = array(
+			'X-Mixed-Types' => array( 'string', 123, 45.67, true, false ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'x-mixed-types' => 'string, 123, 45.67, 1',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
+
+	/**
+	 * @testdox It should handle arrays with whitespace-only values by filtering them out
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Http\Http_Sanitizer::sanitize_headers
+	 */
+	public function test_sanitize_headers_with_whitespace_array_values(): void {
+		$headers = array(
+			'X-Whitespace' => array( '  ', "\t", "\n", 'valid-value', '   ' ),
+		);
+
+		$result = Http_Sanitizer::sanitize_headers( $headers );
+
+		$expected = array(
+			'x-whitespace' => 'valid-value',
+		);
+
+		$this->assertSame( $expected, $result );
+	}
 }

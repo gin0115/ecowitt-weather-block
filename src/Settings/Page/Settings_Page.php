@@ -50,8 +50,8 @@ class Settings_Page extends Menu_Page {
 	/**
 	 * Creates an instance of the Settings_Page.
 	 *
-	 * @param App_Config $app_config
-	 * @param Settings   $settings
+	 * @param App_Config   $app_config
+	 * @param Settings     $settings
 	 * @param Page_Handler $page_handler
 	 */
 	public function __construct( App_Config $app_config, Settings $settings, Page_Handler $page_handler ) {
@@ -60,7 +60,7 @@ class Settings_Page extends Menu_Page {
 		$this->page_handler = $page_handler;
 
 		// Set the page details.
-		$this->page_slug  = 'ecowitt-weather-block-settings';
+		$this->page_slug  = $this->app_config->admin_page_slug;
 		$this->menu_title = 'Ecowitt Weather Block';
 		$this->page_title = 'Ecowitt Weather Block Settings';
 		$this->position   = 10;
@@ -70,7 +70,6 @@ class Settings_Page extends Menu_Page {
 			'app_config'     => $this->app_config,
 			'settings'       => $this->settings,
 			'page'           => $this,
-			'connections'    => new Settings_Connections( $this->settings->connections()->all() ),
 			'form_nonce_key' => $this->page_handler::FORM_NONCE_KEY,
 			'submission_key' => $this->page_handler::SUBMISSION_KEY,
 			'notifications'  => $this->page_handler->get_notifications(),
@@ -128,5 +127,9 @@ class Settings_Page extends Menu_Page {
 			// Reload the settings.
 			$this->settings = $this->page_handler->get_settings();
 		}
+
+		// Set the base path for the device details.
+		$this->view_data['device_base_path'] = menu_page_url( $this->app_config->admin_page_slug . '-devices', false );
+		$this->view_data['connections']      = new Settings_Connections( $this->settings->connections()->all(), $this->view_data['device_base_path'] );
 	}
 }

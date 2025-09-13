@@ -1,0 +1,514 @@
+/**
+ * Device Components
+ * 
+ * Styles for weather station device cards and related components.
+ * Follows the same patterns as connection components for consistency.
+ */
+
+.ecowitt-admin {
+    // ==========================================================================
+    // DEVICES CONTAINER
+    // ==========================================================================
+    .devices-container {
+        margin-bottom: var(--wp-spacing-xl);
+    }
+    .devices-list {
+        display: grid;
+        gap: var(--wp-spacing-lg);
+        margin-bottom: var(--wp-spacing-xl);
+        @include breakpoint('lg') {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 450px));
+        }
+    }
+    // ==========================================================================
+    // DEVICE CARD
+    // ==========================================================================
+    .device-card {
+        @include card;
+        position: relative;
+        transition: all var(--wp-transition);
+        &:hover {
+            box-shadow: var(--wp-shadow-md);
+            transform: translateY(-1px);
+        }
+        // Device status variants (similar to connections)
+        &.device--active {
+            border-left: 4px solid var(--ecowitt-status-connected);
+            .device__type .type-badge {
+                border-color: var(--ecowitt-status-connected);
+                color: var(--ecowitt-status-connected);
+            }
+        }
+        &.device--inactive {
+            border-left: 4px solid var(--ecowitt-status-disconnected);
+            opacity: 0.8;
+            .device__type .type-badge {
+                border-color: var(--ecowitt-status-disconnected);
+                color: var(--ecowitt-status-disconnected);
+            }
+        }
+        &.device--error {
+            border-left: 4px solid var(--ecowitt-status-error);
+            .device__type .type-badge {
+                border-color: var(--ecowitt-status-error);
+                color: var(--ecowitt-status-error);
+            }
+        }
+    }
+    // ==========================================================================
+    // DEVICE HEADER
+    // ==========================================================================
+    .device__header {
+        @include flex-between;
+        margin-bottom: var(--wp-spacing-md);
+        padding-bottom: var(--wp-spacing-sm);
+        border-bottom: var(--wp-border-width) solid var(--wp-color-gray-200);
+    }
+    .device__title-group {
+        min-width: 0; // Allow truncation
+        flex: 1;
+    }
+    .device__title {
+        margin: 0 0 var(--wp-spacing-xs) 0;
+        font-size: var(--wp-font-size-lg);
+        font-weight: var(--wp-font-weight-semibold);
+        color: var(--wp-color-gray-800);
+        @include truncate;
+    }
+    .device__type {
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--wp-spacing-xs) var(--wp-spacing-sm);
+            border: 1px solid var(--wp-color-gray-300);
+            border-radius: var(--wp-border-radius-xl);
+            font-size: var(--wp-font-size-xs);
+            font-weight: var(--wp-font-weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: var(--wp-color-white);
+            // Type-specific colors
+            &.type-badge--weather-detector {
+                border-color: var(--wp-color-info);
+                color: var(--wp-color-info);
+                background-color: color-mix(in srgb, var(--wp-color-info) 10%, transparent);
+            }
+            &.type-badge--camera {
+                border-color: var(--wp-color-warning);
+                color: var(--wp-color-warning);
+                background-color: color-mix(in srgb, var(--wp-color-warning) 10%, transparent);
+            }
+            &.type-badge--unknown {
+                border-color: var(--wp-color-gray-400);
+                color: var(--wp-color-gray-400);
+                background-color: color-mix(in srgb, var(--wp-color-gray-400) 10%, transparent);
+            }
+        }
+    }
+    .device__meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: var(--wp-spacing-xs);
+        margin-left: var(--wp-spacing-md);
+    }
+    .device__id {
+        display: flex;
+        align-items: center;
+        gap: var(--wp-spacing-xs);
+        font-size: var(--wp-font-size-xs);
+        color: var(--wp-color-gray-500);
+        .meta-label {
+            font-weight: var(--wp-font-weight-medium);
+        }
+        .meta-value {
+            font-family: var(--wp-font-family-mono);
+            background-color: var(--wp-color-gray-100);
+            padding: 2px 6px;
+            border-radius: var(--wp-border-radius-sm);
+        }
+    }
+    // ==========================================================================
+    // DEVICE CONTENT
+    // ==========================================================================
+    .device__content {
+        margin-bottom: var(--wp-spacing-lg);
+    }
+    .device__details {
+        display: grid;
+        gap: var(--wp-spacing-sm);
+        margin-bottom: var(--wp-spacing-md);
+    }
+    .device__detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--wp-spacing-xs) 0;
+        &:not(:last-child) {
+            border-bottom: var(--wp-border-width) solid var(--wp-color-gray-100);
+        }
+    }
+    .detail__label {
+        font-size: var(--wp-font-size-sm);
+        font-weight: var(--wp-font-weight-medium);
+        color: var(--wp-color-gray-600);
+    }
+    .detail__value {
+        font-size: var(--wp-font-size-sm);
+        color: var(--wp-color-gray-800);
+        @include truncate;
+        max-width: 60%;
+        // Monospace for technical values
+        &code,
+        code {
+            font-family: var(--wp-font-family-mono);
+            background-color: var(--wp-color-gray-100);
+            padding: 2px 6px;
+            border-radius: var(--wp-border-radius-sm);
+            font-size: var(--wp-font-size-xs);
+        }
+    }
+    // ==========================================================================
+    // IOT DEVICES SECTION
+    // ==========================================================================
+    .device__iot-section {
+        margin-top: var(--wp-spacing-lg);
+        padding-top: var(--wp-spacing-lg);
+        border-top: var(--wp-border-width) solid var(--wp-color-gray-200);
+    }
+    .device__iot-header {
+        margin-bottom: var(--wp-spacing-md);
+    }
+    .device__iot-title {
+        margin: 0;
+        font-size: var(--wp-font-size-md);
+        font-weight: var(--wp-font-weight-semibold);
+        color: var(--wp-color-gray-700);
+    }
+    .device__iot-list {
+        display: grid;
+        gap: var(--wp-spacing-sm);
+    }
+    // ==========================================================================
+    // IOT DEVICE CARD
+    // ==========================================================================
+    .iot-device {
+        background-color: var(--wp-color-gray-50);
+        border: var(--wp-border-width) solid var(--wp-color-gray-200);
+        border-radius: var(--wp-border-radius);
+        padding: var(--wp-spacing-md);
+        transition: all var(--wp-transition);
+        &:hover {
+            background-color: var(--wp-color-white);
+            border-color: var(--wp-color-gray-300);
+        }
+        &.iot-device--active {
+            border-left: 3px solid var(--ecowitt-status-connected);
+        }
+        &.iot-device--inactive {
+            opacity: 0.7;
+            border-left: 3px solid var(--ecowitt-status-disconnected);
+        }
+    }
+    .iot-device__header {
+        @include flex-between;
+        margin-bottom: var(--wp-spacing-sm);
+    }
+    .iot-device__title-group {
+        min-width: 0;
+        flex: 1;
+    }
+    .iot-device__title {
+        margin: 0;
+        font-size: var(--wp-font-size-sm);
+        font-weight: var(--wp-font-weight-medium);
+        color: var(--wp-color-gray-800);
+        @include truncate;
+    }
+    .iot-device__version {
+        .version-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: var(--wp-color-gray-200);
+            color: var(--wp-color-gray-600);
+            font-size: var(--wp-font-size-xs);
+            font-weight: var(--wp-font-weight-medium);
+            border-radius: var(--wp-border-radius-sm);
+            font-family: var(--wp-font-family-mono);
+        }
+    }
+    .iot-device__content {
+        .iot-device__details {
+            display: grid;
+            gap: var(--wp-spacing-xs);
+        }
+        .iot-device__detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--wp-font-size-xs);
+            .detail__label {
+                color: var(--wp-color-gray-500);
+                font-weight: var(--wp-font-weight-medium);
+            }
+            .detail__value {
+                font-family: var(--wp-font-family-mono);
+                color: var(--wp-color-gray-700);
+                &.detail__value--masked {
+                    background-color: var(--wp-color-gray-100);
+                    padding: 2px 4px;
+                    border-radius: var(--wp-border-radius-sm);
+                }
+            }
+        }
+    }
+    // Additional data toggle
+    .iot-device__additional {
+        margin-top: var(--wp-spacing-sm);
+        .iot-device__additional-toggle {
+            summary {
+                cursor: pointer;
+                font-size: var(--wp-font-size-xs);
+                font-weight: var(--wp-font-weight-medium);
+                color: var(--wp-color-gray-600);
+                padding: var(--wp-spacing-xs) 0;
+                &:hover {
+                    color: var(--wp-color-primary);
+                }
+            }
+        }
+        .additional-data {
+            margin-top: var(--wp-spacing-xs);
+            padding: var(--wp-spacing-sm);
+            background-color: var(--wp-color-gray-100);
+            border-radius: var(--wp-border-radius);
+            .additional-data__item {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: var(--wp-spacing-xs) 0;
+                font-size: var(--wp-font-size-xs);
+                &:not(:last-child) {
+                    border-bottom: var(--wp-border-width) solid var(--wp-color-gray-200);
+                }
+            }
+            .additional-data__key {
+                font-weight: var(--wp-font-weight-medium);
+                color: var(--wp-color-gray-600);
+                min-width: 0;
+                flex: 1;
+            }
+            .additional-data__value {
+                font-family: var(--wp-font-family-mono);
+                color: var(--wp-color-gray-800);
+                text-align: right;
+                margin-left: var(--wp-spacing-sm);
+                word-break: break-word;
+            }
+        }
+    }
+    // ==========================================================================
+    // OBSERVATION SECTION
+    // ==========================================================================
+    .device__observation-section {
+        margin-top: var(--wp-spacing-lg);
+        padding-top: var(--wp-spacing-lg);
+        border-top: 2px dashed var(--wp-color-gray-300);
+    }
+    .device__observation-header {
+        margin-bottom: var(--wp-spacing-md);
+    }
+    .device__observation-title {
+        margin: 0;
+        font-size: var(--wp-font-size-md);
+        font-weight: var(--wp-font-weight-semibold);
+        color: var(--wp-color-gray-700);
+        display: flex;
+        align-items: center;
+        gap: var(--wp-spacing-xs);
+        &::before {
+            content: '🌤️';
+            font-size: var(--wp-font-size-lg);
+        }
+    }
+    .device__observation-content {
+        .observation-placeholder {
+            text-align: center;
+            padding: var(--wp-spacing-xl) var(--wp-spacing-lg);
+            background-color: var(--wp-color-gray-50);
+            border: 2px dashed var(--wp-color-gray-300);
+            border-radius: var(--wp-border-radius-lg);
+            margin-bottom: var(--wp-spacing-lg);
+            &__icon {
+                margin: 0 auto var(--wp-spacing-md);
+                width: 48px;
+                height: 48px;
+                color: var(--wp-color-gray-400);
+                svg {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            &__text {
+                margin: 0;
+                font-size: var(--wp-font-size-sm);
+                color: var(--wp-color-gray-500);
+                line-height: var(--wp-line-height-relaxed);
+            }
+        }
+    }
+    .observation-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--wp-spacing-md);
+        justify-content: center;
+        .observation-fetch-btn {
+            // Leverages existing button system - no additional styles needed
+            // Uses .btn.btn--primary classes from _buttons.scss
+        }
+        .observation-loading {
+            display: flex;
+            align-items: center;
+            gap: var(--wp-spacing-sm);
+            color: var(--wp-color-gray-600);
+            font-size: var(--wp-font-size-sm);
+            .loading-spinner {
+                width: 16px;
+                height: 16px;
+                border: 2px solid var(--wp-color-gray-300);
+                border-top: 2px solid var(--wp-color-primary);
+                border-radius: 50%;
+                animation: btn-spin 0.8s linear infinite;
+            }
+            .loading-text {
+                font-weight: var(--wp-font-weight-medium);
+            }
+        }
+    }
+    .observation-data {
+        margin-top: var(--wp-spacing-lg);
+        padding: var(--wp-spacing-lg);
+        background-color: var(--wp-color-white);
+        border: var(--wp-border-width) solid var(--wp-color-gray-200);
+        border-radius: var(--wp-border-radius-lg);
+        // Will contain the observation component once loaded via AJAX
+    }
+    // ==========================================================================
+    // DEVICE FOOTER
+    // ==========================================================================
+    .device__footer {
+        margin-top: var(--wp-spacing-lg);
+        padding-top: var(--wp-spacing-md);
+        border-top: var(--wp-border-width) solid var(--wp-color-gray-200);
+    }
+    .device__timestamp {
+        display: flex;
+        align-items: center;
+        gap: var(--wp-spacing-xs);
+        font-size: var(--wp-font-size-xs);
+        color: var(--wp-color-gray-500);
+        .timestamp-label {
+            font-weight: var(--wp-font-weight-medium);
+        }
+        .timestamp-value {
+            font-family: var(--wp-font-family-mono);
+        }
+    }
+    // ==========================================================================
+    // DEVICES SECTION STYLES (for devices page)
+    // ==========================================================================
+    .ecowitt-devices-section {
+        margin-bottom: var(--wp-spacing-xl);
+        &__header {
+            @include flex-between;
+            margin-bottom: var(--wp-spacing-lg);
+            padding-bottom: var(--wp-spacing-md);
+            border-bottom: 2px solid var(--wp-color-gray-200);
+        }
+        &__title {
+            margin: 0;
+            font-size: var(--wp-font-size-xl);
+            font-weight: var(--wp-font-weight-semibold);
+            color: var(--wp-color-gray-800);
+        }
+        &__content {
+            // Content styling
+        }
+    }
+    .devices-stats {
+        display: flex;
+        align-items: center;
+        gap: var(--wp-spacing-md);
+        font-size: var(--wp-font-size-sm);
+        .devices-count,
+        .iot-devices-count {
+            display: flex;
+            align-items: center;
+            gap: var(--wp-spacing-xs);
+            padding: var(--wp-spacing-xs) var(--wp-spacing-sm);
+            background-color: var(--wp-color-gray-100);
+            border-radius: var(--wp-border-radius-xl);
+            font-weight: var(--wp-font-weight-medium);
+            color: var(--wp-color-gray-700);
+            &::before {
+                content: '📟';
+                font-size: var(--wp-font-size-md);
+            }
+        }
+        .iot-devices-count::before {
+            content: '🔌';
+        }
+    }
+    // ==========================================================================
+    // EMPTY STATES
+    // ==========================================================================
+    .devices-empty,
+    .iot-devices-empty {
+        text-align: center;
+        padding: var(--wp-spacing-xxl) var(--wp-spacing-lg);
+        background: var(--wp-color-gray-50);
+        border: 2px dashed var(--wp-color-gray-300);
+        border-radius: var(--wp-border-radius-lg);
+        margin-bottom: var(--wp-spacing-xl);
+        .empty-icon {
+            margin: 0 auto var(--wp-spacing-lg);
+            width: 64px;
+            height: 64px;
+            color: var(--wp-color-gray-400);
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .empty-title {
+            margin: 0 0 var(--wp-spacing-sm) 0;
+            font-size: var(--wp-font-size-lg);
+            font-weight: var(--wp-font-weight-semibold);
+            color: var(--wp-color-gray-700);
+        }
+        .empty-description {
+            margin: 0;
+            font-size: var(--wp-font-size-base);
+            color: var(--wp-color-gray-500);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: var(--wp-line-height-relaxed);
+        }
+    }
+    // Smaller empty state for IOT devices
+    .iot-devices-empty {
+        padding: var(--wp-spacing-lg);
+        .empty-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: var(--wp-spacing-md);
+        }
+        .empty-title {
+            font-size: var(--wp-font-size-md);
+        }
+        .empty-description {
+            font-size: var(--wp-font-size-sm);
+        }
+    }
+}

@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Http;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 
 /**

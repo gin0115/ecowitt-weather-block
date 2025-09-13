@@ -17,5 +17,8 @@ return array(
 	),
 	'additional' => array(
 		'ecowitt_api_base' => 'https://api.ecowitt.net/api/v3/',
+		'admin_page_slug' => 'ecowitt-weather-block',
+		'ajax_live_observation_action' => 'ecowitt_live_observation_action',
+		'ajax_live_observation_nonce' => 'ecowitt_live_observation_nonce',
 	),
 );

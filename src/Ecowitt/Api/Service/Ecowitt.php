@@ -16,9 +16,11 @@ use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Observation_Service;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Ecowitt_Http_Service;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Exception\Connection_Exception;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * Primary Ecowitt Service.

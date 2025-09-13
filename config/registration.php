@@ -12,4 +12,6 @@
 return array(
 	\PinkCrab\Ecowitt_Weather_Block\Settings\Page\Settings_Page::class,
 	\PinkCrab\Ecowitt_Weather_Block\Admin\Asset_Loader::class,
+	\PinkCrab\Ecowitt_Weather_Block\Admin\Page\Device_Page::class,
+	\PinkCrab\Ecowitt_Weather_Block\Admin\Page\Ajax\Live_Observation_Ajax::class,
 );

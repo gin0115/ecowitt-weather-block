@@ -13,3 +13,5 @@ parameters:
         - %currentWorkingDirectory%/tests/*
     bootstrapFiles:
         - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+    stubFiles:
+        - phpstan-stubs/App_Config.php

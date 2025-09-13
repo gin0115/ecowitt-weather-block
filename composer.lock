@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "123cb575b1cd1a89c339641a93d11126",
+    "content-hash": "620ebb1a16442294027fa30d7da70d48",
     "packages": [
         {
             "name": "gin0115/dice",
@@ -198,6 +198,71 @@
                 }
             ],
             "time": "2023-11-08T09:30:43+00:00"
+        },
+        {
+            "name": "pinkcrab/ajax",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Pink-Crab/Perique-Ajax.git",
+                "reference": "c9bae46245d855efa5da457aff5f3b2566adc47b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Pink-Crab/Perique-Ajax/zipball/c9bae46245d855efa5da457aff5f3b2566adc47b",
+                "reference": "c9bae46245d855efa5da457aff5f3b2566adc47b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0",
+                "pinkcrab/enqueue": "1.*",
+                "pinkcrab/http": "1.1.*",
+                "pinkcrab/perique-framework-core": "2.1.*",
+                "pinkcrab/wp-nonce": "*"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "gin0115/wpunit-helpers": "1.1.*",
+                "php-stubs/wordpress-stubs": "6.7.*",
+                "phpstan/phpstan": "1.*",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+                "roave/security-advisories": "dev-latest",
+                "roots/wordpress": "6.7.*",
+                "squizlabs/php_codesniffer": "3.*",
+                "symfony/var-dumper": "<=6.2.7",
+                "szepeviktor/phpstan-wordpress": "<=1.1.7",
+                "vlucas/phpdotenv": "<=5.5.0",
+                "wp-cli/i18n-command": "*",
+                "wp-coding-standards/wpcs": "^3",
+                "wp-phpunit/wp-phpunit": "6.7.*",
+                "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [],
+                "psr-4": {
+                    "PinkCrab\\Ajax\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glynn Quelch",
+                    "email": "glynn@pinkcrab.co.uk",
+                    "homepage": "http://clappo.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Ajax creation library for the Perique Framework.",
+            "homepage": "https://pinkcrab.co.uk",
+            "support": {
+                "issues": "https://github.com/Pink-Crab/Perique-Ajax/issues",
+                "source": "https://github.com/Pink-Crab/Perique-Ajax/tree/2.1.0"
+            },
+            "time": "2025-01-30T23:32:31+00:00"
         },
         {
             "name": "pinkcrab/enqueue",
@@ -577,6 +642,63 @@
                 "source": "https://github.com/Pink-Crab/Perique-Framework/tree/2.1.0"
             },
             "time": "2025-01-27T23:26:44+00:00"
+        },
+        {
+            "name": "pinkcrab/wp-nonce",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Pink-Crab/Nonce.git",
+                "reference": "09c2d7230a919ca415734507747c51d1fc65c2d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Pink-Crab/Nonce/zipball/09c2d7230a919ca415734507747c51d1fc65c2d1",
+                "reference": "09c2d7230a919ca415734507747c51d1fc65c2d1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "object-calisthenics/phpcs-calisthenics-rules": "*",
+                "php-stubs/wordpress-stubs": "^5.6.0",
+                "phpstan/phpstan": "^0.12.6",
+                "phpunit/phpunit": "^7.0",
+                "pinkcrab/phpunit-helpers": "dev-master",
+                "roots/wordpress": "^5.5",
+                "symfony/var-dumper": "4.*",
+                "szepeviktor/phpstan-wordpress": "^0.7.2",
+                "wp-coding-standards/wpcs": "*",
+                "wp-phpunit/wp-phpunit": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [],
+                "psr-4": {
+                    "PinkCrab\\Nonce\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glynn Quelch",
+                    "email": "glynn.quelch@pinkcrab.co.uk",
+                    "homepage": "http://clappo.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple class based WP Nonce solution",
+            "homepage": "https://pinkcrab.co.uk",
+            "support": {
+                "issues": "https://github.com/Pink-Crab/Nonce/issues",
+                "source": "https://github.com/Pink-Crab/Nonce/tree/0.1.0"
+            },
+            "time": "2021-02-11T11:42:01+00:00"
         },
         {
             "name": "psr/container",

@@ -11,9 +11,11 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * IOT Device DTO class for Ecowitt API v3.
@@ -91,7 +93,7 @@ class IOT {
 	/**
 	 * Create IOT device from API v3 response array.
 	 *
-	 * @param array<string, mixed> $data IOT device data from API v3 response.
+	 * @param array<mixed> $data IOT device data from API v3 response.
 	 * @return IOT IOT device instance.
 	 */
 	public static function from_array( array $data ): IOT {
@@ -111,7 +113,7 @@ class IOT {
 			if ( is_string( $value ) ) {
 				$additional_data[ $sanitized_key ] = sanitize_text_field( $value );
 			} elseif ( is_numeric( $value ) ) {
-				$additional_data[ $sanitized_key ] = is_float( $value ) ? (float) $value : absint( $value );
+				$additional_data[ $sanitized_key ] = is_float( $value ) ? (float) $value : (int) absint( $value );
 			} elseif ( is_bool( $value ) ) {
 				// Preserve boolean values
 				$additional_data[ $sanitized_key ] = $value;
@@ -128,5 +130,21 @@ class IOT {
 		}
 
 		return new self( $name, $default_title, $device_id, $version, $createtime, $additional_data );
+	}
+
+	/**
+	 * Convert IOT device to array with proper PHPStan array shape.
+	 *
+	 * @return array{name: string, default_title: string, device_id: string, version: string, createtime: string, additional_data: array<string, mixed>}
+	 */
+	public function to_array(): array {
+		return array(
+			'name'            => $this->name,
+			'default_title'   => $this->default_title,
+			'device_id'       => $this->device_id,
+			'version'         => $this->version,
+			'createtime'      => $this->createtime,
+			'additional_data' => $this->additional_data,
+		);
 	}
 }

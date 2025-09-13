@@ -33,6 +33,13 @@ $connection_id = !empty($key) ? $key : '__new_';
             
             <div class="connection__actions">
                 <?php if ($connection_status === 'active') : ?>
+                    <a href="<?php echo esc_url($device_base_path . '&connection_id=' . $connection_id); ?>" class="btn btn--sm btn--primary btn--outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <?php esc_html_e('View', 'ecowitt-weather-block'); ?>
+                    </a>
                     <button class="btn btn--sm btn--outline" data-action="edit-connection" data-connection="<?php echo esc_attr($connection_id); ?>">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
