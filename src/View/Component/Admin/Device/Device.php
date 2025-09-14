@@ -88,11 +88,14 @@ class Device extends Component implements \JsonSerializable {
 	 * @return string
 	 */
 	public function type_label(): string {
-		return match ( $this->type ) {
-			1 => 'Weather Detector',
-			2 => 'Camera',
-			default => 'Unknown'
-		};
+		switch ( $this->type ) {
+			case 1:
+				return 'Weather Detector';
+			case 2:
+				return 'Camera';
+			default:
+				return 'Unknown';
+		}
 	}
 
 	/**
@@ -167,10 +170,9 @@ class Device extends Component implements \JsonSerializable {
 	/**
 	 * Get the device as a JSON string.
 	 *
-	 * @return DeviceComponentArray
+	 * @return array
 	 */
-	#[\ReturnTypeWillChange]
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		return $this->to_array();
 	}
 }

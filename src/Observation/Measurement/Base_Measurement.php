@@ -58,21 +58,21 @@ abstract class Base_Measurement implements JsonSerializable {
 	 *
 	 * @var string
 	 */
-	protected readonly string $value;
+	protected $value;
 
 	/**
 	 * The unit of the measurement.
 	 *
 	 * @var string
 	 */
-	protected readonly string $unit;
+	protected $unit;
 
 	/**
 	 * The timestamp when the measurement was taken.
 	 *
 	 * @var DateTime|null
 	 */
-	protected readonly ?DateTime $timestamp;
+	protected $timestamp;
 
 	/**
 	 * Create a new measurement instance from a DTO.
