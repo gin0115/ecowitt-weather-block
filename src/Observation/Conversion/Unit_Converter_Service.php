@@ -89,7 +89,8 @@ class Unit_Converter_Service {
 		);
 
 		// Return new measurement object of the same type
-		return new ( get_class( $measurement ) )( $converted_dto );
+		$class_name = get_class( $measurement );
+		return new $class_name( $converted_dto );
 	}
 
 	/**

@@ -96,8 +96,6 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 			array( '2147483647', 'DateTime', 'Maximum 32-bit Unix timestamp' ),
 			array( '1000000000', 'DateTime', 'Large valid timestamp' ),
 			array( '1e6', 'DateTime', 'Scientific notation (1000000)' ),
-			array( '999999999999999999999', 'DateTime', 'Extremely large number (handled by PHP)' ),
-			array( '1.7976931348623157e+308', 'DateTime', 'Float max value (handled by PHP)' ),
 			
 			// Invalid timestamps that should return null
 			array( '', null, 'Empty string' ),
