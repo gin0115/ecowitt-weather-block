@@ -26,6 +26,7 @@ use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Percentage;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Power;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Soil_Moisture;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature;
@@ -38,7 +39,7 @@ use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
 
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 // @codeCoverageIgnoreEnd
 
@@ -58,6 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Power
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall
+ * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Soil_Moisture
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation
  * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature
@@ -71,7 +73,7 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 
 	/**
 	 * Data provider for all measurement classes
-	 * 
+	 *
 	 * @return array Array of [class_name, expected_type, expected_constants]
 	 */
 	public function measurement_classes_data_provider(): array {
@@ -154,6 +156,12 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 				Base_Measurement::TYPE_RAINFALL,
 				array( 'UNIT_MILLIMETERS', 'UNIT_INCHES' ),
 			),
+			// Rain Rate - has unit constants
+			array(
+				Rain_Rate::class,
+				Base_Measurement::TYPE_RAIN_RATE,
+				array( 'UNIT_INCHES_PER_HOUR', 'UNIT_MILLIMETERS_PER_HOUR' ),
+			),
 			// Soil Moisture - no unit constants
 			array(
 				Soil_Moisture::class,
@@ -212,10 +220,9 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 	public function test_measurement_classes_return_correct_type( string $class_name, string $expected_type, array $expected_constants ): void {
 		// Create a mock DTO for the measurement
 		$measurement_dto = new Measurement( '1.0', 'test_unit', '1642248600' );
-		
 		// Create instance of the measurement class
 		$measurement = new $class_name( $measurement_dto );
-		
+
 		// Test that get_type() returns the expected type
 		$this->assertSame( $expected_type, $measurement->get_type() );
 	}
@@ -227,19 +234,19 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 	public function test_measurement_classes_have_expected_constants( string $class_name, string $expected_type, array $expected_constants ): void {
 		// Test that all expected constants exist
 		foreach ( $expected_constants as $constant_name ) {
-			$this->assertTrue( 
+			$this->assertTrue(
 				defined( $class_name . '::' . $constant_name ),
 				"Constant {$constant_name} should exist in {$class_name}"
 			);
 		}
-		
+
 		// If no constants are expected, verify that no UNIT_ constants exist
 		if ( empty( $expected_constants ) ) {
 			$reflection = new \ReflectionClass( $class_name );
-			$constants = $reflection->getConstants();
-			
+			$constants  = $reflection->getConstants();
+
 			foreach ( $constants as $constant_name => $constant_value ) {
-				$this->assertFalse( 
+				$this->assertFalse(
 					str_starts_with( $constant_name, 'UNIT_' ),
 					"{$class_name} should not have any UNIT_ constants, but found {$constant_name}"
 				);
@@ -253,7 +260,7 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 	 */
 	public function test_measurement_classes_extend_base_measurement( string $class_name, string $expected_type, array $expected_constants ): void {
 		// Test that the class extends Base_Measurement
-		$this->assertTrue( 
+		$this->assertTrue(
 			is_subclass_of( $class_name, Base_Measurement::class ),
 			"{$class_name} should extend Base_Measurement"
 		);
@@ -266,10 +273,10 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 	public function test_measurement_classes_are_instantiable( string $class_name, string $expected_type, array $expected_constants ): void {
 		// Create a mock DTO for the measurement
 		$measurement_dto = new Measurement( '1.0', 'test_unit', '1642248600' );
-		
+
 		// Test that the class can be instantiated
 		$measurement = new $class_name( $measurement_dto );
-		
+
 		$this->assertInstanceOf( $class_name, $measurement );
 		$this->assertInstanceOf( Base_Measurement::class, $measurement );
 	}

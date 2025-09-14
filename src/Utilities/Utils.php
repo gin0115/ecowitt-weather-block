@@ -55,7 +55,7 @@ class Utils {
 	 */
 	public static function get_date_format(): string {
 		$format = get_option( 'date_format' );
-		return is_string( $format ) && '' !== $format ? esc_attr($format) : 'Y-m-d';
+		return is_string( $format ) && '' !== $format ? esc_attr( $format ) : 'Y-m-d';
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Utils {
 	 */
 	public static function get_time_format(): string {
 		$format = get_option( 'time_format' );
-		return is_string( $format ) && '' !== $format ? esc_attr($format) : 'H:i:s';	
+		return is_string( $format ) && '' !== $format ? esc_attr( $format ) : 'H:i:s';
 	}
 
 	/**

@@ -16,6 +16,7 @@ use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Speed;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Volume;
 
@@ -142,6 +143,26 @@ class Conversion_Config implements Conversion_Config_Interface {
 					'format'                => array(
 						Rainfall::UNIT_MILLIMETERS => fn( $value ) => round( $value, 1 ),
 						Rainfall::UNIT_INCHES      => fn( $value ) => round( $value, 2 ),
+					),
+				),
+				Base_Measurement::TYPE_RAIN_RATE       => array(
+					'base_unit'             => Rain_Rate::UNIT_INCHES_PER_HOUR,
+					'base_unit_id'          => 28,
+					'units'                 => array(
+						27 => Rain_Rate::UNIT_MILLIMETERS_PER_HOUR,
+						28 => Rain_Rate::UNIT_INCHES_PER_HOUR,
+					),
+					'to_base_conversions'   => array(
+						Rain_Rate::UNIT_MILLIMETERS_PER_HOUR => fn( $value ) => $value * 0.0393701,
+						Rain_Rate::UNIT_INCHES_PER_HOUR => fn( $value ) => $value,
+					),
+					'from_base_conversions' => array(
+						Rain_Rate::UNIT_MILLIMETERS_PER_HOUR => fn( $value ) => $value * 25.4,
+						Rain_Rate::UNIT_INCHES_PER_HOUR => fn( $value ) => $value,
+					),
+					'format'                => array(
+						Rain_Rate::UNIT_MILLIMETERS_PER_HOUR => fn( $value ) => round( $value, 1 ),
+						Rain_Rate::UNIT_INCHES_PER_HOUR => fn( $value ) => round( $value, 2 ),
 					),
 				),
 				Base_Measurement::TYPE_SOLAR_RADIATION => array(

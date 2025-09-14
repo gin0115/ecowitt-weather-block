@@ -1,5 +1,7 @@
 <?php
 
+use PinkCrab\Ecowitt_Weather_Block\Utilities\Utils;
+
 /**
  * Component: Device
  *
@@ -176,7 +178,7 @@ $device_id_attr = 'device-' . absint( $id );
 			<?php if ( $createtime > 0 ) : ?>
 				<span class="timestamp-label"><?php esc_html_e( 'Created:', 'ecowitt-weather-block' ); ?></span>
 				<time class="timestamp-value" datetime="<?php echo esc_attr( date( 'c', $createtime ) ); ?>">
-					<?php echo esc_html( $this->creation_date() ); ?>
+					<?php echo esc_attr( date( Utils::get_datetime_format(), $createtime ) ); ?>
 				</time>
 			<?php endif; ?>
 		</div>

@@ -83,7 +83,7 @@ class Unit_Converter_Service {
 
 		// Create new DTO with converted value
 		$converted_dto = new Measurement(
-			is_string( $formatted_value ) ? $formatted_value : '',
+			(string) $formatted_value,
 			$target_unit,
 			$measurement->get_timestamp() ? $measurement->get_timestamp()->format( 'U' ) : ''
 		);

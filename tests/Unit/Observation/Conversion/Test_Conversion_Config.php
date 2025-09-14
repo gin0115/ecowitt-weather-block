@@ -18,6 +18,7 @@ use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Speed;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Volume;
 
@@ -368,6 +369,55 @@ class Test_Conversion_Config extends \WP_UnitTestCase {
 
 		// inches: round(value, 2)
 		$this->assertSame( 1.00, $inches_format( 1.004 ) );
+	}
+
+	/**
+	 * @testdox It should convert mm/hr to in/hr correctly
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Conversion_Config::get
+	 */
+	public function test_rain_rate_mmhr_to_inhr(): void {
+		$config = new Conversion_Config();
+		$result = $config->get();
+		$rain_rate_config = $result[ Base_Measurement::TYPE_RAIN_RATE ];
+		$mmhr_to_inhr = $rain_rate_config['to_base_conversions'][ Rain_Rate::UNIT_MILLIMETERS_PER_HOUR ];
+
+		// Test: value * 0.0393701
+		$this->assertEqualsWithDelta( 1.0, $mmhr_to_inhr( 25.4 ), 0.001 );
+		$this->assertEqualsWithDelta( 0.5, $mmhr_to_inhr( 12.7 ), 0.001 );
+	}
+
+	/**
+	 * @testdox It should convert in/hr to mm/hr correctly
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Conversion_Config::get
+	 */
+	public function test_rain_rate_inhr_to_mmhr(): void {
+		$config = new Conversion_Config();
+		$result = $config->get();
+		$rain_rate_config = $result[ Base_Measurement::TYPE_RAIN_RATE ];
+		$inhr_to_mmhr = $rain_rate_config['from_base_conversions'][ Rain_Rate::UNIT_MILLIMETERS_PER_HOUR ];
+
+		// Test: value * 25.4
+		$this->assertEqualsWithDelta( 25.4, $inhr_to_mmhr( 1.0 ), 0.001 );
+		$this->assertEqualsWithDelta( 12.7, $inhr_to_mmhr( 0.5 ), 0.001 );
+	}
+
+	/**
+	 * @testdox It should format rain rate values correctly
+	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Conversion_Config::get
+	 */
+	public function test_rain_rate_formatting(): void {
+		$config = new Conversion_Config();
+		$result = $config->get();
+		$rain_rate_config = $result[ Base_Measurement::TYPE_RAIN_RATE ];
+
+		$mmhr_format = $rain_rate_config['format'][ Rain_Rate::UNIT_MILLIMETERS_PER_HOUR ];
+		$inhr_format = $rain_rate_config['format'][ Rain_Rate::UNIT_INCHES_PER_HOUR ];
+
+		// mm/hr: round(value, 1)
+		$this->assertSame( 25.1, $mmhr_format( 25.123 ) );
+
+		// in/hr: round(value, 2)
+		$this->assertSame( 1.00, $inhr_format( 1.004 ) );
 	}
 
 	/**

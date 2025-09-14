@@ -18,7 +18,7 @@ use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device as DeviceDTO;
 
 /**
  * The device component.
- * 
+ *
  * @phpstan-type DeviceComponentArray array{
 	 *     id: int,
 	 *     name: string,

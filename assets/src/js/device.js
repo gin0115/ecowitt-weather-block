@@ -90,14 +90,11 @@ console.log('Loaded device.js');
         handleObservationSuccess: function($button, response) {
             // Hide loading state
             this.hideLoadingState($button);
-
-            if (response.success) {
-                // Update the observation display area
-                this.updateObservationDisplay(response.data);
-            } else {
-                console.error('Observation request failed:', response.data);
-                this.showError('Failed to get observation data');
-            }
+            
+            console.log(response);
+            
+            // Update the observation display area with the full response
+            this.updateObservationDisplay(response);
         },
 
         /**
@@ -120,16 +117,33 @@ console.log('Loaded device.js');
          * @param {Object} observationData The observation data.
          */
         updateObservationDisplay: function(observationData) {
-            const $displayArea = $('[data-observation-display]');
+            const $displayArea = $('.observation-placeholder');
             
             if ($displayArea.length === 0) {
-                console.warn('No observation display area found');
+                console.warn('No observation placeholder found');
                 return;
             }
 
-            // For now, just show a simple message
-            // This will be enhanced when we have the actual observation data structure
-            $displayArea.html('<div class="notice notice-success"><p>Observation data received successfully!</p></div>');
+            // Display the JSON string
+            const jsonString = JSON.stringify(observationData, null, 2);
+            $displayArea.html(`<pre style="background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; max-height: 600px; overflow-y: auto;">${this.escapeHtml(jsonString)}</pre>`);
+        },
+
+        /**
+         * Escape HTML characters to prevent XSS.
+         *
+         * @param {string} text The text to escape.
+         * @returns {string} The escaped text.
+         */
+        escapeHtml: function(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         },
 
         /**

@@ -51,8 +51,22 @@ class Measurement {
 	 * @param string $timestamp The timestamp of the measurement.
 	 */
 	public function __construct( string $value, string $unit, string $timestamp ) {
-		$this->value     = $value;
-		$this->unit      = $unit;
-		$this->timestamp = $timestamp;
+		$this->value     = esc_attr( $value );
+		$this->unit      = esc_attr( $unit );
+		$this->timestamp = esc_attr( $timestamp );
+	}
+
+	/**
+	 * Create a new measurement instance from an array.
+	 *
+	 * @param array<mixed> $data The measurement data from the API.
+	 * @return Measurement The measurement instance.
+	 */
+	public static function from_array( array $data ): Measurement {
+		return new self(
+			is_string( $data['value'] ) ? esc_attr( $data['value'] ) : '',
+			is_string( $data['unit'] ) ? esc_attr( $data['unit'] ) : '',
+			is_string( $data['time'] ) ? esc_attr( $data['time'] ) : ''
+		);
 	}
 }

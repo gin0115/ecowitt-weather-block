@@ -91,14 +91,15 @@ class Live_Observation_Ajax extends Ajax {
 		$device     = Device::from_array( $this->normalize_device_args( $args ) );
 		$connection = Connection::from_array( $this->normalize_connection_args( $args ) );
 
-		// $observation = $this->ecowitt->with_connection( $connection )->get_current_observations( $device );
+		$observation = $this->ecowitt->with_connection( $connection )->get_live_observations( $device );
 
 		// Return with a valid PSR Response.
 		return $response_factory->success(
 			array(
-				'connection' => $connection,
-				'device'     => $device,
-				'args'       => $args,
+				'connection'  => $connection,
+				'device'      => $device,
+				'args'        => $args,
+				'observation' => $observation,
 			)
 		);
 	}

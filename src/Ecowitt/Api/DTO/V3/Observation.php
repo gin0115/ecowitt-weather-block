@@ -25,10 +25,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Observation {
 
 	/**
+	 * Group of observations.
+	 *
+	 * @var array<string, array<string, Measurement>>
+	 */
+	public array $observations;
+
+	/**
+	 * Placeholder constructor.
+	 * @var array<string, array<string, Measurement>>
+	 */
+
+	/**
 	 * Placeholder constructor.
 	 */
-	public function __construct() {
-		// TODO: Add observation properties and constructor parameters
+	public function __construct( array $observations ) {
+		$this->observations = $observations;
 	}
 
 	/**
@@ -39,6 +51,6 @@ class Observation {
 	 */
 	public static function from_array( array $data ): Observation {
 		// TODO: Implement observation creation from array
-		return new self();
+		return new self( $data );
 	}
 }

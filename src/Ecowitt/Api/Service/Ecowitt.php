@@ -10,6 +10,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service;
 
 use DateTime;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Observation;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Device_Service;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Observation_Service;
@@ -103,8 +104,9 @@ class Ecowitt {
 	 * @param Device $device
 	 * @return Observation|null
 	 */
-	public function get_current_observations( Device $device ): ?Observation {
-		return $this->observation_service->get_current_observations( $device, $this->current_connection );
+	public function get_live_observations( Device $device ): ?Observation {
+		$observation = $this->observation_service->get_live_observations( $device, $this->current_connection );
+		return $observation;
 	}
 
 	/**

@@ -118,12 +118,12 @@ class Device_Page extends Menu_Page {
 	 */
 	public function get_selected_connection(): ?Connection {
 		// Check if connection id is in url.
-		if ( ! isset( $_GET['connection_id'] ) && is_string( $_GET['connection_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, Only checking if set.
+		if ( ! isset( $_GET['connection_id'] ) || ! is_string( $_GET['connection_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, Only checking if set.
 			return null;
 		}
 
 		// @phpstan-ignore-next-line, issue with wp_strip_all_tags() here.
-		$connection_id = sanitize_text_field(wp_strip_all_tags( $_GET['connection_id']) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, Can be accessed safely.
+		$connection_id = sanitize_text_field( wp_strip_all_tags( $_GET['connection_id'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, Can be accessed safely.
 
 		$connections = $this->settings->connections()->all();
 		foreach ( $connections as $connection ) {

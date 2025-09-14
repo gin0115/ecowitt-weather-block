@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\Observation\Measurement;
 
 use DateTime;
+use JsonSerializable;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
 
 // @codeCoverageIgnoreStart
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Abstract base class for all measurement objects with unit conversion capabilities.
  */
-abstract class Base_Measurement {
+abstract class Base_Measurement implements JsonSerializable {
 
 	/**
 	 * Measurement type constants.
@@ -34,6 +35,7 @@ abstract class Base_Measurement {
 	public const TYPE_WIND_SPEED      = 'wind_speed';
 	public const TYPE_WIND_DIRECTION  = 'wind_direction';
 	public const TYPE_RAINFALL        = 'rainfall';
+	public const TYPE_RAIN_RATE       = 'rain_rate';
 	public const TYPE_SOLAR_RADIATION = 'solar_radiation';
 	public const TYPE_UV_INDEX        = 'uv_index';
 	public const TYPE_DISTANCE        = 'distance';
@@ -117,6 +119,29 @@ abstract class Base_Measurement {
 		return $this->timestamp;
 	}
 
+	/**
+	 * Serialize the measurement to a JSON-compatible array.
+	 * Uses the fully qualified class name for type to enable easy deserialization.
+	 *
+	 * @return array The JSON-serializable representation of the measurement.
+	 */
+	public function jsonSerialize(): array {
+		$utc_timestamp = null;
+		if ( $this->timestamp ) {
+			// Clone the DateTime to avoid modifying the original
+			$utc_datetime = clone $this->timestamp;
+			// Convert to UTC and format with Z suffix
+			$utc_datetime->setTimezone( new \DateTimeZone( 'UTC' ) );
+			$utc_timestamp = $utc_datetime->format( 'Y-m-d\TH:i:s\Z' );
+		}
+
+		return array(
+			'type'      => static::class,
+			'value'     => $this->value,
+			'unit'      => $this->unit,
+			'timestamp' => $utc_timestamp,
+		);
+	}
 
 
 	/**
