@@ -149,4 +149,21 @@ class Connection implements JsonSerializable {
 			'name'            => $this->name,
 		);
 	}
+
+	/**
+	 * Creates an instance of the Connection from an array.
+	 *
+	 * @param array{key: string, application_key: string, api_key: string, mac_address: string, description: string, name: string} $data
+	 * @return self
+	 */
+	public static function from_array( array $data ): self {
+		return new self(
+			$data['key'],
+			$data['application_key'],
+			$data['api_key'],
+			$data['mac_address'],
+			$data['description'],
+			$data['name']
+		);
+	}
 }

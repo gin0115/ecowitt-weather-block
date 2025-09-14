@@ -15,9 +15,11 @@ namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service;
 use PinkCrab\Ecowitt_Weather_Block\Http\Client_Interface;
 use PinkCrab\Perique\Application\App_Config;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * Ecowitt HTTP Service.

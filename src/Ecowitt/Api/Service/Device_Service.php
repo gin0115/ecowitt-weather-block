@@ -15,9 +15,11 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * The Device Service for Ecowitt API interactions.

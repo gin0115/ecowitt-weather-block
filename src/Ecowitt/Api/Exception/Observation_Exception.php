@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Exception;
 
+// @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// @codeCoverageIgnoreEnd
 
 /**
  * Observation Exception.

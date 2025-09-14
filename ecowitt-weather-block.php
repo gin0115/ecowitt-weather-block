@@ -27,6 +27,7 @@ defined( 'ABSPATH' ) || exit;
 
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique_Admin_Menu\Module\Admin_Menu;
+use PinkCrab\Ajax\Module\Ajax;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -39,6 +40,7 @@ add_action(
 		$app = ( new App_Factory( __DIR__ ) )
             ->default_setup()
             ->module( Admin_Menu::class )
+			->module( Ajax::class )
             ->di_rules( require __DIR__ . '/config/dependencies.php' )
             ->app_config( require __DIR__ . '/config/settings.php' )
             ->registration_classes( require __DIR__ . '/config/registration.php' );
