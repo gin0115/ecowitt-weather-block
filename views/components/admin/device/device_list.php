@@ -3,14 +3,14 @@
 /**
  * Template: Device List Component
  *
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Admin\Device\Device_List $this The component instance
+ * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
  * @var array<int, PinkCrab\Ecowitt_Weather_Block\View\Component\Admin\Device\Device> $devices Array of device components
  */
 ?>
 
 <div class="ecowitt-devices-section">
 	<div class="ecowitt-devices-section__header">
-		<h2 class="ecowitt-devices-section__title"><?php esc_html_e( 'Weather Station Devices', 'ecowitt-weather-block' ); ?></h2>
+		<h2 class="ecowitt-devices-section__title"><?php esc_html_e( 'Weather Station Devices', 'pinkcrab-weather-block' ); ?></h2>
 		<?php if ( ! empty( $devices ) ) : ?>
 			<div class="devices-stats">
 				<span class="devices-count">
@@ -18,7 +18,7 @@
 					$device_count = count( $devices );
 					printf(
 						/* translators: %1$d: number of devices */
-						esc_html( _n( '%1$d Device', '%1$d Devices', $device_count, 'ecowitt-weather-block' ) ),
+						esc_html( _n( '%1$d Device', '%1$d Devices', $device_count, 'pinkcrab-weather-block' ) ),
 						absint( $device_count )
 					);
 					?>
@@ -38,7 +38,7 @@
 						<?php
 						printf(
 							/* translators: %d: number of IOT devices */
-							esc_html( _n( '%d IOT Device', '%d IOT Devices', $total_iot_count, 'ecowitt-weather-block' ) ),
+							esc_html( _n( '%d IOT Device', '%d IOT Devices', $total_iot_count, 'pinkcrab-weather-block' ) ),
 							absint( $total_iot_count )
 						);
 						?>
@@ -69,9 +69,9 @@
 					<path d="M17 7h.01"/>
 				</svg>
 			</div>
-			<h3 class="empty-title"><?php esc_html_e( 'No Devices Found', 'ecowitt-weather-block' ); ?></h3>
+			<h3 class="empty-title"><?php esc_html_e( 'No Devices Found', 'pinkcrab-weather-block' ); ?></h3>
 			<p class="empty-description">
-				<?php esc_html_e( 'No weather station devices were found. Make sure you have a valid connection configured and that your weather station is properly set up.', 'ecowitt-weather-block' ); ?>
+				<?php esc_html_e( 'No weather station devices were found. Make sure you have a valid connection configured and that your weather station is properly set up.', 'pinkcrab-weather-block' ); ?>
 			</p>
 		</div>
 		<?php endif; ?>

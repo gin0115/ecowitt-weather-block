@@ -12,7 +12,7 @@ use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_
 
 <div class="ecowitt-settings-section">
     <div class="ecowitt-settings-section__header">
-        <h2 class="ecowitt-settings-section__title"><?php esc_html_e('Weather Station Connections', 'ecowitt-weather-block'); ?></h2>
+        <h2 class="ecowitt-settings-section__title"><?php esc_html_e('Weather Station Connections', 'pinkcrab-weather-block'); ?></h2>
     </div>
     
     <div class="ecowitt-settings-section__content">
@@ -32,9 +32,9 @@ use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_
                     <path d="M2 12l10 5 10-5"/>
                 </svg>
             </div>
-            <h3 class="empty-title"><?php esc_html_e( 'No Connections Found', 'ecowitt-weather-block' ); ?></h3>
+            <h3 class="empty-title"><?php esc_html_e( 'No Connections Found', 'pinkcrab-weather-block' ); ?></h3>
             <p class="empty-description">
-                <?php esc_html_e( 'You haven\'t added any Ecowitt weather station connections yet. Add your first connection to get started.', 'ecowitt-weather-block' ); ?>
+                <?php esc_html_e( 'You haven\'t added any Ecowitt weather station connections yet. Add your first connection to get started.', 'pinkcrab-weather-block' ); ?>
             </p>
         </div>
     <?php endif; ?>
@@ -43,7 +43,9 @@ use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_
     <?php if (defined('WP_DEBUG') && WP_DEBUG) : ?>
         <details class="mt-xl">
             <summary>Debug Information</summary>
-            <?php dump( get_defined_vars() ); ?>
+            <?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
+                <pre><?php echo esc_html( wp_json_encode( get_defined_vars(), JSON_PRETTY_PRINT ) ); ?></pre>
+            <?php endif; ?>
         </details>
     <?php endif; ?>
 
@@ -55,9 +57,9 @@ use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
         </div>
-        <h3 class="new-connection__title"><?php esc_html_e( 'Add New Connection', 'ecowitt-weather-block' ); ?></h3>
+        <h3 class="new-connection__title"><?php esc_html_e( 'Add New Connection', 'pinkcrab-weather-block' ); ?></h3>
         <p class="new-connection__description">
-            <?php esc_html_e( 'Connect your Ecowitt weather station to start displaying weather data in your WordPress site.', 'ecowitt-weather-block' ); ?>
+            <?php esc_html_e( 'Connect your Ecowitt weather station to start displaying weather data in your WordPress site.', 'pinkcrab-weather-block' ); ?>
         </p>
                 <button type="button" 
                 class="btn btn--primary btn--large"
@@ -69,9 +71,9 @@ use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_
     <?php // New connection form ?>
     <div class="new-connection-form" id="new-connection-form" style="display: none;">
         <div class="form-header">
-            <h3 class="form-title"><?php esc_html_e( 'Add New Connection', 'ecowitt-weather-block' ); ?></h3>
+            <h3 class="form-title"><?php esc_html_e( 'Add New Connection', 'pinkcrab-weather-block' ); ?></h3>
             <p class="form-description">
-                <?php esc_html_e( 'Enter your Ecowitt weather station details below to create a new connection.', 'ecowitt-weather-block' ); ?>
+                <?php esc_html_e( 'Enter your Ecowitt weather station details below to create a new connection.', 'pinkcrab-weather-block' ); ?>
             </p>
         </div>
         

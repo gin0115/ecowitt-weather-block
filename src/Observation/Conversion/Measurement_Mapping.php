@@ -73,7 +73,7 @@ class Measurement_Mapping {
 
 		// Add channel-based measurements dynamically
 		$mappings = array_merge( $mappings, $this->get_channel_based_mappings() );
-
+// adie($this->get_channel_based_mappings(), $mappings);
 		return $mappings;
 	}
 
@@ -481,9 +481,16 @@ class Measurement_Mapping {
 	 */
 	public function get_group( string $group ): ?array {
 		$method = str_replace( '-', '_', $group );
+		
+		// If the method ends in _ch{digit} rename to _channel
+		if(preg_match('/_ch\d$/', $method)){
+			$method = preg_replace('/_ch\d$/', '_channel', $method);
+		}
+		
 		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}
+		// adump(['method' => $method, 'group' => $group]);
 
 		return null;
 	}
@@ -497,6 +504,9 @@ class Measurement_Mapping {
 	 */
 	public function get_measurement_class( string $group, string $key ): ?string {
 		$group_mapping = $this->get_group( $group );
+		// if($group === 'temp_and_humidity_ch1'){
+		// 	adump(['group' => $group, 'key' => $key,'return' => $group_mapping[ $key ] ?? null]);
+		// }
 		return $group_mapping[ $key ] ?? null;
 	}
 }

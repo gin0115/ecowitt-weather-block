@@ -9,7 +9,6 @@
  * @param string                                                     $form_nonce_key The nonce for the form.
  * @param string                                                     $submission_key The submission key for the form.
  */
-dump( get_defined_vars() );
 ?>
 <div class="wrap ecowitt-admin">
 	<div class="ecowitt-admin__header">

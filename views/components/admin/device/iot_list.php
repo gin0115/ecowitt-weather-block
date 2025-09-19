@@ -3,7 +3,7 @@
 /**
  * Template: IOT Device List Component
  * 
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Admin\Device\IOT_List $this The component instance
+ * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
  * @var array<int, PinkCrab\Ecowitt_Weather_Block\View\Component\Admin\Device\IOT> $iot_devices Array of IOT device components
  */
 
@@ -11,7 +11,7 @@
 
 <div class="ecowitt-iot-devices-section">
     <div class="ecowitt-iot-devices-section__header">
-        <h3 class="ecowitt-iot-devices-section__title"><?php esc_html_e('IOT Devices', 'ecowitt-weather-block'); ?></h3>
+        <h3 class="ecowitt-iot-devices-section__title"><?php esc_html_e('IOT Devices', 'pinkcrab-weather-block'); ?></h3>
         <?php if (!empty($iot_devices)) : ?>
             <div class="iot-devices-stats">
                 <span class="iot-devices-count">
@@ -19,7 +19,7 @@
                     $iot_count = count($iot_devices);
                     printf(
                         /* translators: %d: number of IOT devices */
-                        esc_html(_n('%d Device', '%d Devices', $iot_count, 'ecowitt-weather-block')),
+                        esc_html(_n('%d Device', '%d Devices', $iot_count, 'pinkcrab-weather-block')),
                         absint($iot_count)
                     );
                     ?>
@@ -44,9 +44,9 @@
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
             </div>
-            <h4 class="empty-title"><?php esc_html_e( 'No IOT Devices Found', 'ecowitt-weather-block' ); ?></h4>
+            <h4 class="empty-title"><?php esc_html_e( 'No IOT Devices Found', 'pinkcrab-weather-block' ); ?></h4>
             <p class="empty-description">
-                <?php esc_html_e( 'No IOT devices were found. IOT devices are additional sensors connected to your weather station.', 'ecowitt-weather-block' ); ?>
+                <?php esc_html_e( 'No IOT devices were found. IOT devices are additional sensors connected to your weather station.', 'pinkcrab-weather-block' ); ?>
             </p>
         </div>
         <?php endif; ?>

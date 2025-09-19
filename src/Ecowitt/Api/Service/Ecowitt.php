@@ -101,23 +101,23 @@ class Ecowitt {
 	/**
 	 * Get current observations.
 	 *
-	 * @param Device $device
+	 * @param string $mac
 	 * @return Observation|null
 	 */
-	public function get_live_observations( Device $device ): ?Observation {
-		$observation = $this->observation_service->get_live_observations( $device, $this->current_connection );
+	public function get_live_observations( string $mac ): ?Observation {
+		$observation = $this->observation_service->get_live_observations( $mac, $this->current_connection );
 		return $observation;
 	}
 
 	/**
 	 * Get observation history.
 	 *
-	 * @param Device        $device
+	 * @param string        $mac
 	 * @param DateTime      $from   The start date.
 	 * @param DateTime|null $to     The end date, or null for now.
 	 * @return array<Observation>
 	 */
-	public function get_observation_history( Device $device, DateTime $from, ?DateTime $to = null ): array {
-		return $this->observation_service->get_observation_history( $device, $from, $to, $this->current_connection );
+	public function get_observation_history( string $mac, DateTime $from, ?DateTime $to = null ): array {
+		return $this->observation_service->get_observation_history( $mac, $from, $to, $this->current_connection );
 	}
 }

@@ -184,13 +184,4 @@ class Page_Handler {
 		}
 		return $key;
 	}
-
-	/**
-	 * Get the settings.
-	 *
-	 * @return Settings
-	 */
-	public function get_settings(): Settings {
-		return $this->settings->load() ?? new Settings( new Connections() );
-	}
 }

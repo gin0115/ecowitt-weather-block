@@ -315,6 +315,34 @@
         padding-top: var(--wp-spacing-lg);
         border-top: 2px dashed var(--wp-color-gray-300);
     }
+    // ==========================================================================
+    // OBSERVATION MEASUREMENTS (Compact Layout)
+    // ==========================================================================
+    .measurement-section {
+        margin-bottom: var(--wp-spacing-lg);
+        .device__title {
+            margin-bottom: 0; // Remove padding under titles for compact layout
+        }
+    }
+    .measurement-card {
+        padding: 5px; // Compact padding for observation measurements only
+        &__label {
+            font-size: var(--wp-font-size-sm);
+            font-weight: var(--wp-font-weight-medium);
+            color: var(--wp-color-gray-600);
+            margin-bottom: var(--wp-spacing-xs);
+        }
+        &__value {
+            font-size: var(--wp-font-size-md);
+            font-weight: var(--wp-font-weight-semibold);
+            color: var(--wp-color-gray-800);
+            small {
+                font-size: var(--wp-font-size-xs);
+                color: var(--wp-color-gray-500);
+                margin-left: var(--wp-spacing-xs);
+            }
+        }
+    }
     .device__observation-header {
         margin-bottom: var(--wp-spacing-md);
     }
