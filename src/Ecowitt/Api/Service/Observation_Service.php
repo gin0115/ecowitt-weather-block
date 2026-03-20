@@ -11,13 +11,19 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service;
 
+use DateTime;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Observation;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\History_Measurement;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\History_Observation;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Ecowitt_Http_Service;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\History_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Live_Data_Provider;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Measurement_Mapping;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,16 +58,43 @@ class Observation_Service {
 	protected Measurement_Mapping $measurement_mapping;
 
 	/**
+	 * History data provider.
+	 *
+	 * @var History_Data_Provider
+	 */
+	protected History_Data_Provider $history_provider;
+
+	/**
+	 * Live data provider.
+	 *
+	 * @var Live_Data_Provider
+	 */
+	protected Live_Data_Provider $live_provider;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Ecowitt_Http_Service $http_service
-	 * @param App_Config $config
-	 * @param Measurement_Mapping $measurement_mapping
+	 * @param Ecowitt_Http_Service  $http_service
+	 * @param App_Config            $config
+	 * @param Measurement_Mapping   $measurement_mapping
+	 * @param History_Data_Provider $history_provider
+	 * @param Live_Data_Provider    $live_provider
 	 */
-	public function __construct( Ecowitt_Http_Service $http_service, App_Config $config, Measurement_Mapping $measurement_mapping ) {
+	public function __construct( Ecowitt_Http_Service $http_service, App_Config $config, Measurement_Mapping $measurement_mapping, History_Data_Provider $history_provider, Live_Data_Provider $live_provider ) {
 		$this->http_service        = $http_service;
 		$this->config              = $config;
 		$this->measurement_mapping = $measurement_mapping;
+		$this->history_provider    = $history_provider;
+		$this->live_provider       = $live_provider;
+	}
+
+	/**
+	 * Whether the last history fetch was served from cache.
+	 *
+	 * @return bool
+	 */
+	public function was_history_cached(): bool {
+		return $this->history_provider->was_cached();
 	}
 
 	/**
@@ -82,44 +115,32 @@ class Observation_Service {
 	/**
 	 * Get the live observations for a device.
 	 *
-	 * @param Device $device
+	 * @param string     $mac
 	 * @param Connection $connection
 	 * @return Observation
 	 */
-	public function get_live_observations( Device $device, Connection $connection ): Observation {
-		$base_url = $this->get_api_base_url();
+	public function get_live_observations( string $mac, Connection $connection ): Observation {
+		// Fetch raw data via the live provider (may be cached).
+		$observations = $this->live_provider->fetch_live( $mac, $connection );
 
-		$url = sprintf(
-			'%s/device/real_time?application_key=%s&api_key=%s&mac=%s&call_back=all',
-			$base_url,
-			$connection->application_key(),
-			$connection->api_key(),
-			$device->mac
-		);
-
-		$response = $this->http_service->request( $url, array() );
-
-		$data = json_decode( $response->body(), true );
-
-		// If we dont have a success, throw an exception.
-		if ( ! isset( $data['msg'] ) || 'success' !== $data['msg'] ) {
-			throw new \Exception( 'Failed to get live observations' );
-		}
-
-		// If we have not data, return an empty observation.
-		if ( ! isset( $data['data'] ) || ! is_array( $data['data'] ) ) {
+		if ( empty( $observations ) ) {
 			return new Observation( array() );
 		}
 
 		// Extract the data and map the Measurements.
-		$observations        = $data['data'];
 		$mapped_observations = array();
 
 		// Iterate over the measurement group.
 		foreach ( $observations as $measurement_group => $measurement_data ) {
 			// Iterate over the measurement data.
 			foreach ( $measurement_data as $measurement_key => $measurement_value ) {
+				// If the measurement key is 'time' or we have a non array value, skip.
+				if ( $measurement_key === 'time' || ! is_array( $measurement_value ) ) {
+					continue;
+				}
+
 				// Create a new measurement.
+				// adump([$measurement_key => $measurement_value]);
 				$mapped_observations[ esc_html( $measurement_group ) ][ esc_html( $measurement_key ) ] = Measurement::from_array( $measurement_value );
 			}
 		}
@@ -138,17 +159,1335 @@ class Observation_Service {
 	 */
 	private function convert_measurements_to_domain_objects( array $mapped_observations ): array {
 		$domain_objects = array();
-
 		foreach ( $mapped_observations as $group => $measurements ) {
 			foreach ( $measurements as $key => $measurement_dto ) {
-				$class_name = $this->measurement_mapping->get_measurement_class( $group, $key );
+				$mapping = $this->measurement_mapping->get_measurement_class( $group, $key );
 
-				if ( $class_name ) {
-					$domain_objects[ $group ][ $key ] = new $class_name( $measurement_dto );
+				if ( $mapping ) {
+					// If it's a class-string (subclass with unit constants), instantiate it directly.
+					// Otherwise it's a type constant string, so use Base_Measurement with the type.
+					if ( class_exists( $mapping ) ) {
+						$domain_objects[ $group ][ $key ] = new $mapping( $measurement_dto );
+					} else {
+						$domain_objects[ $group ][ $key ] = new Base_Measurement( $measurement_dto, $mapping );
+					}
 				}
 			}
 		}
 
 		return $domain_objects;
+	}
+
+	/**
+	 * Get observation history for a device.
+	 *
+	 * @param string          $mac        The device MAC address.
+	 * @param DateTime        $from       The start date.
+	 * @param DateTime|null   $to         The end date, or null for now.
+	 * @param Connection|null $connection The API connection.
+	 * @param string[]        $groups     The sensor groups to fetch.
+	 * @param string          $cycle_type The aggregation interval.
+	 * @return History_Observation The history observation data.
+	 */
+	public function get_observation_history(
+		string $mac,
+		DateTime $from,
+		?DateTime $to,
+		?Connection $connection,
+		array $groups = array( 'outdoor', 'indoor', 'wind', 'pressure', 'rainfall', 'solar_and_uvi' ),
+		string $cycle_type = '4hour'
+	): History_Observation {
+		// Default to now if no end date provided.
+		if ( null === $to ) {
+			$to = new DateTime();
+		}
+
+		// If no connection provided, throw.
+		if ( null === $connection ) {
+			throw new \Exception( 'No connection set for observation history' );
+		}
+
+		// Fetch raw data from the provider.
+		$raw_data = $this->history_provider->fetch_history( $mac, $connection, $from, $to, $groups, $cycle_type );
+
+		// If empty, return an empty history observation.
+		if ( empty( $raw_data ) ) {
+			return new History_Observation( array() );
+		}
+
+		// Parse the raw data into domain objects.
+		$domain_observations = array();
+
+		foreach ( $raw_data as $measurement_group => $measurement_data ) {
+			if ( ! is_array( $measurement_data ) ) {
+				continue;
+			}
+
+			foreach ( $measurement_data as $measurement_key => $measurement_value ) {
+				if ( ! is_array( $measurement_value ) ) {
+					continue;
+				}
+
+				// Create a History_Measurement DTO from the API data.
+				$history_measurement = History_Measurement::from_array( $measurement_value );
+
+				// Get the domain class mapping for this group/key.
+				$mapping = $this->measurement_mapping->get_measurement_class(
+					(string) $measurement_group,
+					(string) $measurement_key
+				);
+
+				if ( ! $mapping ) {
+					continue;
+				}
+
+				// Convert each timestamp:value pair into a domain object.
+				$domain_measurements = array();
+				foreach ( $history_measurement->list as $timestamp => $value ) {
+					// Create a Measurement DTO for each data point.
+					$measurement_dto = new Measurement( (string) $value, $history_measurement->unit, (string) $timestamp );
+
+					// Create the domain object using the same pattern as live observations.
+					if ( class_exists( $mapping ) ) {
+						$domain_measurements[] = new $mapping( $measurement_dto );
+					} else {
+						$domain_measurements[] = new Base_Measurement( $measurement_dto, $mapping );
+					}
+				}
+
+				$group_key = esc_html( (string) $measurement_group );
+				$field_key = esc_html( (string) $measurement_key );
+
+				$domain_observations[ $group_key ][ $field_key ] = $domain_measurements;
+			}
+		}
+
+		return History_Observation::from_array( $domain_observations );
+	}
+
+	public function mock(): string {
+		return '{
+    "code": 0,
+    "msg": "success",
+    "time": "1645602867",
+    "data": {
+        "id": 944,
+        "name": "test1",
+        "mac": "25:25:25:25:25:25",
+        "type": 1,
+        "date_zone_id": "Asia/Shanghai",
+        "createtime": 1636684950,
+        "longitude": 113.9147,
+        "latitude": 22.574,
+        "stationtype": "WEB_Test_Tool",
+        "last_update": {
+            "outdoor": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "127.7"
+                },
+                "feels_like": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "127.7"
+                },
+                "app_temp": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "46.6"
+                },
+                "dew_point": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "104.6"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "52"
+                }
+            },
+            "indoor": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "63.7"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "70"
+                }
+            },
+            "solar_and_uvi": {
+                "solar": {
+                    "time": "1645596032",
+                    "unit": "W/m²",
+                    "value": "101.8"
+                },
+                "uvi": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "7"
+                }
+            },
+            "rainfall": {
+                "rain_rate": {
+                    "time": "1645596032",
+                    "unit": "in/hr",
+                    "value": "242.56"
+                },
+                "daily": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "332.69"
+                },
+                "event": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "245.56"
+                },
+                "hourly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "312.33"
+                },
+                "weekly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "372.53"
+                },
+                "monthly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "247.86"
+                },
+                "yearly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "8.25"
+                }
+            },
+            "rainfall_piezo": {
+                "rain_rate": {
+                    "time": "1645596032",
+                    "unit": "in/hr",
+                    "value": "267.62"
+                },
+                "daily": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "223.72"
+                },
+                "event": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "179.51"
+                },
+                "hourly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "38.61"
+                },
+                "weekly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "120.84"
+                },
+                "monthly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "20.31"
+                },
+                "yearly": {
+                    "time": "1645596032",
+                    "unit": "in",
+                    "value": "339.32"
+                }
+            },
+            "wind": {
+                "wind_speed": {
+                    "time": "1645596032",
+                    "unit": "mph",
+                    "value": "46.9"
+                },
+                "wind_gust": {
+                    "time": "1645596032",
+                    "unit": "mph",
+                    "value": "102.7"
+                },
+                "wind_direction": {
+                    "time": "1645596032",
+                    "unit": "º",
+                    "value": "267"
+                }
+            },
+            "pressure": {
+                "relative": {
+                    "time": "1645596032",
+                    "unit": "inHg",
+                    "value": "26.34"
+                },
+                "absolute": {
+                    "time": "1645596032",
+                    "unit": "inHg",
+                    "value": "25.59"
+                }
+            },
+            "lightning": {
+                "distance": {
+                    "time": "1645595889",
+                    "unit": "mi",
+                    "value": "19"
+                },
+                "count": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "29414"
+                }
+            },
+            "indoor_co2": {
+                "co2": {
+                    "time": "1645596032",
+                    "unit": "ppm",
+                    "value": "21493"
+                },
+                "24_hours_average": {
+                    "time": "1645596032",
+                    "unit": "ppm",
+                    "value": "13213"
+                }
+            },
+            "co2_aqi_combo": {
+                "co2": {
+                    "time": "1645596032",
+                    "unit": "ppm",
+                    "value": "16006"
+                },
+                "24_hours_average": {
+                    "time": "1645596032",
+                    "unit": "ppm",
+                    "value": "7094"
+                }
+            },
+            "pm25_aqi_combo": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "154"
+                },
+                "pm25": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "61"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "493"
+                }
+            },
+            "pm10_aqi_combo": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "500"
+                },
+                "pm10": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "884"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "155"
+                }
+            },
+            "pm1_aqi_combo": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "154"
+                },
+                "pm1": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "61"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "493"
+                }
+            },
+            "pm4_aqi_combo": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "154"
+                },
+                "pm4": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "61"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "493"
+                }
+            },
+            "t_rh_aqi_combo": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "57.2"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "96"
+                }
+            },
+            "water_leak": {
+                "leak_ch1": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "leak_ch2": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "2"
+                },
+                "leak_ch3": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "leak_ch4": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                }
+            },
+            "pm25_ch1": {
+                "real_time_aqi": {
+                    "time": "1645602837",
+                    "unit": "µg/m3",
+                    "value": "500"
+                },
+                "pm25": {
+                    "time": "1645602837",
+                    "unit": "µg/m3",
+                    "value": "508"
+                },
+                "24_hours_aqi": {
+                    "time": "1645602837",
+                    "unit": "µg/m3",
+                    "value": "500"
+                }
+            },
+            "pm25_ch2": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "170"
+                },
+                "pm25": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "93"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "500"
+                }
+            },
+            "pm25_ch3": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "500"
+                },
+                "pm25": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "550"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "485"
+                }
+            },
+            "pm25_ch4": {
+                "real_time_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "307"
+                },
+                "pm25": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "257"
+                },
+                "24_hours_aqi": {
+                    "time": "1645596032",
+                    "unit": "µg/m3",
+                    "value": "500"
+                }
+            },
+            "temp_and_humidity_ch1": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "70.0"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "85"
+                }
+            },
+            "temp_and_humidity_ch2": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "69.6"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "95"
+                }
+            },
+            "temp_and_humidity_ch3": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "128.0"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "69"
+                }
+            },
+            "temp_and_humidity_ch4": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "91.4"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "23"
+                }
+            },
+            "temp_and_humidity_ch5": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "135.9"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                }
+            },
+            "temp_and_humidity_ch6": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "98.9"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "32"
+                }
+            },
+            "temp_and_humidity_ch7": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "-27.2"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "22"
+                }
+            },
+            "temp_and_humidity_ch8": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "78.4"
+                },
+                "humidity": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "11"
+                }
+            },
+            "soil_ch1": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "79"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "163"
+                }
+            },
+            "soil_ch2": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "19"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "43"
+                }
+            },
+            "soil_ch3": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "37"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "64"
+                }
+            },
+            "soil_ch4": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "55"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "48"
+                }
+            },
+            "soil_ch5": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "47"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "306"
+                }
+            },
+            "soil_ch6": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "31"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "66"
+                }
+            },
+            "soil_ch7": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "30"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "56"
+                }
+            },
+            "soil_ch8": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "46"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "39"
+                }
+            },
+            "soil_ch9": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "5"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "4"
+                }
+            },
+            "soil_ch10": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "5"
+                }
+            },
+            "soil_ch11": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "55"
+                }
+            },
+            "soil_ch12": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "60"
+                }
+            },
+            "soil_ch13": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "66"
+                }
+            },
+            "soil_ch14": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "56"
+                }
+            },
+            "soil_ch15": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "161"
+                }
+            },
+            "soil_ch16": {
+                "soilmoisture": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "0"
+                },
+                "ad": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "59"
+                }
+            },
+            "temp_ch1": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "64.3"
+                }
+            },
+            "temp_ch2": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "104.9"
+                }
+            },
+            "temp_ch3": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "119.3"
+                }
+            },
+            "temp_ch4": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "-8.4"
+                }
+            },
+            "temp_ch5": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "36.5"
+                }
+            },
+            "temp_ch6": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "69.8"
+                }
+            },
+            "temp_ch7": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "129.0"
+                }
+            },
+            "temp_ch8": {
+                "temperature": {
+                    "time": "1645596032",
+                    "unit": "°F",
+                    "value": "-32.1"
+                }
+            },
+            "leaf_ch1": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "73"
+                }
+            },
+            "leaf_ch2": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "62"
+                }
+            },
+            "leaf_ch3": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "27"
+                }
+            },
+            "leaf_ch4": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "35"
+                }
+            },
+            "leaf_ch5": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "82"
+                }
+            },
+            "leaf_ch6": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "73"
+                }
+            },
+            "leaf_ch7": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "86"
+                }
+            },
+            "leaf_ch8": {
+                "leaf_wetness": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "75"
+                }
+            },
+            "battery": {
+                "t_rh_p_sensor": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "ws1900_console": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.07"
+                },
+                "ws1800_console": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "2.79"
+                },
+                "ws6006_console": {
+                    "time": "1645596032",
+                    "unit": "%",
+                    "value": "45"
+                },
+                "console": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "3.98"
+                },
+                "outdoor_t_rh_sensor": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "0"
+                },
+                "wind_sensor": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.02"
+                },
+                "ws90_sensor_battery": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "2.78"
+                },
+                "ws80_sensor": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.71"
+                },
+                "rainfall_sensor": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.3"
+                },
+                "ws65_67_69_sensor": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "lightning_sensor": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "2"
+                },
+                "aqi_combo_sensor": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "water_leak_sensor_ch1": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "5"
+                },
+                "water_leak_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "2"
+                },
+                "water_leak_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "2"
+                },
+                "water_leak_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "3"
+                },
+                "pm25_sensor_ch1": {
+                    "time": "1645602837",
+                    "unit": "",
+                    "value": "6"
+                },
+                "pm25_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "6"
+                },
+                "pm25_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "4"
+                },
+                "pm25_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch1": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "0"
+                },
+                "temp_humidity_sensor_ch5": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch6": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "0"
+                },
+                "temp_humidity_sensor_ch7": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "1"
+                },
+                "temp_humidity_sensor_ch8": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "0"
+                },
+                "soilmoisture_sensor_ch1": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.3"
+                },
+                "soilmoisture_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.0"
+                },
+                "soilmoisture_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.1"
+                },
+                "soilmoisture_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.0"
+                },
+                "soilmoisture_sensor_ch5": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.9"
+                },
+                "soilmoisture_sensor_ch6": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.1"
+                },
+                "soilmoisture_sensor_ch7": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.9"
+                },
+                "soilmoisture_sensor_ch8": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.5"
+                },
+                "temperature_sensor_ch1": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.77"
+                },
+                "temperature_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.15"
+                },
+                "temperature_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.50"
+                },
+                "temperature_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.65"
+                },
+                "temperature_sensor_ch5": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.99"
+                },
+                "temperature_sensor_ch6": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.32"
+                },
+                "temperature_sensor_ch7": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.97"
+                },
+                "temperature_sensor_ch8": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.15"
+                },
+                "leaf_wetness_sensor_ch1": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.71"
+                },
+                "leaf_wetness_sensor_ch2": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.74"
+                },
+                "leaf_wetness_sensor_ch3": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.97"
+                },
+                "leaf_wetness_sensor_ch4": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.82"
+                },
+                "leaf_wetness_sensor_ch5": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.91"
+                },
+                "leaf_wetness_sensor_ch6": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.30"
+                },
+                "leaf_wetness_sensor_ch7": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.39"
+                },
+                "leaf_wetness_sensor_ch8": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "0.09"
+                },
+                "ldsbatt_1": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.5"
+                },
+                "ldsbatt_2": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.3"
+                },
+                "ldsbatt_3": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.3"
+                },
+                "ldsbatt_4": {
+                    "time": "1645596032",
+                    "unit": "V",
+                    "value": "1.5"
+                }
+            },
+            "ch_lds1": {
+                "air_ch1": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "0.16"
+                },
+                "depth_ch1": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "11.48"
+                },
+                "ldsheat_ch1": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "500"
+                }
+            },
+            "ch_lds2": {
+                "air_ch2": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "0.16"
+                },
+                "depth_ch2": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "11.48"
+                },
+                "ldsheat_ch2": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "500"
+                }
+            },
+            "ch_lds3": {
+                "air_ch3": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "0.16"
+                },
+                "depth_ch3": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "11.48"
+                },
+                "ldsheat_ch3": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "500"
+                }
+            },
+            "ch_lds4": {
+                "air_ch4": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "0.16"
+                },
+                "depth_ch4": {
+                    "time": "1645596032",
+                    "unit": "ft",
+                    "value": "11.48"
+                },
+                "ldsheat_ch4": {
+                    "time": "1645596032",
+                    "unit": "",
+                    "value": "500"
+                }
+            },
+            "WFC01-0xxxxxx8(WFC01 默认标题)": {
+                "daily": {
+                    "value": "0.0",
+                    "unit": "L",
+                    "day": "20240920"
+                },
+                "monthly": {
+                    "value": "0.0",
+                    "unit": "L",
+                    "month": "202409"
+                },
+                "status": {
+                    "value": "1",
+                    "unit": "",
+                    "time": "1726798265"
+                },
+                "flow_rate": {
+                    "value": "0.0",
+                    "unit": "L/min",
+                    "time": "1726798265"
+                },
+                "temperature": {
+                    "value": "171.9",
+                    "unit": "℉",
+                    "time": "1726798265"
+                }
+            },
+            "AC1100-0xxxxxx1(AC1100 默认标题)": {
+                "daily": {
+                    "value": 19,
+                    "unit": "W·h",
+                    "day": "20240920"
+                },
+                "monthly": {
+                    "value": 1.94,
+                    "unit": "kW·h",
+                    "month": "202409"
+                },
+                "status": {
+                    "value": 1,
+                    "unit": "",
+                    "time": "1726798077"
+                },
+                "power": {
+                    "value": 18,
+                    "unit": "W",
+                    "time": "1726798077"
+                },
+                "voltage": {
+                    "value": 223,
+                    "unit": "V",
+                    "time": "1726798077"
+                }
+            },
+            "WFC02-0xxxxxx1(WFC02 默认标题)": {
+                "daily": {
+                    "value": "0.000",
+                    "unit": "m³",
+                    "day": "20240920"
+                },
+                "monthly": {
+                    "value": "0.000",
+                    "unit": "m³",
+                    "month": "202409"
+                },
+                "status": {
+                    "value": "1",
+                    "unit": "",
+                    "time": "1726801575"
+                },
+                "flow_rate": {
+                    "value": "0.000",
+                    "unit": "m³/min",
+                    "time": "1726801575"
+                },
+                "position": {
+                    "value": "0",
+                    "unit": "%",
+                    "time": "1726801575"
+                },
+                "flowmeter": {
+                    "value": "0",
+                    "unit": "",
+                    "time": "1726801575"
+                }
+            },
+            "photo": {
+                "time": "1670814912",
+                "url": "https://osstest.ecowitt.net/images/webcam/v0/2022_12_12/1341/cf15e739f2100d84a32b69ccdcd25958.jpg"
+            }
+        }
+    }
+}';
 	}
 }

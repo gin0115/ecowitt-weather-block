@@ -13,22 +13,12 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\Tests\Unit\Observation\Conversion;
 
 use PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Measurement_Mapping;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Air_Quality;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Battery;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\CO2;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Count;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Distance;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Humidity;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Leaf_Wetness;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Percentage;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Soil_Moisture;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\UV_Index;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Voltage;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Direction;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Speed;
 
@@ -59,7 +49,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertEquals( Temperature::class, $result['feels_like'] );
 		$this->assertEquals( Temperature::class, $result['app_temp'] );
 		$this->assertEquals( Temperature::class, $result['dew_point'] );
-		$this->assertEquals( Humidity::class, $result['humidity'] );
+		$this->assertEquals( Base_Measurement::TYPE_HUMIDITY, $result['humidity'] );
 	}
 
 	/**
@@ -74,7 +64,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'humidity', $result );
 
 		$this->assertEquals( Temperature::class, $result['temperature'] );
-		$this->assertEquals( Humidity::class, $result['humidity'] );
+		$this->assertEquals( Base_Measurement::TYPE_HUMIDITY, $result['humidity'] );
 	}
 
 	/**
@@ -89,7 +79,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'uvi', $result );
 
 		$this->assertEquals( Solar_Radiation::class, $result['solar'] );
-		$this->assertEquals( UV_Index::class, $result['uvi'] );
+		$this->assertEquals( Base_Measurement::TYPE_UV_INDEX, $result['uvi'] );
 	}
 
 	/**
@@ -165,8 +155,8 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'distance', $result );
 		$this->assertArrayHasKey( 'count', $result );
 
-		$this->assertEquals( Distance::class, $result['distance'] );
-		$this->assertEquals( Count::class, $result['count'] );
+		$this->assertEquals( Base_Measurement::TYPE_DISTANCE, $result['distance'] );
+		$this->assertEquals( Base_Measurement::TYPE_COUNT, $result['count'] );
 	}
 
 	/**
@@ -176,8 +166,8 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 	 */
 	public function co2_keys_provider(): array {
 		return array(
-			'CO2 level' => array( 'co2', CO2::class ),
-			'24 hour average' => array( '24_hours_average', CO2::class ),
+			'CO2 level' => array( 'co2', Base_Measurement::TYPE_CO2 ),
+			'24 hour average' => array( '24_hours_average', Base_Measurement::TYPE_CO2 ),
 		);
 	}
 
@@ -201,8 +191,8 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 	 */
 	public function air_quality_keys_provider(): array {
 		return array(
-			'real time AQI' => array( 'real_time_aqi', Air_Quality::class ),
-			'24 hour AQI' => array( '24_hours_aqi', Air_Quality::class ),
+			'real time AQI' => array( 'real_time_aqi', Base_Measurement::TYPE_AIR_QUALITY ),
+			'24 hour AQI' => array( '24_hours_aqi', Base_Measurement::TYPE_AIR_QUALITY ),
 		);
 	}
 
@@ -218,7 +208,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( $key, $result );
 		$this->assertArrayHasKey( 'pm25', $result );
 		$this->assertEquals( $expected_class, $result[ $key ] );
-		$this->assertEquals( Air_Quality::class, $result['pm25'] );
+		$this->assertEquals( Base_Measurement::TYPE_AIR_QUALITY, $result['pm25'] );
 	}
 
 	/**
@@ -232,8 +222,8 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'soilmoisture', $result );
 		$this->assertArrayHasKey( 'ad', $result );
 
-		$this->assertEquals( Soil_Moisture::class, $result['soilmoisture'] );
-		$this->assertEquals( Count::class, $result['ad'] );
+		$this->assertEquals( Base_Measurement::TYPE_SOIL_MOISTURE, $result['soilmoisture'] );
+		$this->assertEquals( Base_Measurement::TYPE_COUNT, $result['ad'] );
 	}
 
 	/**
@@ -257,7 +247,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 
 		$this->assertIsArray( $result );
 		$this->assertArrayHasKey( 'leaf_wetness', $result );
-		$this->assertEquals( Leaf_Wetness::class, $result['leaf_wetness'] );
+		$this->assertEquals( Base_Measurement::TYPE_LEAF_WETNESS, $result['leaf_wetness'] );
 	}
 
 	/**
@@ -267,12 +257,12 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 	 */
 	public function lds_keys_provider(): array {
 		return array(
-			'air gap channel 1' => array( 'air_ch1', Distance::class ),
-			'air gap channel 2' => array( 'air_ch2', Distance::class ),
-			'depth channel 1' => array( 'depth_ch1', Distance::class ),
-			'depth channel 4' => array( 'depth_ch4', Distance::class ),
-			'LDS heat channel 1' => array( 'ldsheat_ch1', Count::class ),
-			'LDS heat channel 4' => array( 'ldsheat_ch4', Count::class ),
+			'air gap channel 1' => array( 'air_ch1', Base_Measurement::TYPE_DISTANCE ),
+			'air gap channel 2' => array( 'air_ch2', Base_Measurement::TYPE_DISTANCE ),
+			'depth channel 1' => array( 'depth_ch1', Base_Measurement::TYPE_DISTANCE ),
+			'depth channel 4' => array( 'depth_ch4', Base_Measurement::TYPE_DISTANCE ),
+			'LDS heat channel 1' => array( 'ldsheat_ch1', Base_Measurement::TYPE_COUNT ),
+			'LDS heat channel 4' => array( 'ldsheat_ch4', Base_Measurement::TYPE_COUNT ),
 		);
 	}
 
@@ -296,13 +286,13 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 	 */
 	public function battery_keys_provider(): array {
 		return array(
-			'sensor array' => array( 'sensor_array', Battery::class ),
-			'outdoor sensor' => array( 'outdoor_t_rh_sensor', Battery::class ),
-			'wind sensor' => array( 'wind_sensor', Voltage::class ),
-			'console' => array( 'console', Voltage::class ),
-			'WS6006 console' => array( 'ws6006_console', Percentage::class ),
-			'soil moisture sensor' => array( 'soilmoisture_sensor_ch1', Voltage::class ),
-			'LDS battery 1' => array( 'ldsbatt_1', Voltage::class ),
+			'sensor array' => array( 'sensor_array', Base_Measurement::TYPE_BATTERY ),
+			'outdoor sensor' => array( 'outdoor_t_rh_sensor', Base_Measurement::TYPE_BATTERY ),
+			'wind sensor' => array( 'wind_sensor', Base_Measurement::TYPE_VOLTAGE ),
+			'console' => array( 'console', Base_Measurement::TYPE_VOLTAGE ),
+			'WS6006 console' => array( 'ws6006_console', Base_Measurement::TYPE_PERCENTAGE ),
+			'soil moisture sensor' => array( 'soilmoisture_sensor_ch1', Base_Measurement::TYPE_VOLTAGE ),
+			'LDS battery 1' => array( 'ldsbatt_1', Base_Measurement::TYPE_VOLTAGE ),
 		);
 	}
 
@@ -410,10 +400,9 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertIsArray( $result );
 		$this->assertNotEmpty( $result );
 
-		// Verify all values are class strings
-		foreach ( $result as $key => $class ) {
-			$this->assertIsString( $class );
-			$this->assertTrue( class_exists( $class ) );
+		// Verify all values are strings (class-strings or type constant strings)
+		foreach ( $result as $key => $value ) {
+			$this->assertIsString( $value );
 		}
 	}
 
@@ -435,7 +424,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 	public function measurement_class_provider(): array {
 		return array(
 			'outdoor temperature' => array( 'outdoor', 'temperature', Temperature::class ),
-			'outdoor humidity' => array( 'outdoor', 'humidity', Humidity::class ),
+			'outdoor humidity' => array( 'outdoor', 'humidity', Base_Measurement::TYPE_HUMIDITY ),
 			'rainfall rain rate' => array( 'rainfall', 'rain_rate', Rain_Rate::class ),
 			'rainfall daily' => array( 'rainfall', 'daily', Rainfall::class ),
 			'wind speed' => array( 'wind', 'wind_speed', Wind_Speed::class ),
@@ -500,7 +489,7 @@ class Test_Measurement_Mapping extends \WP_UnitTestCase {
 		$this->assertArrayHasKey( 'leak_ch4', $result );
 
 		foreach ( $result as $key => $class ) {
-			$this->assertEquals( Percentage::class, $class );
+			$this->assertEquals( Base_Measurement::TYPE_PERCENTAGE, $class );
 		}
 	}
 }

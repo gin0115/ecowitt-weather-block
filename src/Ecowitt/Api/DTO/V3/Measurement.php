@@ -63,10 +63,13 @@ class Measurement {
 	 * @return Measurement The measurement instance.
 	 */
 	public static function from_array( array $data ): Measurement {
+		// The API uses 'time', 'day', or 'month' depending on the data granularity.
+		$timestamp = $data['time'] ?? $data['day'] ?? $data['month'] ?? '';
+
 		return new self(
 			is_string( $data['value'] ) ? esc_attr( $data['value'] ) : '',
 			is_string( $data['unit'] ) ? esc_attr( $data['unit'] ) : '',
-			is_string( $data['time'] ) ? esc_attr( $data['time'] ) : ''
+			is_string( $timestamp ) ? esc_attr( $timestamp ) : ''
 		);
 	}
 }

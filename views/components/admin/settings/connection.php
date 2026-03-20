@@ -18,14 +18,14 @@ $connection_id = !empty($key) ? $key : '__new_';
         <div class="connection__header">
             <div class="connection__title-group">
                 <h3 class="connection__title">
-                    <?php echo esc_html($name ?: __('Unnamed Connection', 'ecowitt-weather-block')); ?>
+                    <?php echo esc_html($name ?: __('Unnamed Connection', 'pinkcrab-weather-block')); ?>
                 </h3>
                 <div class="connection__status">
                     <?php 
                     if ($connection_status === 'active') {
-                        esc_html_e('Connected', 'ecowitt-weather-block');
+                        esc_html_e('Connected', 'pinkcrab-weather-block');
                     } else {
-                        esc_html_e('Not Configured', 'ecowitt-weather-block');
+                        esc_html_e('Not Configured', 'pinkcrab-weather-block');
                     }
                     ?>
                 </div>
@@ -38,21 +38,21 @@ $connection_id = !empty($key) ? $key : '__new_';
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                        <?php esc_html_e('View', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('View', 'pinkcrab-weather-block'); ?>
                     </a>
                     <button class="btn btn--sm btn--outline" data-action="edit-connection" data-connection="<?php echo esc_attr($connection_id); ?>">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
-                        <?php esc_html_e('Edit', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Edit', 'pinkcrab-weather-block'); ?>
                     </button>
                     <button class="btn btn--sm btn--danger btn--outline" data-action="delete-connection" data-connection="<?php echo esc_attr($connection_id); ?>">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3,6 5,6 21,6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                         </svg>
-                        <?php esc_html_e('Delete', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Delete', 'pinkcrab-weather-block'); ?>
                     </button>
                 <?php endif; ?>
             </div>
@@ -66,7 +66,7 @@ $connection_id = !empty($key) ? $key : '__new_';
             <div class="connection__details">
                 <?php if (!empty($application_key)) : ?>
                     <div class="connection__detail">
-                        <span class="detail__label"><?php esc_html_e('Application Key:', 'ecowitt-weather-block'); ?></span>
+                        <span class="detail__label"><?php esc_html_e('Application Key:', 'pinkcrab-weather-block'); ?></span>
                         <code class="detail__value detail__value--masked" title="<?php echo esc_attr(substr($application_key, 0, 4) . '••••••••'); ?>">
                             <?php echo esc_html(substr($application_key, 0, 4) . '••••••••'); ?>
                         </code>
@@ -75,7 +75,7 @@ $connection_id = !empty($key) ? $key : '__new_';
 
                 <?php if (!empty($api_key)) : ?>
                     <div class="connection__detail">
-                        <span class="detail__label"><?php esc_html_e('API Key:', 'ecowitt-weather-block'); ?></span>
+                        <span class="detail__label"><?php esc_html_e('API Key:', 'pinkcrab-weather-block'); ?></span>
                         <code class="detail__value detail__value--masked" title="<?php echo esc_attr(substr($api_key, 0, 4) . '••••••••'); ?>">
                             <?php echo esc_html(substr($api_key, 0, 4) . '••••••••'); ?>
                         </code>
@@ -84,7 +84,7 @@ $connection_id = !empty($key) ? $key : '__new_';
 
                 <?php if (!empty($mac_address)) : ?>
                     <div class="connection__detail">
-                        <span class="detail__label"><?php esc_html_e('MAC Address:', 'ecowitt-weather-block'); ?></span>
+                        <span class="detail__label"><?php esc_html_e('MAC Address:', 'pinkcrab-weather-block'); ?></span>
                         <code class="detail__value"><?php echo esc_html($mac_address); ?></code>
                     </div>
                 <?php endif; ?>
@@ -95,7 +95,7 @@ $connection_id = !empty($key) ? $key : '__new_';
             <div class="connection__footer">
                 <div class="connection__meta">
                     <span class="meta-item">
-                        <strong><?php esc_html_e('Last Updated:', 'ecowitt-weather-block'); ?></strong>
+                        <strong><?php esc_html_e('Last Updated:', 'pinkcrab-weather-block'); ?></strong>
                         <?php echo esc_html(date_i18n(get_option('date_format'), time())); ?>
                     </span>
                 </div>
@@ -111,57 +111,57 @@ $connection_id = !empty($key) ? $key : '__new_';
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-name">
-                        <?php esc_html_e('Connection Name', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Connection Name', 'pinkcrab-weather-block'); ?>
                     </label>
                     <input type="text" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-name" 
                            name="connection_name[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($name); ?>" 
-                           placeholder="<?php esc_attr_e('My Weather Station', 'ecowitt-weather-block'); ?>">
+                           placeholder="<?php esc_attr_e('My Weather Station', 'pinkcrab-weather-block'); ?>">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label form-label--optional" for="connection-<?php echo esc_attr($connection_id); ?>-description">
-                        <?php esc_html_e('Description', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Description', 'pinkcrab-weather-block'); ?>
                     </label>
                     <input type="text" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-description" 
                            name="connection_description[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($description); ?>" 
-                           placeholder="<?php esc_attr_e('Weather station in my backyard', 'ecowitt-weather-block'); ?>">
+                           placeholder="<?php esc_attr_e('Weather station in my backyard', 'pinkcrab-weather-block'); ?>">
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-application_key">
-                        <?php esc_html_e('Application Key', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Application Key', 'pinkcrab-weather-block'); ?>
                     </label>
                     <input type="text" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-application_key" 
                            name="connection_application_key[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($application_key); ?>"
-                           placeholder="<?php esc_attr_e('Your Ecowitt Application Key', 'ecowitt-weather-block'); ?>">
+                           placeholder="<?php esc_attr_e('Your Ecowitt Application Key', 'pinkcrab-weather-block'); ?>">
                     <p class="form-help">
-                        <?php esc_html_e('Get your Application key from your Ecowitt account dashboard.', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Get your Application key from your Ecowitt account dashboard.', 'pinkcrab-weather-block'); ?>
                     </p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-api_key">
-                        <?php esc_html_e('API Key', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('API Key', 'pinkcrab-weather-block'); ?>
                     </label>
                     <input type="password" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-api_key" 
                            name="connection_api_key[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($api_key); ?>"
-                           placeholder="<?php esc_attr_e('Your Ecowitt API Key', 'ecowitt-weather-block'); ?>">
+                           placeholder="<?php esc_attr_e('Your Ecowitt API Key', 'pinkcrab-weather-block'); ?>">
                     <p class="form-help">
-                        <?php esc_html_e('Keep your API key secure and do not share it publicly.', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Keep your API key secure and do not share it publicly.', 'pinkcrab-weather-block'); ?>
                     </p>
                 </div>
             </div>
@@ -169,18 +169,18 @@ $connection_id = !empty($key) ? $key : '__new_';
             <div class="form-grid form-grid--single">
                 <div class="form-group">
                     <label class="form-label form-label--required" for="connection-<?php echo esc_attr($connection_id); ?>-mac_address">
-                        <?php esc_html_e('MAC Address', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('MAC Address', 'pinkcrab-weather-block'); ?>
                     </label>
                     <input type="text" 
                            class="form-control" 
                            id="connection-<?php echo esc_attr($connection_id); ?>-mac_address" 
                            name="connection_mac_address[<?php echo esc_attr($connection_id); ?>]" 
                            value="<?php echo esc_attr($mac_address); ?>"
-                           placeholder="<?php esc_attr_e('AA:BB:CC:DD:EE:FF', 'ecowitt-weather-block'); ?>"
+                           placeholder="<?php esc_attr_e('AA:BB:CC:DD:EE:FF', 'pinkcrab-weather-block'); ?>"
                            >
                     <p class="form-help">
                         00:1A:2B:3C:4D:5E
-                        <?php esc_html_e('The MAC address of your weather station device.', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('The MAC address of your weather station device.', 'pinkcrab-weather-block'); ?>
                     </p>
                 </div>
             </div>
@@ -192,11 +192,11 @@ $connection_id = !empty($key) ? $key : '__new_';
                         <polyline points="17,21 17,13 7,13 7,21"></polyline>
                         <polyline points="7,3 7,8 15,8"></polyline>
                     </svg>
-                    <?php esc_html_e('Save Connection', 'ecowitt-weather-block'); ?>
+                    <?php esc_html_e('Save Connection', 'pinkcrab-weather-block'); ?>
                 </button>
                 
                 <button type="button" class="btn btn--secondary" data-action="cancel-edit" data-connection="<?php echo esc_attr($connection_id); ?>">
-                    <?php esc_html_e('Cancel', 'ecowitt-weather-block'); ?>
+                    <?php esc_html_e('Cancel', 'pinkcrab-weather-block'); ?>
                 </button>
 
                 <?php if (!empty($key)) : ?>
@@ -205,7 +205,7 @@ $connection_id = !empty($key) ? $key : '__new_';
                             <polyline points="3,6 5,6 21,6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                         </svg>
-                        <?php esc_html_e('Delete', 'ecowitt-weather-block'); ?>
+                        <?php esc_html_e('Delete', 'pinkcrab-weather-block'); ?>
                     </button>
                 <?php endif; ?>
             </div>

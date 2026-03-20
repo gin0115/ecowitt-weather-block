@@ -1,17 +1,81 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 2,
-    "name": "fse-pilot/dummy-subscribe-form",
+    "name": "ecowitt/weather",
     "version": "0.1.0",
-    "title": "Dummy Subscribe Form",
+    "title": "Ecowitt Weather",
     "category": "widgets",
-    "icon": "smiley",
-    "description": "Example block scaffolded with Create Block tool.",
+    "icon": "cloud",
+    "description": "Display live weather data from an Ecowitt station.",
     "supports": {
         "html": false
     },
-    "textdomain": "fse-pilot-blocks",
+    "textdomain": "pinkcrab-weather-block",
+    "attributes": {
+        "connectionKey": {
+            "type": "string",
+            "default": ""
+        },
+        "mac": {
+            "type": "string",
+            "default": ""
+        },
+        "stationName": {
+            "type": "string",
+            "default": ""
+        },
+        "selectedFields": {
+            "type": "object",
+            "default": {}
+        },
+        "theme": {
+            "type": "string",
+            "default": "default"
+        },
+        "colors": {
+            "type": "object",
+            "default": {}
+        },
+        "iconSet": {
+            "type": "string",
+            "default": "outline"
+        },
+        "mode": {
+            "type": "string",
+            "default": "live"
+        },
+        "defaultRange": {
+            "type": "string",
+            "default": "24h"
+        },
+        "cycleType": {
+            "type": "string",
+            "default": "auto"
+        },
+        "autoRefreshInterval": {
+            "type": "number",
+            "default": 300
+        }
+    },
+    "variations": [
+        {
+            "name": "live",
+            "title": "Ecowitt Live Weather",
+            "description": "Display live weather data from an Ecowitt station.",
+            "attributes": { "mode": "live" },
+            "isDefault": true,
+            "icon": "cloud"
+        },
+        {
+            "name": "history",
+            "title": "Ecowitt Weather History",
+            "description": "Display historical weather charts from an Ecowitt station.",
+            "attributes": { "mode": "history" },
+            "icon": "chart-line"
+        }
+    ],
     "editorScript": "file:./index.js",
     "editorStyle": "file:./index.css",
-    "style": "file:./style-index.css"
+    "style": "file:./style-index.css",
+    "viewScript": "file:./view.js"
 }

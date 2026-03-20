@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Observation\Measurement;
 
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
+
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,15 +28,13 @@ class Volume extends Base_Measurement {
 	 * Unit constants for volume.
 	 */
 	public const UNIT_LITERS       = 'L';
-	public const UNIT_CUBIC_METERS = 'm³';
+	public const UNIT_CUBIC_METERS = 'm3';
 	public const UNIT_GALLONS      = 'gal';
 
 	/**
-	 * Get the measurement type identifier.
-	 *
-	 * @return string The measurement type.
+	 * @param Measurement $measurement_dto The measurement DTO from the API.
 	 */
-	public function get_type(): string {
-		return self::TYPE_VOLUME;
+	public function __construct( Measurement $measurement_dto ) {
+		parent::__construct( $measurement_dto, self::TYPE_VOLUME );
 	}
 }

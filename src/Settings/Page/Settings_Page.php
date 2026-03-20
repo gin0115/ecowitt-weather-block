@@ -19,7 +19,7 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique_Admin_Menu\Page\Menu_Page;
 use PinkCrab\Ecowitt_Weather_Block\Settings\Settings;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Settings\Connections\Settings_Connections;
-use PinkCrab\Perique\Application\App;
+
 
 /**
  * The Settings_Page class.
@@ -48,6 +48,13 @@ class Settings_Page extends Menu_Page {
 	protected Page_Handler $page_handler;
 
 	/**
+	 * Path to the base of the device page.
+	 *
+	 * @var string
+	 */
+	protected string $device_base_path = '';
+
+	/**
 	 * Creates an instance of the Settings_Page.
 	 *
 	 * @param App_Config   $app_config
@@ -60,7 +67,7 @@ class Settings_Page extends Menu_Page {
 		$this->page_handler = $page_handler;
 
 		// Set the page details.
-		$this->page_slug  = $this->app_config->admin_page_slug;
+		$this->page_slug  = 'ecowitt-weather-block-settings';
 		$this->menu_title = 'Ecowitt Weather Block';
 		$this->page_title = 'Ecowitt Weather Block Settings';
 		$this->position   = 10;
@@ -87,7 +94,7 @@ class Settings_Page extends Menu_Page {
 		// Assert that the view is set.
 		assert( $this->view instanceof \PinkCrab\Perique\Services\View\View );
 
-		Enqueue::script( 'ecowittSettings' )
+		$a = Enqueue::script( 'ecowittSettings' )
 			->src( Asset_Loader::assets_url() . 'js/settings.js' )
 			->ver( $this->app_config->version() )
 			->localize(
@@ -98,7 +105,7 @@ class Settings_Page extends Menu_Page {
 						'components.admin.settings.connection',
 						array(
 							'key'                    => '{key}',
-							'connection_id'          => '{key}',
+							'connection_id'          => '{key}',  // Add this for template compatibility
 							'application_key'        => '{application_key}',
 							'api_key'                => '{api_key}',
 							'mac_address'            => '{mac_address}',
@@ -110,8 +117,7 @@ class Settings_Page extends Menu_Page {
 						false
 					),
 				)
-			)
-			->register();
+			)->register();
 	}
 
 	/**
@@ -124,12 +130,8 @@ class Settings_Page extends Menu_Page {
 		// Check if the form was submitted.
 		if ( isset( $_POST[ $this->page_handler::SUBMISSION_KEY ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, Only checking if set.
 			$this->page_handler->handle_form_submission( $this );
-			// Reload the settings.
-			$this->settings = $this->page_handler->get_settings();
 		}
-
-		// Set the base path for the device details.
-		$this->view_data['device_base_path'] = menu_page_url( $this->app_config->admin_page_slug . '-devices', false );
+		$this->view_data['device_base_path'] = admin_url( 'admin.php?page=' . $this->app_config->admin_page_slug . '-devices' );
 		$this->view_data['connections']      = new Settings_Connections( $this->settings->connections()->all(), $this->view_data['device_base_path'] );
 	}
 }

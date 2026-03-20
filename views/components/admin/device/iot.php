@@ -3,7 +3,7 @@
 /**
  * Component: IOT Device
  * 
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Admin\Device\IOT $this The component instance
+ * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
  * @var string $name IOT device name
  * @var string $default_title IOT device default title
  * @var string $device_id IOT device ID
@@ -23,7 +23,7 @@ $safe_device_id = sanitize_title($device_id);
             <h5 class="iot-device__title">
                 <?php 
                 $display_title = !empty($name) ? $name : $default_title;
-                echo esc_html($display_title ?: __('Unnamed IOT Device', 'ecowitt-weather-block')); 
+                echo esc_html($display_title ?: __('Unnamed IOT Device', 'pinkcrab-weather-block')); 
                 ?>
             </h5>
             <?php if (!empty($version)) : ?>
@@ -32,7 +32,7 @@ $safe_device_id = sanitize_title($device_id);
                         <?php 
                         printf(
                             /* translators: %s: version number */
-                            esc_html__('v%s', 'ecowitt-weather-block'), 
+                            esc_html__('v%s', 'pinkcrab-weather-block'), 
                             esc_html($version)
                         ); 
                         ?>
@@ -47,7 +47,7 @@ $safe_device_id = sanitize_title($device_id);
             
             <?php if (!empty($device_id)) : ?>
                 <div class="iot-device__detail">
-                    <span class="detail__label"><?php esc_html_e('Device ID:', 'ecowitt-weather-block'); ?></span>
+                    <span class="detail__label"><?php esc_html_e('Device ID:', 'pinkcrab-weather-block'); ?></span>
                     <code class="detail__value detail__value--masked" title="<?php echo esc_attr($device_id); ?>">
                         <?php 
                         // Create masked device ID
@@ -68,14 +68,14 @@ $safe_device_id = sanitize_title($device_id);
 
             <?php if (!empty($default_title) && $default_title !== $name) : ?>
                 <div class="iot-device__detail">
-                    <span class="detail__label"><?php esc_html_e('Default Title:', 'ecowitt-weather-block'); ?></span>
+                    <span class="detail__label"><?php esc_html_e('Default Title:', 'pinkcrab-weather-block'); ?></span>
                     <span class="detail__value"><?php echo esc_html($default_title); ?></span>
                 </div>
             <?php endif; ?>
 
             <?php if (!empty($createtime) && is_numeric($createtime)) : ?>
                 <div class="iot-device__detail">
-                    <span class="detail__label"><?php esc_html_e('Created:', 'ecowitt-weather-block'); ?></span>
+                    <span class="detail__label"><?php esc_html_e('Created:', 'pinkcrab-weather-block'); ?></span>
                     <time class="detail__value" datetime="<?php echo esc_attr(date('c', (int)$createtime)); ?>">
                         <?php echo esc_html($this->creation_date()); ?>
                     </time>
@@ -86,7 +86,7 @@ $safe_device_id = sanitize_title($device_id);
                 <div class="iot-device__additional">
                     <details class="iot-device__additional-toggle">
                         <summary class="additional-toggle__label">
-                            <?php esc_html_e('Additional Data', 'ecowitt-weather-block'); ?>
+                            <?php esc_html_e('Additional Data', 'pinkcrab-weather-block'); ?>
                         </summary>
                         <div class="additional-data">
                             <?php foreach ($additional_data as $key => $value) : ?>
@@ -97,9 +97,9 @@ $safe_device_id = sanitize_title($device_id);
                                         if (is_array($value)) {
                                             echo esc_html(wp_json_encode($value, JSON_PRETTY_PRINT));
                                         } elseif (is_bool($value)) {
-                                            echo esc_html($value ? __('Yes', 'ecowitt-weather-block') : __('No', 'ecowitt-weather-block'));
+                                            echo esc_html($value ? __('Yes', 'pinkcrab-weather-block') : __('No', 'pinkcrab-weather-block'));
                                         } elseif (is_null($value)) {
-                                            echo esc_html__('(null)', 'ecowitt-weather-block');
+                                            echo esc_html__('(null)', 'pinkcrab-weather-block');
                                         } else {
                                             echo esc_html((string)$value);
                                         }

@@ -17,6 +17,12 @@ use PinkCrab\Ecowitt_Weather_Block\Http\Client_Interface;
 use PinkCrab\Ecowitt_Weather_Block\Http\WordPress_Client;
 use PinkCrab\Ecowitt_Weather_Block\Settings\Settings_Repository;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connections;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Live_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\History_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Cache\Cached_Live_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Cache\Cached_History_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Conversion_Config;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Conversion_Config_Interface;
 
 return array(
     '*' =>[
@@ -40,5 +46,14 @@ return array(
                 }
             ),
         ],
-    ]
+    ],
+	History_Data_Provider::class       => array(
+		'instanceOf' => Cached_History_Data_Provider::class,
+	),
+	Live_Data_Provider::class          => array(
+		'instanceOf' => Cached_Live_Data_Provider::class,
+	),
+	Conversion_Config_Interface::class => array(
+		'instanceOf' => Conversion_Config::class,
+	),
 );

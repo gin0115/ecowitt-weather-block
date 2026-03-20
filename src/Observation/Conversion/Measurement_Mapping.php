@@ -11,25 +11,12 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Observation\Conversion;
 
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Air_Quality;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Battery;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\CO2;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Count;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Distance;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Energy;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Flow_Rate;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Humidity;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Leaf_Wetness;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Percentage;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Power;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Pressure;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rainfall;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Rain_Rate;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Soil_Moisture;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Solar_Radiation;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\UV_Index;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Voltage;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Volume;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Direction;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Speed;
@@ -42,13 +29,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Configuration class for measurement type mappings from API groups/keys to domain classes.
+ *
+ * Returns either a class-string (for types with unit constants) or a type constant string
+ * (for simple types that use Base_Measurement directly).
  */
 class Measurement_Mapping {
 
 	/**
 	 * Get all measurement mappings.
 	 *
-	 * @return array<string, array<string, class-string>> All measurement mappings by group.
+	 * @return array<string, array<string, string>> All measurement mappings by group.
 	 */
 	public function get_all(): array {
 		$mappings = array(
@@ -80,7 +70,7 @@ class Measurement_Mapping {
 	/**
 	 * Get channel-based measurement mappings.
 	 *
-	 * @return array<string, array<string, class-string>>
+	 * @return array<string, array<string, string>>
 	 */
 	private function get_channel_based_mappings(): array {
 		$mappings = array();
@@ -121,7 +111,7 @@ class Measurement_Mapping {
 	/**
 	 * Get measurement mapping for outdoor sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function outdoor(): array {
 		return array(
@@ -129,38 +119,38 @@ class Measurement_Mapping {
 			'feels_like'  => Temperature::class,
 			'app_temp'    => Temperature::class,
 			'dew_point'   => Temperature::class,
-			'humidity'    => Humidity::class,
+			'humidity'    => Base_Measurement::TYPE_HUMIDITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for indoor sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function indoor(): array {
 		return array(
 			'temperature' => Temperature::class,
-			'humidity'    => Humidity::class,
+			'humidity'    => Base_Measurement::TYPE_HUMIDITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for solar and UV index sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function solar_and_uvi(): array {
 		return array(
 			'solar' => Solar_Radiation::class,
-			'uvi'   => UV_Index::class,
+			'uvi'   => Base_Measurement::TYPE_UV_INDEX,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for rainfall sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function rainfall(): array {
 		return array(
@@ -177,16 +167,16 @@ class Measurement_Mapping {
 	/**
 	 * Get measurement mapping for piezo rainfall sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function rainfall_piezo(): array {
-		return $this->rainfall(); // Same as regular rainfall
+		return $this->rainfall();
 	}
 
 	/**
 	 * Get measurement mapping for wind sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function wind(): array {
 		return array(
@@ -199,7 +189,7 @@ class Measurement_Mapping {
 	/**
 	 * Get measurement mapping for pressure sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pressure(): array {
 		return array(
@@ -211,158 +201,158 @@ class Measurement_Mapping {
 	/**
 	 * Get measurement mapping for lightning sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function lightning(): array {
 		return array(
-			'distance' => Distance::class,
-			'count'    => Count::class,
+			'distance' => Base_Measurement::TYPE_DISTANCE,
+			'count'    => Base_Measurement::TYPE_COUNT,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for indoor CO2 sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function indoor_co2(): array {
 		return array(
-			'co2'              => CO2::class,
-			'24_hours_average' => CO2::class,
+			'co2'              => Base_Measurement::TYPE_CO2,
+			'24_hours_average' => Base_Measurement::TYPE_CO2,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for CO2 AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function co2_aqi_combo(): array {
 		return array(
-			'co2'              => CO2::class,
-			'24_hours_average' => CO2::class,
+			'co2'              => Base_Measurement::TYPE_CO2,
+			'24_hours_average' => Base_Measurement::TYPE_CO2,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for PM2.5 AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pm25_aqi_combo(): array {
 		return array(
-			'real_time_aqi' => Air_Quality::class,
-			'pm25'          => Air_Quality::class,
-			'24_hours_aqi'  => Air_Quality::class,
+			'real_time_aqi' => Base_Measurement::TYPE_AIR_QUALITY,
+			'pm25'          => Base_Measurement::TYPE_AIR_QUALITY,
+			'24_hours_aqi'  => Base_Measurement::TYPE_AIR_QUALITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for PM10 AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pm10_aqi_combo(): array {
 		return array(
-			'real_time_aqi' => Air_Quality::class,
-			'pm10'          => Air_Quality::class,
-			'24_hours_aqi'  => Air_Quality::class,
+			'real_time_aqi' => Base_Measurement::TYPE_AIR_QUALITY,
+			'pm10'          => Base_Measurement::TYPE_AIR_QUALITY,
+			'24_hours_aqi'  => Base_Measurement::TYPE_AIR_QUALITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for PM1 AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pm1_aqi_combo(): array {
 		return array(
-			'real_time_aqi' => Air_Quality::class,
-			'pm1'           => Air_Quality::class,
-			'24_hours_aqi'  => Air_Quality::class,
+			'real_time_aqi' => Base_Measurement::TYPE_AIR_QUALITY,
+			'pm1'           => Base_Measurement::TYPE_AIR_QUALITY,
+			'24_hours_aqi'  => Base_Measurement::TYPE_AIR_QUALITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for PM4 AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pm4_aqi_combo(): array {
 		return array(
-			'real_time_aqi' => Air_Quality::class,
-			'pm4'           => Air_Quality::class,
-			'24_hours_aqi'  => Air_Quality::class,
+			'real_time_aqi' => Base_Measurement::TYPE_AIR_QUALITY,
+			'pm4'           => Base_Measurement::TYPE_AIR_QUALITY,
+			'24_hours_aqi'  => Base_Measurement::TYPE_AIR_QUALITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for temperature/humidity AQI combo sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function t_rh_aqi_combo(): array {
 		return array(
 			'temperature' => Temperature::class,
-			'humidity'    => Humidity::class,
+			'humidity'    => Base_Measurement::TYPE_HUMIDITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for water leak sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function water_leak(): array {
 		return array(
-			'leak_ch1' => Percentage::class,
-			'leak_ch2' => Percentage::class,
-			'leak_ch3' => Percentage::class,
-			'leak_ch4' => Percentage::class,
+			'leak_ch1' => Base_Measurement::TYPE_PERCENTAGE,
+			'leak_ch2' => Base_Measurement::TYPE_PERCENTAGE,
+			'leak_ch3' => Base_Measurement::TYPE_PERCENTAGE,
+			'leak_ch4' => Base_Measurement::TYPE_PERCENTAGE,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for PM2.5 channel sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function pm25_channel(): array {
 		return array(
-			'real_time_aqi' => Air_Quality::class,
-			'pm25'          => Air_Quality::class,
-			'24_hours_aqi'  => Air_Quality::class,
+			'real_time_aqi' => Base_Measurement::TYPE_AIR_QUALITY,
+			'pm25'          => Base_Measurement::TYPE_AIR_QUALITY,
+			'24_hours_aqi'  => Base_Measurement::TYPE_AIR_QUALITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for temperature and humidity channel sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function temp_and_humidity_channel(): array {
 		return array(
 			'temperature' => Temperature::class,
-			'humidity'    => Humidity::class,
+			'humidity'    => Base_Measurement::TYPE_HUMIDITY,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for soil moisture channel sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function soil_channel(): array {
 		return array(
-			'soilmoisture' => Soil_Moisture::class,
-			'ad'           => Count::class, // A/D conversion value
+			'soilmoisture' => Base_Measurement::TYPE_SOIL_MOISTURE,
+			'ad'           => Base_Measurement::TYPE_COUNT,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for temperature-only channel sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function temp_channel(): array {
 		return array(
@@ -373,103 +363,101 @@ class Measurement_Mapping {
 	/**
 	 * Get measurement mapping for leaf wetness channel sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function leaf_channel(): array {
 		return array(
-			'leaf_wetness' => Leaf_Wetness::class,
+			'leaf_wetness' => Base_Measurement::TYPE_LEAF_WETNESS,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for LDS (Level Detection Sensor) channels.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function lds_channel(): array {
 		return array(
-			'air_ch1'     => Distance::class,   // Air gap measurement
-			'air_ch2'     => Distance::class,
-			'air_ch3'     => Distance::class,
-			'air_ch4'     => Distance::class,
-			'depth_ch1'   => Distance::class,   // Depth measurement
-			'depth_ch2'   => Distance::class,
-			'depth_ch3'   => Distance::class,
-			'depth_ch4'   => Distance::class,
-			'ldsheat_ch1' => Count::class,      // LDS heat value
-			'ldsheat_ch2' => Count::class,
-			'ldsheat_ch3' => Count::class,
-			'ldsheat_ch4' => Count::class,
+			'air_ch1'     => Base_Measurement::TYPE_DISTANCE,
+			'air_ch2'     => Base_Measurement::TYPE_DISTANCE,
+			'air_ch3'     => Base_Measurement::TYPE_DISTANCE,
+			'air_ch4'     => Base_Measurement::TYPE_DISTANCE,
+			'depth_ch1'   => Base_Measurement::TYPE_DISTANCE,
+			'depth_ch2'   => Base_Measurement::TYPE_DISTANCE,
+			'depth_ch3'   => Base_Measurement::TYPE_DISTANCE,
+			'depth_ch4'   => Base_Measurement::TYPE_DISTANCE,
+			'ldsheat_ch1' => Base_Measurement::TYPE_COUNT,
+			'ldsheat_ch2' => Base_Measurement::TYPE_COUNT,
+			'ldsheat_ch3' => Base_Measurement::TYPE_COUNT,
+			'ldsheat_ch4' => Base_Measurement::TYPE_COUNT,
 		);
 	}
 
 	/**
 	 * Get measurement mapping for battery sensors.
 	 *
-	 * @return array<string, class-string>
+	 * @return array<string, string>
 	 */
 	public function battery(): array {
-		// Battery measurements can be voltage, percentage, or just status
-		// We'll use appropriate classes based on typical units
 		return array(
-			'sensor_array'             => Battery::class,
-			't_rh_p_sensor'            => Battery::class,
-			'ws1900_console'           => Voltage::class,
-			'ws1800_console'           => Voltage::class,
-			'ws6006_console'           => Percentage::class,
-			'console'                  => Voltage::class,
-			'outdoor_t_rh_sensor'      => Battery::class,
-			'wind_sensor'              => Voltage::class,
-			'ws90_sensor_battery'      => Voltage::class,
-			'ws80_sensor'              => Voltage::class,
-			'rainfall_sensor'          => Voltage::class,
-			'ws65_67_69_sensor'        => Battery::class,
-			'lightning_sensor'         => Battery::class,
-			'aqi_combo_sensor'         => Battery::class,
-			'water_leak_sensor_ch1'    => Battery::class,
-			'water_leak_sensor_ch2'    => Battery::class,
-			'water_leak_sensor_ch3'    => Battery::class,
-			'water_leak_sensor_ch4'    => Battery::class,
-			'pm25_sensor_ch1'          => Battery::class,
-			'pm25_sensor_ch2'          => Battery::class,
-			'pm25_sensor_ch3'          => Battery::class,
-			'pm25_sensor_ch4'          => Battery::class,
-			'temp_humidity_sensor_ch1' => Battery::class,
-			'temp_humidity_sensor_ch2' => Battery::class,
-			'temp_humidity_sensor_ch3' => Battery::class,
-			'temp_humidity_sensor_ch4' => Battery::class,
-			'temp_humidity_sensor_ch5' => Battery::class,
-			'temp_humidity_sensor_ch6' => Battery::class,
-			'temp_humidity_sensor_ch7' => Battery::class,
-			'temp_humidity_sensor_ch8' => Battery::class,
-			'soilmoisture_sensor_ch1'  => Voltage::class,
-			'soilmoisture_sensor_ch2'  => Voltage::class,
-			'soilmoisture_sensor_ch3'  => Voltage::class,
-			'soilmoisture_sensor_ch4'  => Voltage::class,
-			'soilmoisture_sensor_ch5'  => Voltage::class,
-			'soilmoisture_sensor_ch6'  => Voltage::class,
-			'soilmoisture_sensor_ch7'  => Voltage::class,
-			'soilmoisture_sensor_ch8'  => Voltage::class,
-			'temperature_sensor_ch1'   => Voltage::class,
-			'temperature_sensor_ch2'   => Voltage::class,
-			'temperature_sensor_ch3'   => Voltage::class,
-			'temperature_sensor_ch4'   => Voltage::class,
-			'temperature_sensor_ch5'   => Voltage::class,
-			'temperature_sensor_ch6'   => Voltage::class,
-			'temperature_sensor_ch7'   => Voltage::class,
-			'temperature_sensor_ch8'   => Voltage::class,
-			'leaf_wetness_sensor_ch1'  => Voltage::class,
-			'leaf_wetness_sensor_ch2'  => Voltage::class,
-			'leaf_wetness_sensor_ch3'  => Voltage::class,
-			'leaf_wetness_sensor_ch4'  => Voltage::class,
-			'leaf_wetness_sensor_ch5'  => Voltage::class,
-			'leaf_wetness_sensor_ch6'  => Voltage::class,
-			'leaf_wetness_sensor_ch7'  => Voltage::class,
-			'leaf_wetness_sensor_ch8'  => Voltage::class,
-			'ldsbatt_1'                => Voltage::class,
-			'ldsbatt_2'                => Voltage::class,
-			'ldsbatt_3'                => Voltage::class,
-			'ldsbatt_4'                => Voltage::class,
+			'sensor_array'             => Base_Measurement::TYPE_BATTERY,
+			't_rh_p_sensor'            => Base_Measurement::TYPE_BATTERY,
+			'ws1900_console'           => Base_Measurement::TYPE_VOLTAGE,
+			'ws1800_console'           => Base_Measurement::TYPE_VOLTAGE,
+			'ws6006_console'           => Base_Measurement::TYPE_PERCENTAGE,
+			'console'                  => Base_Measurement::TYPE_VOLTAGE,
+			'outdoor_t_rh_sensor'      => Base_Measurement::TYPE_BATTERY,
+			'wind_sensor'              => Base_Measurement::TYPE_VOLTAGE,
+			'ws90_sensor_battery'      => Base_Measurement::TYPE_VOLTAGE,
+			'ws80_sensor'              => Base_Measurement::TYPE_VOLTAGE,
+			'rainfall_sensor'          => Base_Measurement::TYPE_VOLTAGE,
+			'ws65_67_69_sensor'        => Base_Measurement::TYPE_BATTERY,
+			'lightning_sensor'         => Base_Measurement::TYPE_BATTERY,
+			'aqi_combo_sensor'         => Base_Measurement::TYPE_BATTERY,
+			'water_leak_sensor_ch1'    => Base_Measurement::TYPE_BATTERY,
+			'water_leak_sensor_ch2'    => Base_Measurement::TYPE_BATTERY,
+			'water_leak_sensor_ch3'    => Base_Measurement::TYPE_BATTERY,
+			'water_leak_sensor_ch4'    => Base_Measurement::TYPE_BATTERY,
+			'pm25_sensor_ch1'          => Base_Measurement::TYPE_BATTERY,
+			'pm25_sensor_ch2'          => Base_Measurement::TYPE_BATTERY,
+			'pm25_sensor_ch3'          => Base_Measurement::TYPE_BATTERY,
+			'pm25_sensor_ch4'          => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch1' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch2' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch3' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch4' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch5' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch6' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch7' => Base_Measurement::TYPE_BATTERY,
+			'temp_humidity_sensor_ch8' => Base_Measurement::TYPE_BATTERY,
+			'soilmoisture_sensor_ch1'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch2'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch3'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch4'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch5'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch6'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch7'  => Base_Measurement::TYPE_VOLTAGE,
+			'soilmoisture_sensor_ch8'  => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch1'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch2'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch3'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch4'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch5'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch6'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch7'   => Base_Measurement::TYPE_VOLTAGE,
+			'temperature_sensor_ch8'   => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch1'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch2'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch3'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch4'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch5'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch6'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch7'  => Base_Measurement::TYPE_VOLTAGE,
+			'leaf_wetness_sensor_ch8'  => Base_Measurement::TYPE_VOLTAGE,
+			'ldsbatt_1'                => Base_Measurement::TYPE_VOLTAGE,
+			'ldsbatt_2'                => Base_Measurement::TYPE_VOLTAGE,
+			'ldsbatt_3'                => Base_Measurement::TYPE_VOLTAGE,
+			'ldsbatt_4'                => Base_Measurement::TYPE_VOLTAGE,
 		);
 	}
 
@@ -477,10 +465,16 @@ class Measurement_Mapping {
 	 * Get measurement mapping for a specific group.
 	 *
 	 * @param string $group The measurement group name.
-	 * @return array<string, class-string>|null Mapping array or null if group not found.
+	 * @return array<string, string>|null Mapping array or null if group not found.
 	 */
 	public function get_group( string $group ): ?array {
 		$method = str_replace( '-', '_', $group );
+
+		// If the method ends in _ch{digit} rename to _channel
+		if ( preg_match( '/_ch\d$/', $method ) ) {
+			$method = preg_replace( '/_ch\d$/', '_channel', $method );
+		}
+
 		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}
@@ -489,14 +483,18 @@ class Measurement_Mapping {
 	}
 
 	/**
-	 * Get measurement class for a specific group and key.
+	 * Get measurement class or type for a specific group and key.
+	 *
+	 * Returns either a class-string (for types with unit constants like Temperature)
+	 * or a type constant string (for simple types like 'humidity').
 	 *
 	 * @param string $group The measurement group name.
 	 * @param string $key The measurement key.
-	 * @return class-string|null The measurement class or null if not found.
+	 * @return string|null The measurement class or type, or null if not found.
 	 */
 	public function get_measurement_class( string $group, string $key ): ?string {
 		$group_mapping = $this->get_group( $group );
+
 		return $group_mapping[ $key ] ?? null;
 	}
 }

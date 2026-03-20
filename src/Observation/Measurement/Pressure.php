@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Observation\Measurement;
 
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
+
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,11 +32,9 @@ class Pressure extends Base_Measurement {
 	public const UNIT_MMHG = 'mmHg';
 
 	/**
-	 * Get the measurement type identifier.
-	 *
-	 * @return string The measurement type.
+	 * @param Measurement $measurement_dto The measurement DTO from the API.
 	 */
-	public function get_type(): string {
-		return self::TYPE_PRESSURE;
+	public function __construct( Measurement $measurement_dto ) {
+		parent::__construct( $measurement_dto, self::TYPE_PRESSURE );
 	}
 }

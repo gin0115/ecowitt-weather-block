@@ -33,7 +33,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::get_type
 	 */
 	public function test_returns_correct_measurement_type(): void {
-		$measurement_dto = new Measurement( '25.0', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.0', 'C', '1642248600' );
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->assertSame( Base_Measurement::TYPE_TEMPERATURE, $temperature->get_type() );
@@ -44,7 +44,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::get_value
 	 */
 	public function test_returns_correct_value(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.5', 'C', '1642248600' );
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->assertSame( '25.5', $temperature->get_value() );
@@ -55,10 +55,10 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::get_unit
 	 */
 	public function test_returns_correct_unit(): void {
-		$measurement_dto = new Measurement( '25.0', '℉', '1642248600' );
+		$measurement_dto = new Measurement( '25.0', 'F', '1642248600' );
 		$temperature = new Temperature( $measurement_dto );
 
-		$this->assertSame( '℉', $temperature->get_unit() );
+		$this->assertSame( 'F', $temperature->get_unit() );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::get_timestamp
 	 */
 	public function test_returns_correct_timestamp(): void {
-		$measurement_dto = new Measurement( '25.0', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.0', 'C', '1642248600' );
 		$temperature = new Temperature( $measurement_dto );
 		$timestamp = $temperature->get_timestamp();
 
@@ -79,7 +79,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::__construct
 	 */
 	public function test_handles_empty_timestamp(): void {
-		$measurement_dto = new Measurement( '25.0', '℃', '' );
+		$measurement_dto = new Measurement( '25.0', 'C', '' );
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->assertNull( $temperature->get_timestamp() );
@@ -90,7 +90,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature::__construct
 	 */
 	public function test_handles_invalid_timestamp(): void {
-		$measurement_dto = new Measurement( '25.0', '℃', 'invalid_timestamp' );
+		$measurement_dto = new Measurement( '25.0', 'C', 'invalid_timestamp' );
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->assertNull( $temperature->get_timestamp() );
@@ -101,7 +101,7 @@ class Test_Temperature extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Temperature
 	 */
 	public function test_provides_unit_constants(): void {
-		$this->assertSame( '℃', Temperature::UNIT_CELSIUS );
-		$this->assertSame( '℉', Temperature::UNIT_FAHRENHEIT );
+		$this->assertSame( 'C', Temperature::UNIT_CELSIUS );
+		$this->assertSame( 'F', Temperature::UNIT_FAHRENHEIT );
 	}
 }

@@ -1,0 +1,529 @@
+/**
+ * Slate theme styles.
+ *
+ * Dark panel cards with group-specific layouts.
+ * Colours: slate-900 background, slate-800 panels, slate-700 borders, sky-400 accent.
+ */
+
+/* ─── Theme container ─────────────────────────────── */
+.slate-theme {
+	--slate-bg: #0f172a;
+	--slate-panel: #1e293b;
+	--slate-text: #f1f5f9;
+	--slate-text-muted: #94a3b8;
+	--slate-text-dim: #64748b;
+	--slate-accent: #38bdf8;
+	--slate-border: #334155;
+	--slate-surface: #1e293b;
+	--slate-radius: 16px;
+	--slate-ok: #22c55e;
+	--slate-alert: #ef4444;
+
+	font-family: system-ui, -apple-system, sans-serif;
+	color: var(--slate-text);
+	background-color: var(--slate-bg);
+	border-radius: var(--slate-radius);
+	padding: 16px;
+}
+
+/* ─── Header ──────────────────────────────────────── */
+.slate-theme__header {
+	margin-bottom: 16px;
+}
+
+.slate-theme__station-name {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--slate-text);
+}
+
+/* ─── Main grid — single column ───────────────────── */
+.slate-theme__grid {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 28rem;
+	margin: 0 auto;
+}
+
+/* ─── Card base ───────────────────────────────────── */
+.slate-card {
+	background: var(--slate-panel);
+	border: 1px solid var(--slate-border);
+	border-radius: var(--slate-radius);
+	padding: 16px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Card title ──────────────────────────────────── */
+.slate-card__title {
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--slate-text-muted);
+	margin: 0 0 8px;
+}
+
+/* ─── Measurement values ──────────────────────────── */
+.slate-value {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 4px;
+	font-weight: 800;
+	color: var(--slate-text);
+	font-variant-numeric: tabular-nums;
+}
+
+.slate-value--hero {
+	font-size: 3rem;
+	line-height: 1;
+}
+
+.slate-value--sm {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.slate-value--grid {
+	font-size: 0.875rem;
+	font-weight: 700;
+}
+
+/* ─── Unit toggle pill ────────────────────────────── */
+.slate-unit {
+	font-weight: 400;
+	color: var(--slate-text-muted);
+}
+
+.slate-unit--md {
+	font-size: 0.875rem;
+}
+
+.slate-unit--sm {
+	font-size: 0.625rem;
+}
+
+.slate-unit--toggle {
+	cursor: pointer;
+	padding: 1px 6px;
+	border-radius: 4px;
+	background: var(--slate-border);
+	border: none;
+	color: var(--slate-text-muted);
+	transition: all 0.2s ease;
+	user-select: none;
+	line-height: 1.4;
+
+	&:hover {
+		background: var(--slate-accent);
+		color: var(--slate-bg);
+	}
+
+	&:active {
+		transform: scale(0.95);
+	}
+}
+
+/* ─── Split layout ────────────────────────────────── */
+.slate-card__body {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+}
+
+.slate-card__primary {
+	flex-shrink: 0;
+}
+
+.slate-card__sidebar {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	text-align: right;
+}
+
+.slate-card__sidebar-item {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+}
+
+.slate-card__sidebar-label {
+	font-size: 0.75rem;
+	color: var(--slate-text-muted);
+}
+
+/* ─── Footer row (below divider) ──────────────────── */
+.slate-card__footer {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid var(--slate-border);
+}
+
+.slate-card__footer-item {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+}
+
+.slate-card__footer-label {
+	font-size: 0.75rem;
+	color: var(--slate-text-muted);
+}
+
+/* ─── Hero-grid layout (rainfall) ─────────────────── */
+.slate-card__hero-section {
+	margin-bottom: 16px;
+}
+
+.slate-card__hero-sublabel {
+	font-size: 0.625rem;
+	text-transform: uppercase;
+	color: var(--slate-text-dim);
+	margin: 4px 0 0;
+}
+
+.slate-card__grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px 8px;
+	border-top: 1px solid var(--slate-border);
+	padding-top: 16px;
+}
+
+.slate-card__grid-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.slate-card__grid-label {
+	font-size: 0.625rem;
+	text-transform: uppercase;
+	color: var(--slate-text-muted);
+	margin-bottom: 2px;
+}
+
+/* ─── Compass layout (wind) ───────────────────────── */
+.slate-card__compass-wrap {
+	flex-shrink: 0;
+}
+
+.slate-card__wind-details {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	text-align: right;
+}
+
+.slate-card__wind-gust {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+	margin-top: 4px;
+	font-size: 0.75rem;
+}
+
+/* ─── Wind compass ────────────────────────────────── */
+.slate-compass {
+	position: relative;
+	width: 64px;
+	height: 64px;
+	background: var(--slate-bg);
+	border-radius: 50%;
+	border: 2px solid var(--slate-border);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.slate-compass__needle {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.4s ease;
+}
+
+.slate-compass__needle-line {
+	position: relative;
+	height: 48px;
+	width: 2px;
+	background: var(--slate-accent);
+}
+
+.slate-compass__needle-tip {
+	position: absolute;
+	top: -4px;
+	left: -3px;
+	width: 8px;
+	height: 8px;
+	background: var(--slate-accent);
+	border-radius: 50%;
+}
+
+.slate-compass__cardinal {
+	position: relative;
+	z-index: 1;
+	font-size: 0.625rem;
+	font-weight: 700;
+	color: var(--slate-text);
+}
+
+/* ─── Dots layout (water leak) ────────────────────── */
+.slate-card__dots-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 8px;
+	text-align: center;
+}
+
+.slate-card__dot-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+
+.slate-card__dot {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+}
+
+.slate-card__dot--ok {
+	background: var(--slate-ok);
+}
+
+.slate-card__dot--alert {
+	background: var(--slate-alert);
+	animation: slate-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.slate-card__dot-label {
+	font-size: 0.625rem;
+	color: var(--slate-text-muted);
+}
+
+@keyframes slate-pulse {
+	50% {
+		opacity: 0.5;
+	}
+}
+
+/* ─── Loading ─────────────────────────────────────── */
+.slate-theme--loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+}
+
+.slate-theme__loader {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	color: var(--slate-text-muted);
+}
+
+.slate-theme__spinner {
+	width: 28px;
+	height: 28px;
+	border: 2px solid var(--slate-border);
+	border-top-color: var(--slate-accent);
+	border-radius: 50%;
+	animation: slate-spin 0.7s linear infinite;
+}
+
+@keyframes slate-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* ─── Error / empty ───────────────────────────────── */
+.slate-theme--error,
+.slate-theme--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+}
+
+.slate-theme__error-text {
+	color: var(--slate-alert);
+	text-align: center;
+	padding: 20px;
+}
+
+.slate-theme__no-fields {
+	color: var(--slate-text-muted);
+	text-align: center;
+	padding: 32px 16px;
+	font-style: italic;
+	font-size: 0.875rem;
+}
+
+/* ─── History theme ───────────────────────────────── */
+.slate-history {
+	font-family: system-ui, -apple-system, sans-serif;
+	color: var(--slate-text, #f1f5f9);
+	background-color: var(--slate-bg, #0f172a);
+	border-radius: var(--slate-radius, 16px);
+	padding: 16px;
+}
+
+.slate-history__grid {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.slate-history__card {
+	background: var(--slate-panel, #1e293b);
+	border: 1px solid var(--slate-border, #334155);
+	border-radius: 16px;
+	padding: 16px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.slate-history__card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+.slate-history__card-title {
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--slate-text-muted, #94a3b8);
+	margin: 0;
+}
+
+.slate-history__card-unit {
+	font-size: 0.6875rem;
+	color: var(--slate-text-dim, #64748b);
+}
+
+.slate-history__card-controls {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.slate-history__card-unit--toggle {
+	background: none;
+	border: 1px solid var(--slate-border, #334155);
+	border-radius: 6px;
+	padding: 2px 8px;
+	cursor: pointer;
+	transition: border-color 0.15s, color 0.15s;
+
+	&:hover {
+		color: var(--slate-text, #f1f5f9);
+		border-color: var(--slate-text-dim, #64748b);
+	}
+}
+
+.slate-history__fit-toggle {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+}
+
+.slate-history__fit-label {
+	font-size: 0.625rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: var(--slate-text-dim, #64748b);
+	letter-spacing: 0.03em;
+	user-select: none;
+}
+
+.slate-history__fit-track {
+	position: relative;
+	width: 28px;
+	height: 16px;
+	background: var(--slate-border, #334155);
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+	outline: none;
+
+	&:hover {
+		background: var(--slate-text-dim, #64748b);
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 0 2px var(--slate-accent, #38bdf8);
+	}
+}
+
+.slate-history__fit-track--on {
+	background: var(--slate-accent, #38bdf8);
+
+	&:hover {
+		background: var(--slate-accent, #38bdf8);
+		filter: brightness(1.15);
+	}
+
+	.slate-history__fit-thumb {
+		transform: translateX(12px);
+	}
+}
+
+.slate-history__fit-thumb {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 12px;
+	height: 12px;
+	background: var(--slate-text, #f1f5f9);
+	border-radius: 50%;
+	transition: transform 0.2s ease;
+}
+
+.slate-history--loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+}
+
+.slate-history--error,
+.slate-history--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+}
+
+/* ─── Responsive ──────────────────────────────────── */
+@media (max-width: 480px) {
+	.slate-theme {
+		padding: 12px;
+	}
+
+	.slate-value--hero {
+		font-size: 2.25rem;
+	}
+
+	.slate-card__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.slate-card__footer {
+		grid-template-columns: 1fr;
+	}
+}

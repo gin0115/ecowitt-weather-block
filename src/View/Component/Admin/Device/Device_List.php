@@ -31,56 +31,20 @@ class Device_List extends Component {
 	/**
 	 * The connection object.
 	 *
-	 * @var Connection
+	 * @var string
 	 */
-	public Connection $connection;
+	public string $connection_id;
 
 
 	/**
 	 * Creates an instance of the Device_List Component.
 	 *
 	 * @param array<int, mixed> $devices
-	 * @param Connection $connection
+	 * @param string            $connection_id
 	 */
-	public function __construct( array $devices, Connection $connection ) {
-		$devices          = array_filter( $devices, fn( $device ) => $device instanceof DeviceDTO );
-		$this->devices    = array_map( fn( $device ) => new Device( $device, $connection ), $devices );
-		$this->connection = $connection;
-	}
-
-	/**
-	 * Get the devices.
-	 *
-	 * @return array<int, Device>
-	 */
-	public function devices(): array {
-		return $this->devices;
-	}
-
-	/**
-	 * Check if there are any devices.
-	 *
-	 * @return bool
-	 */
-	public function has_devices(): bool {
-		return ! empty( $this->devices );
-	}
-
-	/**
-	 * Get the count of devices.
-	 *
-	 * @return int
-	 */
-	public function devices_count(): int {
-		return count( $this->devices );
-	}
-
-	/**
-	 * Get total count of IOT devices across all devices.
-	 *
-	 * @return int
-	 */
-	public function total_iot_devices_count(): int {
-		return array_sum( array_map( fn( $device ) => $device->iot_devices_count(), $this->devices ) );
+	public function __construct( array $devices, string $connection_id ) {
+		$devices             = array_filter( $devices, fn( $device ) => $device instanceof DeviceDTO );
+		$this->devices       = array_map( fn( $device ) => new Device( $device, $connection_id ), $devices );
+		$this->connection_id = $connection_id;
 	}
 }

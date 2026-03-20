@@ -314,7 +314,7 @@ class Test_Unit_Converter_Service extends WP_UnitTestCase {
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->expectException( Unit_Conversion_Exception::class );
-		$this->expectExceptionMessage( 'No to_base conversion formula found for unit: ℃' );
+		$this->expectExceptionMessage( 'No to_base conversion formula found for unit: C' );
 
 		$converter->convert( $temperature, Temperature::UNIT_FAHRENHEIT );
 	}
@@ -346,7 +346,7 @@ class Test_Unit_Converter_Service extends WP_UnitTestCase {
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->expectException( Unit_Conversion_Exception::class );
-		$this->expectExceptionMessage( 'No from_base conversion formula found for unit: ℉' );
+		$this->expectExceptionMessage( 'No from_base conversion formula found for unit: F' );
 
 		$converter->convert( $temperature, Temperature::UNIT_FAHRENHEIT );
 	}
@@ -540,7 +540,7 @@ class Test_Unit_Converter_Service extends WP_UnitTestCase {
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->expectException( Unit_Conversion_Exception::class );
-		$this->expectExceptionMessage( 'No to_base conversion formula found for unit: ℃' );
+		$this->expectExceptionMessage( 'No to_base conversion formula found for unit: C' );
 
 		$converter->convert( $temperature, Temperature::UNIT_FAHRENHEIT );
 	}
@@ -580,7 +580,7 @@ class Test_Unit_Converter_Service extends WP_UnitTestCase {
 		$temperature = new Temperature( $measurement_dto );
 
 		$this->expectException( Unit_Conversion_Exception::class );
-		$this->expectExceptionMessage( 'No from_base conversion formula found for unit: ℃' );
+		$this->expectExceptionMessage( 'No from_base conversion formula found for unit: C' );
 
 		$converter->convert( $temperature, Temperature::UNIT_CELSIUS );
 	}

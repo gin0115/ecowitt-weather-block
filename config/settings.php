@@ -8,12 +8,16 @@
  *
  * @return array<string, mixed>
  */
+global $wpdb;
 return array(
 	'url'        => array(
 		'assets' => plugins_url( '/', __DIR__ ) . 'assets/build/',
 	),
 	'path'       => array(
 		'assets' => dirname( __DIR__, 1 ) . '/assets/build/',
+	),
+	'db_tables'  => array(
+		'observation_cache' => $wpdb->prefix . 'ecowitt_observation_cache',
 	),
 	'additional' => array(
 		'ecowitt_api_base' => 'https://api.ecowitt.net/api/v3/',

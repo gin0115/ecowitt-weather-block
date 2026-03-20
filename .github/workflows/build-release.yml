@@ -1,0 +1,71 @@
+name: Build and Release
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --no-interaction --ignore-platform-reqs --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Zip Folder
+        run: |
+          zip -r ${{ github.event.repository.name }}.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x ".claude/*" \
+            -x ".vscode/*" \
+            -x ".idea/*" \
+            -x "node_modules/*" \
+            -x "tests/*" \
+            -x "coverage-report/*" \
+            -x "phpstan-stubs/*" \
+            -x ".gitignore" \
+            -x ".editorconfig" \
+            -x "composer.json" \
+            -x "composer.lock" \
+            -x "package.json" \
+            -x "package-lock.json" \
+            -x "webpack.config.js" \
+            -x "phpcs.xml" \
+            -x "phpstan.neon.dist" \
+            -x "phpunit.xml" \
+            -x ".phpunit.result.cache" \
+            -x "readme.md" \
+            -x "CLAUDE.md" \
+            -x "AGENTS.md" \
+            -x ".agents/*" \
+            -x ".cursor/*" \
+            -x ".deployignore" \
+            -x "block/src/*" \
+            -x "assets/src/*"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.event.repository.name }}.zip

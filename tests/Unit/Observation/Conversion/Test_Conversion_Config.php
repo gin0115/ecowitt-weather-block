@@ -1114,8 +1114,8 @@ class Test_Conversion_Config extends \WP_UnitTestCase {
 		$result = $config->get();
 		$wind_dir_config = $result[ Base_Measurement::TYPE_WIND_DIRECTION ];
 
-		$degrees_format = $wind_dir_config['format']['°'];
-		$compass_format = $wind_dir_config['format']['compass'];
+		$degrees_format = $wind_dir_config['format']['deg'];
+		$compass_format = $wind_dir_config['format']['cardinal'];
 
 		// degrees: (int) value
 		$this->assertSame( 90, $degrees_format( 90.7 ) );
@@ -1475,8 +1475,8 @@ class Test_Conversion_Config extends \WP_UnitTestCase {
 		$result = $config->get();
 		$wind_dir_config = $result[ Base_Measurement::TYPE_WIND_DIRECTION ];
 
-		$degrees_format = $wind_dir_config['format']['°'];
-		$compass_format = $wind_dir_config['format']['compass'];
+		$degrees_format = $wind_dir_config['format']['deg'];
+		$compass_format = $wind_dir_config['format']['cardinal'];
 
 		// degrees: (int) value - test various scenarios
 		$this->assertSame( 0, $degrees_format( 0.0 ) );

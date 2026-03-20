@@ -27,6 +27,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Unit_Converter_Service {
 
 	/**
+	 * Human-readable labels for unit symbols.
+	 *
+	 * @var array<string, string>
+	 */
+	private const UNIT_LABELS = array(
+		'C'        => '°C',
+		'F'        => '°F',
+		'hPa'      => 'hPa',
+		'inHg'     => 'inHg',
+		'mmHg'     => 'mmHg',
+		'm/s'      => 'm/s',
+		'km/h'     => 'km/h',
+		'knots'    => 'knots',
+		'mph'      => 'mph',
+		'BFT'      => 'BFT',
+		'fpm'      => 'fpm',
+		'mm'       => 'mm',
+		'in'       => 'in',
+		'mm/hr'    => 'mm/hr',
+		'in/hr'    => 'in/hr',
+		'lux'      => 'lux',
+		'fc'       => 'fc',
+		'W/m2'     => 'W/m²',
+		'L'        => 'L',
+		'm3'       => 'm³',
+		'gal'      => 'gal',
+		'deg'      => '°',
+		'cardinal' => 'cardinal',
+	);
+
+	/**
 	 * The conversion configuration.
 	 *
 	 * @var Conversion_Config_Interface
@@ -163,5 +194,69 @@ class Unit_Converter_Service {
 		}
 
 		return $format( $value );
+	}
+
+	/**
+	 * Get all unit variants for a measurement.
+	 *
+	 * Returns an array of { value, label, unit } for every supported unit
+	 * of the measurement's type. If the type has no conversions configured,
+	 * returns a single-entry array with the original value.
+	 *
+	 * @param Base_Measurement $measurement The measurement to expand.
+	 * @return array<int, array{value: string, label: string, unit: string}>
+	 */
+	public function get_all_variants( Base_Measurement $measurement ): array {
+		$measurement_type = $measurement->get_type();
+		$config_data      = $this->config->get();
+
+		// No conversion config for this type — return original as single variant.
+		if ( ! isset( $config_data[ $measurement_type ] ) ) {
+			return array(
+				array(
+					'value' => $measurement->get_value(),
+					'label' => $this->get_unit_label( $measurement->get_unit() ),
+					'unit'  => $measurement->get_unit(),
+				),
+			);
+		}
+
+		$units    = $config_data[ $measurement_type ]['units'];
+		$variants = array();
+
+		foreach ( $units as $unit ) {
+			try {
+				$converted  = $this->convert( $measurement, $unit );
+				$variants[] = array(
+					'value' => $converted->get_value(),
+					'label' => $this->get_unit_label( $unit ),
+					'unit'  => $unit,
+				);
+			} catch ( \Exception $e ) {
+				// Skip units that fail to convert.
+				continue;
+			}
+		}
+
+		// If all conversions failed, fall back to original.
+		if ( empty( $variants ) ) {
+			$variants[] = array(
+				'value' => $measurement->get_value(),
+				'label' => $this->get_unit_label( $measurement->get_unit() ),
+				'unit'  => $measurement->get_unit(),
+			);
+		}
+
+		return $variants;
+	}
+
+	/**
+	 * Get a human-readable label for a unit symbol.
+	 *
+	 * @param string $unit The unit symbol.
+	 * @return string The label, or the unit symbol if no label is defined.
+	 */
+	public function get_unit_label( string $unit ): string {
+		return self::UNIT_LABELS[ $unit ] ?? $unit;
 	}
 }

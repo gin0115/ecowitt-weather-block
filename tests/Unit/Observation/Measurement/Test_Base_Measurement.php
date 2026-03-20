@@ -31,7 +31,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::get_value
 	 */
 	public function test_can_get_value(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.5', 'C', '1642248600' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertSame( '25.5', $measurement->get_value() );
@@ -42,10 +42,10 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::get_unit
 	 */
 	public function test_can_get_unit(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.5', 'C', '1642248600' );
 		$measurement = new Temperature( $measurement_dto );
 
-		$this->assertSame( '℃', $measurement->get_unit() );
+		$this->assertSame( 'C', $measurement->get_unit() );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::get_timestamp
 	 */
 	public function test_can_get_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '1642248600' );
+		$measurement_dto = new Measurement( '25.5', 'C', '1642248600' );
 		$measurement = new Temperature( $measurement_dto );
 		$timestamp = $measurement->get_timestamp();
 
@@ -66,7 +66,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::__construct
 	 */
 	public function test_handles_empty_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '' );
+		$measurement_dto = new Measurement( '25.5', 'C', '' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
@@ -77,7 +77,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::__construct
 	 */
 	public function test_handles_invalid_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', 'invalid_timestamp' );
+		$measurement_dto = new Measurement( '25.5', 'C', 'invalid_timestamp' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
@@ -122,7 +122,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @dataProvider timestamp_validation_data_provider
 	 */
 	public function test_timestamp_validation_scenarios( string $timestamp_string, $expected_result, string $description ): void {
-		$measurement_dto = new Measurement( '25.5', '℃', $timestamp_string );
+		$measurement_dto = new Measurement( '25.5', 'C', $timestamp_string );
 		$measurement = new Temperature( $measurement_dto );
 		$result = $measurement->get_timestamp();
 
@@ -142,7 +142,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_zero_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '0' );
+		$measurement_dto = new Measurement( '25.5', 'C', '0' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
@@ -153,7 +153,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_negative_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '-100' );
+		$measurement_dto = new Measurement( '25.5', 'C', '-100' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
@@ -164,7 +164,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_non_numeric_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', 'not_a_number' );
+		$measurement_dto = new Measurement( '25.5', 'C', 'not_a_number' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
@@ -175,7 +175,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_timestamp_with_decimals(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '1642248600.123' );
+		$measurement_dto = new Measurement( '25.5', 'C', '1642248600.123' );
 		$measurement = new Temperature( $measurement_dto );
 		$timestamp = $measurement->get_timestamp();
 
@@ -189,7 +189,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_very_large_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '2147483647' ); // Max 32-bit timestamp
+		$measurement_dto = new Measurement( '25.5', 'C', '2147483647' ); // Max 32-bit timestamp
 		$measurement = new Temperature( $measurement_dto );
 		$timestamp = $measurement->get_timestamp();
 
@@ -202,7 +202,7 @@ class Test_Base_Measurement extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement::parse_timestamp
 	 */
 	public function test_handles_whitespace_only_timestamp(): void {
-		$measurement_dto = new Measurement( '25.5', '℃', '   ' );
+		$measurement_dto = new Measurement( '25.5', 'C', '   ' );
 		$measurement = new Temperature( $measurement_dto );
 
 		$this->assertNull( $measurement->get_timestamp() );
