@@ -1,0 +1,65 @@
+# PHPStan Issues To Fix
+# This file is NOT tracked in git - delete when done
+
+## Category 1: `mixed` passed where `Base_Measurement` expected (Measurement_Type::for_type() calls)
+- [ ] View/Component/Observation/Battery.php:39
+- [ ] View/Component/Observation/Indoor.php:44,48
+- [ ] View/Component/Observation/Indoor_CO2.php:44,48
+- [ ] View/Component/Observation/LDS_Channels.php:48,52,56
+- [ ] View/Component/Observation/Leaf_Channels.php:43
+- [ ] View/Component/Observation/Lightning.php:44,48
+- [ ] View/Component/Observation/Outdoor.php:65,69,73,77,81
+- [ ] View/Component/Observation/PM25_AQI_Combo.php:51,55,59
+- [ ] View/Component/Observation/PM25_Channels.php:45,49,53
+- [ ] View/Component/Observation/Pressure.php:44 (+ others truncated)
+- [ ] View/Component/Observation/Rainfall.php
+- [ ] View/Component/Observation/Soil_Channels.php
+- [ ] View/Component/Observation/Solar_And_Uvi.php
+- [ ] View/Component/Observation/T_RH_AQI_Combo.php
+- [ ] View/Component/Observation/Temp_And_Humidity_Channels.php
+- [ ] View/Component/Observation/Temp_Channels.php
+- [ ] View/Component/Observation/Water_Leak.php
+- [ ] View/Component/Observation/Wind.php
+
+## Category 2: `Connection|null` passed where `Connection` expected
+- [ ] Ecowitt/Api/Service/Ecowitt.php:109
+- [ ] Rest/Weather_Route_Controller.php:200,227,292
+
+## Category 3: `Cannot cast mixed to string/int`
+- [ ] Cache/Cached_History_Data_Provider.php:213
+- [ ] Cache/Cached_Live_Data_Provider.php:111,145
+- [ ] Ecowitt/Api/DTO/V3/History_Measurement.php:68
+- [ ] Observation/Conversion/Unit_Converter_Service.php:117
+
+## Category 4: No value type in iterable type array (missing PHPDoc generics)
+- [ ] Ecowitt/Api/DTO/V3/Observation.php:198
+- [ ] Ecowitt/Api/Service/Ecowitt.php:132
+- [ ] Ecowitt/Api/Service/Observation_Service.php:160 (param + return)
+- [ ] View/Component/Observation/CO2_AQI_Combo.php:42
+- [ ] View/Component/Observation/PM10_AQI_Combo.php:49
+- [ ] View/Component/Observation/PM1_AQI_Combo.php:49
+- [ ] View/Component/Observation/PM4_AQI_Combo.php:49
+- [ ] Observation/Measurement/Base_Measurement.php:170
+- [ ] View/Component/Admin/Device/Device.php:175
+
+## Category 5: Array shape / return type mismatches
+- [ ] Cache/Observation_Cache_Repository.php:197
+- [ ] Ecowitt/Api/DTO/V3/History_Observation.php:221,223,224,225,227,243
+- [ ] Ecowitt/Api/DTO/V3/Observation.php:240
+- [ ] Ecowitt/Api/Service/Api_History_Data_Provider.php:120
+- [ ] Ecowitt/Api/Service/Api_Live_Data_Provider.php:92,96,100
+- [ ] Rest/History_Measurement_Serializer.php:66,86,89,107,110
+- [ ] Rest/Measurement_Serializer.php:67,113,116,134,137
+
+## Category 6: WP_REST_Request generic type
+- [ ] Rest/Weather_Route_Controller.php:150,160,188,214,251
+
+## Category 7: One-offs
+- [ ] Admin/Page/Ajax/Live_Observation_Ajax.php:127,135,167,168 (mixed params)
+- [ ] Admin/Page/Device_Page.php:126 (stale phpstan-ignore)
+- [ ] Ecowitt/Api/Service/Api_History_Data_Provider.php:112 (binary op with mixed)
+- [ ] Ecowitt/Api/Service/Ecowitt_Http_Service.php:41 (property never read)
+- [ ] Ecowitt/Api/Service/Observation_Service.php:136,144,265 (mixed in foreach/params)
+- [ ] Observation/Conversion/Measurement_Mapping.php:478 (string|null to string)
+- [ ] Settings/Page/Settings_Page.php:97 (void result used)
+- [ ] View/Component/Observation/PM25_Channels.php:26,28 (invalid PHPDoc, no type)

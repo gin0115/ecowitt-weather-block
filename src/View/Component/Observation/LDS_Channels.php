@@ -12,6 +12,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The LDS channels measurements component.
@@ -30,7 +31,7 @@ class LDS_Channels extends Component {
 	/**
 	 * Creates an instance of the LDS_Channels Component.
 	 *
-	 * @param array<string, array<string, mixed>> $measurements Array of LDS channel measurement arrays
+	 * @param array<string, array<string, Base_Measurement>> $measurements Array of LDS channel measurement arrays
 	 */
 	public function __construct( array $measurements = array() ) {
 		foreach ( $measurements as $channel_key => $channel_data ) {

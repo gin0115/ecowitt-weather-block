@@ -12,6 +12,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The Temperature and Humidity AQI Combo component.
@@ -37,7 +38,7 @@ class T_RH_AQI_Combo extends Component {
 	/**
 	 * Creates an instance of the Temperature and Humidity AQI Combo Component.
 	 *
-	 * @param array $measurements
+	 * @param array<string, Base_Measurement> $measurements
 	 */
 	public function __construct( array $measurements = array() ) {
 		if ( isset( $measurements['temperature'] ) ) {

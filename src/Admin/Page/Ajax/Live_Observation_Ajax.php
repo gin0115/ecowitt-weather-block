@@ -155,11 +155,12 @@ class Live_Observation_Ajax extends Ajax {
 	 * Validate the args.
 	 *
 	 * @param array<string, mixed> $args
-	 * @return array<string, mixed>
+	 * @return array{connection: string, device: string}
 	 */
 	private function validate_args( array $args ): array {
 		// If we dont have the connection and device props throw an exception.
-		if ( ! isset( $args['connection'] ) || ! isset( $args['device'] ) ) {
+		if ( ! isset( $args['connection'] ) || ! is_string( $args['connection'] )
+			|| ! isset( $args['device'] ) || ! is_string( $args['device'] ) ) {
 			throw new Ajax_Exception( 'Missing required fields' );
 		}
 

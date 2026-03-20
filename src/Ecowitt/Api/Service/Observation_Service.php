@@ -132,15 +132,18 @@ class Observation_Service {
 
 		// Iterate over the measurement group.
 		foreach ( $observations as $measurement_group => $measurement_data ) {
+			if ( ! is_array( $measurement_data ) || ! is_string( $measurement_group ) ) {
+				continue;
+			}
+
 			// Iterate over the measurement data.
 			foreach ( $measurement_data as $measurement_key => $measurement_value ) {
 				// If the measurement key is 'time' or we have a non array value, skip.
-				if ( $measurement_key === 'time' || ! is_array( $measurement_value ) ) {
+				if ( ! is_string( $measurement_key ) || $measurement_key === 'time' || ! is_array( $measurement_value ) ) {
 					continue;
 				}
 
 				// Create a new measurement.
-				// adump([$measurement_key => $measurement_value]);
 				$mapped_observations[ esc_html( $measurement_group ) ][ esc_html( $measurement_key ) ] = Measurement::from_array( $measurement_value );
 			}
 		}
@@ -154,8 +157,8 @@ class Observation_Service {
 	/**
 	 * Convert measurement DTOs to domain measurement objects.
 	 *
-	 * @param array $mapped_observations Array of [group][key] => Measurement DTO
-	 * @return array Array of [group][key] => Domain Measurement object
+	 * @param array<string, array<string, Measurement>> $mapped_observations Array of [group][key] => Measurement DTO
+	 * @return array<string, array<string, Base_Measurement>> Array of [group][key] => Domain Measurement object
 	 */
 	private function convert_measurements_to_domain_objects( array $mapped_observations ): array {
 		$domain_objects = array();
@@ -167,7 +170,9 @@ class Observation_Service {
 					// If it's a class-string (subclass with unit constants), instantiate it directly.
 					// Otherwise it's a type constant string, so use Base_Measurement with the type.
 					if ( class_exists( $mapping ) ) {
-						$domain_objects[ $group ][ $key ] = new $mapping( $measurement_dto );
+						/** @var Base_Measurement $domain_object */
+						$domain_object                    = new $mapping( $measurement_dto );
+						$domain_objects[ $group ][ $key ] = $domain_object;
 					} else {
 						$domain_objects[ $group ][ $key ] = new Base_Measurement( $measurement_dto, $mapping );
 					}
@@ -216,6 +221,7 @@ class Observation_Service {
 		}
 
 		// Parse the raw data into domain objects.
+		/** @var array<string, array<string, Base_Measurement[]>> $domain_observations */
 		$domain_observations = array();
 
 		foreach ( $raw_data as $measurement_group => $measurement_data ) {
@@ -249,7 +255,9 @@ class Observation_Service {
 
 					// Create the domain object using the same pattern as live observations.
 					if ( class_exists( $mapping ) ) {
-						$domain_measurements[] = new $mapping( $measurement_dto );
+						/** @var Base_Measurement $domain_object */
+						$domain_object         = new $mapping( $measurement_dto );
+						$domain_measurements[] = $domain_object;
 					} else {
 						$domain_measurements[] = new Base_Measurement( $measurement_dto, $mapping );
 					}

@@ -218,19 +218,19 @@ class History_Observation {
 		$this->pm4_aqi_combo              = $observations['pm4_aqi_combo'] ?? array();
 		$this->t_rh_aqi_combo             = $observations['t_rh_aqi_combo'] ?? array();
 		$this->water_leak                 = $observations['water_leak'] ?? array();
-		$this->pm25_channels              = $observations['pm25_channels'] ?? array();
+		$this->pm25_channels              = $observations['pm25_channels'] ?? array(); // @phpstan-ignore assign.propertyType
 		$this->temp_and_humidity_channels = $this->map_temp_and_humidity_channels( $observations );
-		$this->soil_channels              = $observations['soil_channels'] ?? array();
-		$this->temp_channels              = $observations['temp_channels'] ?? array();
-		$this->leaf_channels              = $observations['leaf_channels'] ?? array();
+		$this->soil_channels              = $observations['soil_channels'] ?? array(); // @phpstan-ignore assign.propertyType
+		$this->temp_channels              = $observations['temp_channels'] ?? array(); // @phpstan-ignore assign.propertyType
+		$this->leaf_channels              = $observations['leaf_channels'] ?? array(); // @phpstan-ignore assign.propertyType
 		$this->battery                    = $observations['battery'] ?? array();
-		$this->lds_channels               = $observations['lds_channels'] ?? array();
+		$this->lds_channels               = $observations['lds_channels'] ?? array(); // @phpstan-ignore assign.propertyType
 	}
 
 	/**
 	 * Map the temp and humidity channels.
 	 *
-	 * @param array<string, mixed> $observations Observations.
+	 * @param array<string, array<string, Base_Measurement[]>> $observations Observations.
 	 * @return array<string, array<string, Base_Measurement[]>> Temp and humidity channels.
 	 */
 	private function map_temp_and_humidity_channels( array $observations ): array {

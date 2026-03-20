@@ -89,7 +89,7 @@ class Api_Live_Data_Provider implements Live_Data_Provider {
 		$response = $this->http_service->request( $url, array() );
 		$data     = json_decode( $response->body(), true );
 
-		if ( ! isset( $data['msg'] ) || 'success' !== $data['msg'] ) {
+		if ( ! is_array( $data ) || ! isset( $data['msg'] ) || 'success' !== $data['msg'] ) {
 			throw new \Exception( 'Failed to get live observations' );
 		}
 
@@ -97,6 +97,7 @@ class Api_Live_Data_Provider implements Live_Data_Provider {
 			return array();
 		}
 
+		/** @var array<string, mixed> */
 		return $data['data'];
 	}
 }

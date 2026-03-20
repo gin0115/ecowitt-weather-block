@@ -12,6 +12,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The temperature and humidity channels measurements component.
@@ -30,19 +31,21 @@ class Temp_And_Humidity_Channels extends Component {
 	/**
 	 * Creates an instance of the Temp_And_Humidity_Channels Component.
 	 *
-	 * @param array<string, array<string, mixed>> $measurements Array of temperature and humidity channel measurement arrays
+	 * @param array<string, array<string, Base_Measurement>> $measurements Array of temperature and humidity channel measurement arrays
 	 */
 	public function __construct( array $measurements = array() ) {
 		foreach ( $measurements as $channel_key => $channel_data ) {
 			// Get the digit from the channel key.
-			$digit = preg_replace('/^temp_and_humidity_ch/', '', $channel_key);
-			
+			$digit = preg_replace( '/^temp_and_humidity_ch/', '', $channel_key );
+
 			$channel = array(
 				'temperature'  => null,
 				'humidity'     => null,
 				'channel_name' => sprintf(
 					// translators: %s is the digit from the channel key.
-					__('Channel %s', 'ecowitt-weather-block'), $digit),
+					__( 'Channel %s', 'ecowitt-weather-block' ),
+					$digit
+				),
 			);
 
 			if ( isset( $channel_data['temperature'] ) ) {

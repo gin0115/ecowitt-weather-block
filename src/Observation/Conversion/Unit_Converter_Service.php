@@ -114,7 +114,7 @@ class Unit_Converter_Service {
 
 		// Create new DTO with converted value
 		$converted_dto = new Measurement(
-			(string) $formatted_value,
+			is_scalar( $formatted_value ) ? (string) $formatted_value : '',
 			$target_unit,
 			$measurement->get_timestamp() ? $measurement->get_timestamp()->format( 'U' ) : ''
 		);
