@@ -3,6 +3,23 @@
  * PHPUnit bootstrap file
  */
 
+// Suppress deprecation notices from WordPress core and vendor libraries
+// that are not yet compatible with PHP 8.5+.
+// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
+set_error_handler(
+	static function ( $errno, $errstr ) {
+		if ( $errno === E_DEPRECATED && (
+			str_contains( $errstr, 'Non-canonical cast' )
+			|| str_contains( $errstr, 'ReflectionProperty::setAccessible()' )
+			|| str_contains( $errstr, 'array_key_exists()' )
+		) ) {
+			return true;
+		}
+		return false;
+	},
+	E_DEPRECATED
+);
+
 // Composer autoloader must be loaded before WP_PHPUNIT__DIR will be available
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
