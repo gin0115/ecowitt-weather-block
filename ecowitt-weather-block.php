@@ -3,7 +3,7 @@
  * Ecowitt Weather Block
  *
  * @since       0.1.0
- * @version     0.1.0
+ * @version     1.0.0-RC1
  * @author      WordPress.com Special Projects
  * @license     GPL-3.0-or-later
  *
@@ -12,7 +12,7 @@
  * @wordpress-plugin
  * Plugin Name:             PinkCrab - Ecowitt Weather Block
  * Description:             A simple block to display weather data from an Ecowitt weather station.
- * Version:                 0.1.0
+ * Version:                 1.0.0-RC1
  * Requires at least:       6.1
  * Requires PHP:            8.1
  * Author:                  Glynn Quelch<glynn.quelch@gmail.com>
@@ -64,9 +64,6 @@ add_action(
 			->registration_classes( require __DIR__ . '/config/registration.php' );
 		$app->boot();
 
-		// Trigger the wp plugin avctivation hook if we're in the admin and the plugin is being activated.
-		// do_action( 'activate_' . plugin_basename( __FILE__ ) );
-		// dd( $app, $app::make( Create_Observation_Cache_Table::class ) );
 	},
 	0
 );

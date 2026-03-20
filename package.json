@@ -1,6 +1,6 @@
 {
     "name": "pinkcrab-ecowitt-weather-block",
-    "version": "1.0.0",
+    "version": "1.0.0-RC1",
     "description": "A block to display weather data from an Ecowitt weather station.",
     "author": {
         "name": "Glynn QUelch",
