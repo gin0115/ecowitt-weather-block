@@ -170,7 +170,7 @@ class Device extends Component implements \JsonSerializable {
 	/**
 	 * Get the device as a JSON string.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public function jsonSerialize(): array {
 		return $this->to_array();

@@ -12,6 +12,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The rainfall measurements component.
@@ -72,7 +73,7 @@ class Rainfall extends Component {
 	/**
 	 * Creates an instance of the Rainfall Component.
 	 *
-	 * @param array<string, mixed> $measurements Array with rainfall measurement instances
+	 * @param array<string, Base_Measurement> $measurements Array with rainfall measurement instances
 	 */
 	public function __construct( array $measurements = array() ) {
 		if ( isset( $measurements['rain_rate'] ) ) {

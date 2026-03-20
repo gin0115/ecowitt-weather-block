@@ -113,7 +113,7 @@ class Cached_History_Data_Provider implements History_Data_Provider {
 
 		// Otherwise, fetch from API.
 		$this->last_was_cached = false;
-		$api_data = $this->api_provider->fetch_history( $mac, $connection, $from, $to, $groups, $cycle_type );
+		$api_data              = $this->api_provider->fetch_history( $mac, $connection, $from, $to, $groups, $cycle_type );
 
 		// Store the API response as per-timestamp cache rows.
 		if ( ! empty( $api_data ) ) {
@@ -210,7 +210,7 @@ class Cached_History_Data_Provider implements History_Data_Provider {
 
 					$snapshots[ $ts ][ $group_key ][ $field_key ] = array(
 						'unit'  => $unit,
-						'value' => (string) $value,
+						'value' => is_scalar( $value ) ? (string) $value : '',
 					);
 				}
 			}

@@ -12,6 +12,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The PM1 AQI Combo component.
@@ -44,7 +45,7 @@ class PM1_AQI_Combo extends Component {
 	/**
 	 * Creates an instance of the PM1 AQI Combo Component.
 	 *
-	 * @param array $measurements
+	 * @param array<string, Base_Measurement> $measurements
 	 */
 	public function __construct( array $measurements = array() ) {
 		if ( isset( $measurements['real_time_aqi'] ) ) {

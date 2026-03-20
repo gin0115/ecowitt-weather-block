@@ -37,6 +37,7 @@ class Ecowitt_Http_Service {
 	 * App Config.
 	 *
 	 * @var App_Config
+	 * @phpstan-ignore-next-line property.onlyWritten (injected for DI, may be used by subclasses)
 	 */
 	private $config;
 

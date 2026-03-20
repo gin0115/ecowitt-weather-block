@@ -42,12 +42,12 @@ class History_Measurement {
 	/**
 	 * Create an instance.
 	 *
-	 * @param string                $unit The unit of the measurement.
-	 * @param array<string, string> $list The time series data.
+	 * @param string                $unit      The unit of the measurement.
+	 * @param array<string, string> $list_data The time series data.
 	 */
-	public function __construct( string $unit, array $list ) {
+	public function __construct( string $unit, array $list_data ) {
 		$this->unit = esc_attr( $unit );
-		$this->list = $list;
+		$this->list = $list_data;
 	}
 
 	/**
@@ -65,7 +65,7 @@ class History_Measurement {
 		// Sanitise the list values.
 		$sanitised_list = array();
 		foreach ( $list as $timestamp => $value ) {
-			$sanitised_list[ esc_attr( (string) $timestamp ) ] = esc_attr( (string) $value );
+			$sanitised_list[ esc_attr( (string) $timestamp ) ] = esc_attr( is_scalar( $value ) ? (string) $value : '' );
 		}
 
 		return new self( $unit, $sanitised_list );

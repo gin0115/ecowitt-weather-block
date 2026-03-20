@@ -472,7 +472,7 @@ class Measurement_Mapping {
 
 		// If the method ends in _ch{digit} rename to _channel
 		if ( preg_match( '/_ch\d$/', $method ) ) {
-			$method = preg_replace( '/_ch\d$/', '_channel', $method );
+			$method = (string) preg_replace( '/_ch\d$/', '_channel', $method );
 		}
 
 		if ( method_exists( $this, $method ) ) {

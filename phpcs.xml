@@ -26,7 +26,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="pinkcrab-weather-block"/> <!-- Change this value to your plugin slug. -->
+				<element value="ecowitt-weather-block"/> <!-- Change this value to your plugin slug. -->
 			</property>
 		</properties>
 	</rule>

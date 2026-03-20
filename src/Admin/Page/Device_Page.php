@@ -122,7 +122,6 @@ class Device_Page extends Menu_Page {
 			return null;
 		}
 
-		// @phpstan-ignore-next-line, issue with wp_strip_all_tags() here.
 		$connection_id = sanitize_text_field( wp_strip_all_tags( $_GET['connection_id'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, Can be accessed safely.
 
 		$connections = $this->settings->connections()->all();

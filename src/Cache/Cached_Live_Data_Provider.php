@@ -108,7 +108,7 @@ class Cached_Live_Data_Provider implements Live_Data_Provider {
 			}
 			foreach ( $group_fields as $field_data ) {
 				if ( is_array( $field_data ) && isset( $field_data['time'] ) ) {
-					return (int) $field_data['time'];
+					return (int) ( is_scalar( $field_data['time'] ) ? $field_data['time'] : 0 );
 				}
 			}
 		}
@@ -142,7 +142,7 @@ class Cached_Live_Data_Provider implements Live_Data_Provider {
 
 				$snapshot[ $group_key ][ $field_key ] = array(
 					'unit'  => $field_data['unit'] ?? '',
-					'value' => (string) $field_data['value'],
+					'value' => is_scalar( $field_data['value'] ) ? (string) $field_data['value'] : '',
 				);
 			}
 		}

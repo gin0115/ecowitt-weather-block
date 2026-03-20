@@ -106,20 +106,14 @@ class Ecowitt {
 	 * @return Observation|null
 	 */
 	public function get_live_observations( string $mac ): ?Observation {
+		if ( ! $this->current_connection ) {
+			throw new Connection_Exception( 'No connection set' );
+		}
+
 		$observation = $this->observation_service->get_live_observations( $mac, $this->current_connection );
 		return $observation;
 	}
 
-	/**
-	 * Get observation history.
-	 *
-	 * @param string        $mac        The device MAC address.
-	 * @param DateTime      $from       The start date.
-	 * @param DateTime|null $to         The end date, or null for now.
-	 * @param string[]      $groups     The sensor groups to fetch. Defaults to common groups.
-	 * @param string        $cycle_type The aggregation interval. Defaults to '4hour'.
-	 * @return History_Observation The history observation data.
-	 */
 	/**
 	 * Whether the last history fetch was served from cache.
 	 *
@@ -129,6 +123,16 @@ class Ecowitt {
 		return $this->observation_service->was_history_cached();
 	}
 
+	/**
+	 * Get observation history.
+	 *
+	 * @param string        $mac        The device MAC address.
+	 * @param DateTime      $from       The start date.
+	 * @param DateTime|null $to         The end date, or null for now.
+	 * @param string[]      $groups     The sensor groups to fetch.
+	 * @param string        $cycle_type The aggregation interval.
+	 * @return History_Observation The history observation data.
+	 */
 	public function get_observation_history(
 		string $mac,
 		DateTime $from,

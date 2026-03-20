@@ -108,8 +108,8 @@ class Api_History_Data_Provider implements History_Data_Provider {
 
 		// Validate the response.
 		if ( ! is_array( $data ) || ! isset( $data['msg'] ) || 'success' !== $data['msg'] ) {
-			$error_msg = is_array( $data ) && isset( $data['msg'] ) ? $data['msg'] : 'Unknown error';
-			throw new \Exception( 'Failed to get observation history: ' . $error_msg );
+			$error_msg = is_array( $data ) && isset( $data['msg'] ) && is_string( $data['msg'] ) ? $data['msg'] : 'Unknown error';
+			throw new \Exception( 'Failed to get observation history: ' . esc_html( $error_msg ) );
 		}
 
 		// Return the data array, or empty if not present.
@@ -117,6 +117,7 @@ class Api_History_Data_Provider implements History_Data_Provider {
 			return array();
 		}
 
+		/** @var array<string, mixed> */
 		return $data['data'];
 	}
 

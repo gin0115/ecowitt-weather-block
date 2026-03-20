@@ -165,7 +165,7 @@ class Base_Measurement implements JsonSerializable {
 	 * Serialize the measurement to a JSON-compatible array.
 	 * Uses the fully qualified class name for type to enable easy deserialization.
 	 *
-	 * @return array The JSON-serializable representation of the measurement.
+	 * @return array<string, mixed> The JSON-serializable representation of the measurement.
 	 */
 	public function jsonSerialize(): array {
 		$utc_timestamp = null;

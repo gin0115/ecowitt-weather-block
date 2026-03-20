@@ -51,7 +51,7 @@ class Measurement_Serializer {
 	 * Serialize a live observation with all unit variants per measurement.
 	 *
 	 * @param Observation $observation The observation to serialize.
-	 * @return array<string, array<string, array<int, array{value: string, label: string, unit: string}>>>
+	 * @return array<string, array<string, mixed>>
 	 */
 	public function serialize_observation( Observation $observation ): array {
 		$result = array();
@@ -110,9 +110,11 @@ class Measurement_Serializer {
 
 				if ( $first instanceof Base_Measurement ) {
 					// Array of measurements (history time-series) — serialize with variants.
+					/** @var Base_Measurement[] $field_value */
 					$result[ $field_key ] = $this->serialize_series( $field_value );
 				} elseif ( is_array( $first ) ) {
 					// Nested group (e.g. channel data) — recurse.
+					/** @var array<string, mixed> $field_value */
 					$result[ $field_key ] = $this->serialize_group( $field_value );
 				}
 			}
@@ -131,7 +133,14 @@ class Measurement_Serializer {
 	 */
 	private function serialize_series( array $measurements ): array {
 		$first = reset( $measurements );
-		$type  = $first->get_type();
+		if ( ! $first instanceof Base_Measurement ) {
+			return array(
+				'type'     => '',
+				'variants' => array(),
+			);
+		}
+
+		$type = $first->get_type();
 
 		// Discover all available units for this measurement type.
 		$first_variants  = $this->converter->get_all_variants( $first );

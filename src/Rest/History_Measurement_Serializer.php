@@ -50,7 +50,7 @@ class History_Measurement_Serializer {
 	 * Serialize a history observation into time-series format.
 	 *
 	 * @param History_Observation $history The history observation to serialize.
-	 * @return array<string, array<string, array{unit: string, label: string, type: string, data: array<int, array{timestamp: int, value: string}>}>>
+	 * @return array<string, array<string, mixed>>
 	 */
 	public function serialize( History_Observation $history ): array {
 		$result = array();
@@ -83,9 +83,11 @@ class History_Measurement_Serializer {
 
 				if ( $first instanceof Base_Measurement ) {
 					// Array of Base_Measurement — this is a time-series field.
+					/** @var Base_Measurement[] $field_value */
 					$result[ $field_key ] = $this->serialize_series( $field_value );
 				} elseif ( is_array( $first ) ) {
 					// Nested group (e.g. channel data) — recurse.
+					/** @var array<string, mixed> $field_value */
 					$result[ $field_key ] = $this->serialize_group( $field_value );
 				}
 			}
@@ -104,10 +106,17 @@ class History_Measurement_Serializer {
 	 */
 	private function serialize_series( array $measurements ): array {
 		$first = reset( $measurements );
-		$type  = $first->get_type();
+		if ( ! $first instanceof Base_Measurement ) {
+			return array(
+				'type'     => '',
+				'variants' => array(),
+			);
+		}
+
+		$type = $first->get_type();
 
 		// Discover all available units for this measurement type.
-		$first_variants = $this->converter->get_all_variants( $first );
+		$first_variants  = $this->converter->get_all_variants( $first );
 		$available_units = array_map(
 			function ( $v ) {
 				return $v['unit'];

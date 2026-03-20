@@ -31,11 +31,11 @@ class Battery extends Component {
 	/**
 	 * Creates an instance of the Battery Component.
 	 *
-	 * @param array<string, mixed> $measurements Array with battery measurement instances
+	 * @param array<string, Base_Measurement> $measurements Array with battery measurement instances
 	 */
 	public function __construct( array $measurements = array() ) {
 		foreach ( $measurements as $key => $measurement ) {
-			$label = $this->get_battery_label( $key );
+			$label                        = $this->get_battery_label( $key );
 			$this->battery_measurements[] = Measurement_Type::for_type( $measurement, $label );
 		}
 	}

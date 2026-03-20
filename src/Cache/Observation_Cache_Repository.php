@@ -115,13 +115,13 @@ class Observation_Cache_Repository {
 			return array();
 		}
 
-		$placeholders = implode( ',', array_fill( 0, count( $timestamps ), '%d' ) );
-		$params       = array_merge( array( $station, $mac ), $timestamps );
+		$in_clause = implode( ', ', array_map( 'intval', $timestamps ) );
 
 		$results = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT `timestamp` FROM {$this->table_name} WHERE station = %s AND mac = %s AND `timestamp` IN ({$placeholders}) ORDER BY `timestamp` ASC", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
-				$params
+				"SELECT `timestamp` FROM {$this->table_name} WHERE station = %s AND mac = %s AND `timestamp` IN ({$in_clause}) ORDER BY `timestamp` ASC", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$station,
+				$mac
 			)
 		);
 
@@ -143,13 +143,13 @@ class Observation_Cache_Repository {
 			return array();
 		}
 
-		$placeholders = implode( ',', array_fill( 0, count( $timestamps ), '%d' ) );
-		$params       = array_merge( array( $station, $mac ), $timestamps );
+		$in_clause = implode( ', ', array_map( 'intval', $timestamps ) );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT `timestamp`, `data` FROM {$this->table_name} WHERE station = %s AND mac = %s AND `timestamp` IN ({$placeholders}) ORDER BY `timestamp` ASC", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
-				$params
+				"SELECT `timestamp`, `data` FROM {$this->table_name} WHERE station = %s AND mac = %s AND `timestamp` IN ({$in_clause}) ORDER BY `timestamp` ASC", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$station,
+				$mac
 			),
 			ARRAY_A
 		);
@@ -194,6 +194,7 @@ class Observation_Cache_Repository {
 			return null;
 		}
 
+		/** @var array<string, mixed> $data */
 		return array(
 			'timestamp' => (int) $row['timestamp'],
 			'data'      => $data,

@@ -14,7 +14,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\Rest;
 use WP_REST_Request;
 use WP_REST_Response;
 use PinkCrab\Route\Route\Route;
-use PinkCrab\Route\Route_Group;
+use PinkCrab\Route\Route\Route_Group;
 use PinkCrab\Route\Route_Factory;
 use PinkCrab\Route\Route_Controller;
 use PinkCrab\WP_Rest_Schema\Argument\String_Type;
@@ -144,7 +144,7 @@ class Weather_Route_Controller extends Route_Controller {
 	/**
 	 * Check admin authentication.
 	 *
-	 * @param WP_REST_Request $request REST request.
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
 	 * @return bool
 	 */
 	public function check_admin_auth( WP_REST_Request $request ): bool {
@@ -154,7 +154,7 @@ class Weather_Route_Controller extends Route_Controller {
 	/**
 	 * List configured connections (safe fields only — no API secrets).
 	 *
-	 * @param WP_REST_Request $request REST request.
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
 	 * @return WP_REST_Response
 	 */
 	public function list_connections( WP_REST_Request $request ): WP_REST_Response {
@@ -182,11 +182,11 @@ class Weather_Route_Controller extends Route_Controller {
 	/**
 	 * List devices for a connection.
 	 *
-	 * @param WP_REST_Request $request REST request.
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
 	 * @return WP_REST_Response
 	 */
 	public function list_devices( WP_REST_Request $request ): WP_REST_Response {
-		$connection_key = sanitize_text_field( $request->get_param( 'connection' ) ?? '' );
+		$connection_key = $this->get_string_param( $request, 'connection' );
 
 		$settings = $this->settings_repository->load();
 
@@ -195,6 +195,9 @@ class Weather_Route_Controller extends Route_Controller {
 		}
 
 		$connection = $settings->connections()->get( $connection_key );
+		if ( ! $connection ) {
+			return new WP_REST_Response( array( 'error' => 'Connection not found.' ), 404 );
+		}
 
 		try {
 			$devices = $this->ecowitt->with_connection( $connection )->get_devices();
@@ -208,12 +211,12 @@ class Weather_Route_Controller extends Route_Controller {
 	/**
 	 * Get live observation snapshot.
 	 *
-	 * @param WP_REST_Request $request REST request.
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
 	 * @return WP_REST_Response
 	 */
 	public function get_live_observations( WP_REST_Request $request ): WP_REST_Response {
-		$connection_key = sanitize_text_field( $request->get_param( 'connection' ) ?? '' );
-		$mac            = sanitize_text_field( $request->get_param( 'mac' ) ?? '' );
+		$connection_key = $this->get_string_param( $request, 'connection' );
+		$mac            = $this->get_string_param( $request, 'mac' );
 
 		$settings = $this->settings_repository->load();
 
@@ -222,6 +225,9 @@ class Weather_Route_Controller extends Route_Controller {
 		}
 
 		$connection = $settings->connections()->get( $connection_key );
+		if ( ! $connection ) {
+			return new WP_REST_Response( array( 'error' => 'Connection not found.' ), 404 );
+		}
 
 		try {
 			$observation = $this->ecowitt->with_connection( $connection )->get_live_observations( $mac );
@@ -245,15 +251,15 @@ class Weather_Route_Controller extends Route_Controller {
 	/**
 	 * Get historical observation time-series.
 	 *
-	 * @param WP_REST_Request $request REST request.
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
 	 * @return WP_REST_Response
 	 */
 	public function get_history_observations( WP_REST_Request $request ): WP_REST_Response {
-		$connection_key = sanitize_text_field( $request->get_param( 'connection' ) ?? '' );
-		$mac            = sanitize_text_field( $request->get_param( 'mac' ) ?? '' );
-		$from_str       = sanitize_text_field( $request->get_param( 'from' ) ?? '' );
-		$to_str         = sanitize_text_field( $request->get_param( 'to' ) ?? '' );
-		$cycle_type     = sanitize_text_field( $request->get_param( 'cycle_type' ) ?? '' );
+		$connection_key = $this->get_string_param( $request, 'connection' );
+		$mac            = $this->get_string_param( $request, 'mac' );
+		$from_str       = $this->get_string_param( $request, 'from' );
+		$to_str         = $this->get_string_param( $request, 'to' );
+		$cycle_type     = $this->get_string_param( $request, 'cycle_type' );
 
 		$settings = $this->settings_repository->load();
 
@@ -262,6 +268,9 @@ class Weather_Route_Controller extends Route_Controller {
 		}
 
 		$connection = $settings->connections()->get( $connection_key );
+		if ( ! $connection ) {
+			return new WP_REST_Response( array( 'error' => 'Connection not found.' ), 404 );
+		}
 
 		try {
 			$from = new \DateTime( $from_str );
@@ -485,5 +494,17 @@ class Weather_Route_Controller extends Route_Controller {
 		}
 
 		return new History_Observation( $thinned );
+	}
+
+	/**
+	 * Extract a string parameter from a REST request.
+	 *
+	 * @param WP_REST_Request<array<string, mixed>> $request REST request.
+	 * @param string                                $key     Parameter key.
+	 * @return string The sanitized parameter value, or empty string.
+	 */
+	private function get_string_param( WP_REST_Request $request, string $key ): string {
+		$value = $request->get_param( $key );
+		return sanitize_text_field( is_string( $value ) ? $value : '' );
 	}
 }

@@ -243,7 +243,7 @@ class Conversion_Config implements Conversion_Config_Interface {
 	 * @return string The compass direction.
 	 */
 	public function degrees_to_compass( $degrees ): string {
-		$degrees = (float) $degrees;
+		$degrees    = (float) $degrees;
 		$directions = array(
 			'N',
 			'NNE',

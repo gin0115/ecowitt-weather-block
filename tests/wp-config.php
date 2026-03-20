@@ -1,5 +1,31 @@
 <?php
 
+// Custom error handler to suppress known test environment noise.
+// @see https://core.trac.wordpress.org/ticket/63086
+// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
+$previous_error_handler = set_error_handler(
+	function ( $errno, $errstr, $errfile, $errline ) use ( &$previous_error_handler ) {
+		$messages = array(
+			'wp_is_block_theme',              // WP 6.8+ called before theme directory registered.
+			'Non-canonical cast',             // PHP 8.5+ deprecation in WP core.
+			'ReflectionProperty::setAccessible()', // PHP 8.5+ deprecation in vendor libs.
+			'array_key_exists()',              // PHP 8.5+ deprecation in Dice container.
+		);
+
+		foreach ( $messages as $message ) {
+			if ( strpos( $errstr, $message ) !== false ) {
+				return true;
+			}
+		}
+
+		if ( $previous_error_handler ) {
+			return call_user_func( $previous_error_handler, $errno, $errstr, $errfile, $errline );
+		}
+
+		return false;
+	}
+);
+
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/wordpress/' );
 
