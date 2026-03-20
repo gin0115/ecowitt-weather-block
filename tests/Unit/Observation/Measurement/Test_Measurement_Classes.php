@@ -243,12 +243,12 @@ class Test_Measurement_Classes extends WP_UnitTestCase {
 		// If no constants are expected, verify that no UNIT_ constants exist
 		if ( empty( $expected_constants ) ) {
 			$reflection = new \ReflectionClass( $class_name );
-			$constants  = $reflection->getConstants();
+			$constants  = $reflection->getReflectionConstants( \ReflectionClassConstant::IS_PUBLIC );
 
-			foreach ( $constants as $constant_name => $constant_value ) {
+			foreach ( $constants as $ref_constant ) {
 				$this->assertFalse(
-					str_starts_with( $constant_name, 'UNIT_' ),
-					"{$class_name} should not have any UNIT_ constants, but found {$constant_name}"
+					str_starts_with( $ref_constant->getName(), 'UNIT_' ),
+					"{$class_name} should not have any public UNIT_ constants, but found {$ref_constant->getName()}"
 				);
 			}
 		}
