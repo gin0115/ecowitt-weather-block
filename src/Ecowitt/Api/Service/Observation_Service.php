@@ -11,13 +11,19 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service;
 
+use DateTime;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Observation;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\History_Measurement;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\History_Observation;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Ecowitt_Http_Service;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\History_Data_Provider;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Live_Data_Provider;
 use PinkCrab\Ecowitt_Weather_Block\Observation\Conversion\Measurement_Mapping;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,16 +58,43 @@ class Observation_Service {
 	protected Measurement_Mapping $measurement_mapping;
 
 	/**
+	 * History data provider.
+	 *
+	 * @var History_Data_Provider
+	 */
+	protected History_Data_Provider $history_provider;
+
+	/**
+	 * Live data provider.
+	 *
+	 * @var Live_Data_Provider
+	 */
+	protected Live_Data_Provider $live_provider;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Ecowitt_Http_Service $http_service
-	 * @param App_Config           $config
-	 * @param Measurement_Mapping  $measurement_mapping
+	 * @param Ecowitt_Http_Service  $http_service
+	 * @param App_Config            $config
+	 * @param Measurement_Mapping   $measurement_mapping
+	 * @param History_Data_Provider $history_provider
+	 * @param Live_Data_Provider    $live_provider
 	 */
-	public function __construct( Ecowitt_Http_Service $http_service, App_Config $config, Measurement_Mapping $measurement_mapping ) {
+	public function __construct( Ecowitt_Http_Service $http_service, App_Config $config, Measurement_Mapping $measurement_mapping, History_Data_Provider $history_provider, Live_Data_Provider $live_provider ) {
 		$this->http_service        = $http_service;
 		$this->config              = $config;
 		$this->measurement_mapping = $measurement_mapping;
+		$this->history_provider    = $history_provider;
+		$this->live_provider       = $live_provider;
+	}
+
+	/**
+	 * Whether the last history fetch was served from cache.
+	 *
+	 * @return bool
+	 */
+	public function was_history_cached(): bool {
+		return $this->history_provider->was_cached();
 	}
 
 	/**
@@ -87,41 +120,14 @@ class Observation_Service {
 	 * @return Observation
 	 */
 	public function get_live_observations( string $mac, Connection $connection ): Observation {
-		$base_url = $this->get_api_base_url();
+		// Fetch raw data via the live provider (may be cached).
+		$observations = $this->live_provider->fetch_live( $mac, $connection );
 
-		$url = sprintf(
-			'%s/device/real_time?application_key=%s&api_key=%s&mac=%s&call_back=all',
-			$base_url,
-			$connection->application_key(),
-			$connection->api_key(),
-			$mac
-		);
-
-		$response = $this->http_service->request( $url, array() );
-
-		$data = json_decode( $response->body(), true );
-// adie($data);
-		$data =  json_decode($this->mock(), true);
-
-		$_r           = $data['data']['last_update'];
-		$data['data'] = $_r;
-		// adie($_r);
-		// adump($data1['data']);
-		//      adump($data['data']);
-		//      adie(1);
-
-		// If we dont have a success, throw an exception.
-		if ( ! isset( $data['msg'] ) || 'success' !== $data['msg'] ) {
-			throw new \Exception( 'Failed to get live observations' );
-		}
-
-		// If we have not data, return an empty observation.
-		if ( ! isset( $data['data'] ) || ! is_array( $data['data'] ) ) {
+		if ( empty( $observations ) ) {
 			return new Observation( array() );
 		}
 
 		// Extract the data and map the Measurements.
-		$observations        = $data['data'];
 		$mapped_observations = array();
 
 		// Iterate over the measurement group.
@@ -155,15 +161,108 @@ class Observation_Service {
 		$domain_objects = array();
 		foreach ( $mapped_observations as $group => $measurements ) {
 			foreach ( $measurements as $key => $measurement_dto ) {
-				$class_name = $this->measurement_mapping->get_measurement_class( $group, $key );
+				$mapping = $this->measurement_mapping->get_measurement_class( $group, $key );
 
-				if ( $class_name ) {
-					$domain_objects[ $group ][ $key ] = new $class_name( $measurement_dto );
+				if ( $mapping ) {
+					// If it's a class-string (subclass with unit constants), instantiate it directly.
+					// Otherwise it's a type constant string, so use Base_Measurement with the type.
+					if ( class_exists( $mapping ) ) {
+						$domain_objects[ $group ][ $key ] = new $mapping( $measurement_dto );
+					} else {
+						$domain_objects[ $group ][ $key ] = new Base_Measurement( $measurement_dto, $mapping );
+					}
 				}
 			}
 		}
 
 		return $domain_objects;
+	}
+
+	/**
+	 * Get observation history for a device.
+	 *
+	 * @param string          $mac        The device MAC address.
+	 * @param DateTime        $from       The start date.
+	 * @param DateTime|null   $to         The end date, or null for now.
+	 * @param Connection|null $connection The API connection.
+	 * @param string[]        $groups     The sensor groups to fetch.
+	 * @param string          $cycle_type The aggregation interval.
+	 * @return History_Observation The history observation data.
+	 */
+	public function get_observation_history(
+		string $mac,
+		DateTime $from,
+		?DateTime $to,
+		?Connection $connection,
+		array $groups = array( 'outdoor', 'indoor', 'wind', 'pressure', 'rainfall', 'solar_and_uvi' ),
+		string $cycle_type = '4hour'
+	): History_Observation {
+		// Default to now if no end date provided.
+		if ( null === $to ) {
+			$to = new DateTime();
+		}
+
+		// If no connection provided, throw.
+		if ( null === $connection ) {
+			throw new \Exception( 'No connection set for observation history' );
+		}
+
+		// Fetch raw data from the provider.
+		$raw_data = $this->history_provider->fetch_history( $mac, $connection, $from, $to, $groups, $cycle_type );
+
+		// If empty, return an empty history observation.
+		if ( empty( $raw_data ) ) {
+			return new History_Observation( array() );
+		}
+
+		// Parse the raw data into domain objects.
+		$domain_observations = array();
+
+		foreach ( $raw_data as $measurement_group => $measurement_data ) {
+			if ( ! is_array( $measurement_data ) ) {
+				continue;
+			}
+
+			foreach ( $measurement_data as $measurement_key => $measurement_value ) {
+				if ( ! is_array( $measurement_value ) ) {
+					continue;
+				}
+
+				// Create a History_Measurement DTO from the API data.
+				$history_measurement = History_Measurement::from_array( $measurement_value );
+
+				// Get the domain class mapping for this group/key.
+				$mapping = $this->measurement_mapping->get_measurement_class(
+					(string) $measurement_group,
+					(string) $measurement_key
+				);
+
+				if ( ! $mapping ) {
+					continue;
+				}
+
+				// Convert each timestamp:value pair into a domain object.
+				$domain_measurements = array();
+				foreach ( $history_measurement->list as $timestamp => $value ) {
+					// Create a Measurement DTO for each data point.
+					$measurement_dto = new Measurement( (string) $value, $history_measurement->unit, (string) $timestamp );
+
+					// Create the domain object using the same pattern as live observations.
+					if ( class_exists( $mapping ) ) {
+						$domain_measurements[] = new $mapping( $measurement_dto );
+					} else {
+						$domain_measurements[] = new Base_Measurement( $measurement_dto, $mapping );
+					}
+				}
+
+				$group_key = esc_html( (string) $measurement_group );
+				$field_key = esc_html( (string) $measurement_key );
+
+				$domain_observations[ $group_key ][ $field_key ] = $domain_measurements;
+			}
+		}
+
+		return History_Observation::from_array( $domain_observations );
 	}
 
 	public function mock(): string {

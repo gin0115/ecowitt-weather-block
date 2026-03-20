@@ -94,7 +94,7 @@ class Settings_Page extends Menu_Page {
 		// Assert that the view is set.
 		assert( $this->view instanceof \PinkCrab\Perique\Services\View\View );
 
-		Enqueue::script( 'ecowittSettings' )
+		$a = Enqueue::script( 'ecowittSettings' )
 			->src( Asset_Loader::assets_url() . 'js/settings.js' )
 			->ver( $this->app_config->version() )
 			->localize(
@@ -117,8 +117,7 @@ class Settings_Page extends Menu_Page {
 						false
 					),
 				)
-			)
-			->register();
+			)->register();
 	}
 
 	/**

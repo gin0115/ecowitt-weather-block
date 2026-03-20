@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Distance;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Count;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The lightning measurements component.
@@ -24,14 +23,14 @@ class Lightning extends Component {
 	/**
 	 * Distance component.
 	 *
-	 * @var Distance|null
+	 * @var Measurement_Type|null
 	 */
 	public $distance = null;
 
 	/**
 	 * Count component.
 	 *
-	 * @var Count|null
+	 * @var Measurement_Type|null
 	 */
 	public $count = null;
 
@@ -42,11 +41,11 @@ class Lightning extends Component {
 	 */
 	public function __construct( array $measurements = array() ) {
 		if ( isset( $measurements['distance'] ) ) {
-			$this->distance = new Distance( $measurements['distance'], _x( 'Distance', 'lightning measurement label', 'ecowitt-weather-block' ) );
+			$this->distance = Measurement_Type::for_type( $measurements['distance'], _x( 'Distance', 'lightning measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $measurements['count'] ) ) {
-			$this->count = new Count( $measurements['count'], _x( 'Count', 'lightning measurement label', 'ecowitt-weather-block' ) );
+			$this->count = Measurement_Type::for_type( $measurements['count'], _x( 'Count', 'lightning measurement label', 'ecowitt-weather-block' ) );
 		}
 	}
 }

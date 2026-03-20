@@ -3,8 +3,8 @@
  * Component: Temperature and Humidity AQI Combo Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature|null $temperature Temperature component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Humidity|null $humidity Humidity component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $temperature Temperature component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $humidity Humidity component instance
  */
 ?>
 

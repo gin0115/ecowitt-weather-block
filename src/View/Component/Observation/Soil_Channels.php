@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Soil_Moisture;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Count;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The soil channels measurements component.
@@ -24,7 +23,7 @@ class Soil_Channels extends Component {
 	/**
 	 * Array of soil channel measurements.
 	 *
-	 * @var array<array{soilmoisture: Soil_Moisture|null, ad: Count|null, channel_name: string}>
+	 * @var array<array{soilmoisture: Measurement_Type|null, ad: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -42,11 +41,11 @@ class Soil_Channels extends Component {
 			);
 
 			if ( isset( $channel_data['soilmoisture'] ) ) {
-				$channel['soilmoisture'] = new Soil_Moisture( $channel_data['soilmoisture'], _x( 'Soil Moisture', 'soil channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['soilmoisture'] = Measurement_Type::for_type( $channel_data['soilmoisture'], _x( 'Soil Moisture', 'soil channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data['ad'] ) ) {
-				$channel['ad'] = new Count( $channel_data['ad'], _x( 'AD', 'soil channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['ad'] = Measurement_Type::for_type( $channel_data['ad'], _x( 'AD', 'soil channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

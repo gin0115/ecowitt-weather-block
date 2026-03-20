@@ -11,6 +11,7 @@ namespace PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service;
 use DateTime;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Device;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Observation;
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\History_Observation;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Connection\Connection;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Device_Service;
 use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\Service\Observation_Service;
@@ -112,12 +113,40 @@ class Ecowitt {
 	/**
 	 * Get observation history.
 	 *
-	 * @param string        $mac
-	 * @param DateTime      $from   The start date.
-	 * @param DateTime|null $to     The end date, or null for now.
-	 * @return array<Observation>
+	 * @param string        $mac        The device MAC address.
+	 * @param DateTime      $from       The start date.
+	 * @param DateTime|null $to         The end date, or null for now.
+	 * @param string[]      $groups     The sensor groups to fetch. Defaults to common groups.
+	 * @param string        $cycle_type The aggregation interval. Defaults to '4hour'.
+	 * @return History_Observation The history observation data.
 	 */
-	public function get_observation_history( string $mac, DateTime $from, ?DateTime $to = null ): array {
-		return $this->observation_service->get_observation_history( $mac, $from, $to, $this->current_connection );
+	/**
+	 * Whether the last history fetch was served from cache.
+	 *
+	 * @return bool
+	 */
+	public function was_history_cached(): bool {
+		return $this->observation_service->was_history_cached();
+	}
+
+	public function get_observation_history(
+		string $mac,
+		DateTime $from,
+		?DateTime $to = null,
+		array $groups = array( 'outdoor', 'indoor', 'wind', 'pressure', 'rainfall', 'solar_and_uvi' ),
+		string $cycle_type = '4hour'
+	): History_Observation {
+		if ( ! $this->current_connection ) {
+			throw new Connection_Exception( 'No connection set' );
+		}
+
+		return $this->observation_service->get_observation_history(
+			$mac,
+			$from,
+			$to,
+			$this->current_connection,
+			$groups,
+			$cycle_type
+		);
 	}
 }

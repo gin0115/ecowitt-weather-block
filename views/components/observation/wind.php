@@ -4,9 +4,9 @@
  * Component: Wind Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Wind_Speed|null $wind_speed Wind speed component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Wind_Speed|null $wind_gust Wind gust component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Wind_Direction|null $wind_direction Wind direction component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $wind_speed Wind speed component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $wind_gust Wind gust component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $wind_direction Wind direction component instance
  */
 
 ?>

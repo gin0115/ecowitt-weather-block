@@ -32,7 +32,7 @@ class Test_Wind_Direction extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Direction::get_type
 	 */
 	public function test_returns_correct_measurement_type(): void {
-		$measurement_dto = new Measurement( '180', '°', '1642248600' );
+		$measurement_dto = new Measurement( '180', 'deg', '1642248600' );
 		$wind_direction = new Wind_Direction( $measurement_dto );
 
 		$this->assertSame( Base_Measurement::TYPE_WIND_DIRECTION, $wind_direction->get_type() );
@@ -43,7 +43,7 @@ class Test_Wind_Direction extends \WP_UnitTestCase {
 	 * @covers \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Wind_Direction
 	 */
 	public function test_provides_unit_constants(): void {
-		$this->assertSame( '°', Wind_Direction::UNIT_DEGREES );
+		$this->assertSame( 'deg', Wind_Direction::UNIT_DEGREES );
 		$this->assertSame( 'cardinal', Wind_Direction::UNIT_CARDINAL );
 	}
 }

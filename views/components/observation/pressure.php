@@ -4,8 +4,8 @@
  * Component: Pressure Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Pressure|null $relative Relative pressure component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Pressure|null $absolute Absolute pressure component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $relative Relative pressure component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $absolute Absolute pressure component instance
  */
 
 ?>

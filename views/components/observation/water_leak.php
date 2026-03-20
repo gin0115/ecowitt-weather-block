@@ -4,10 +4,10 @@
  * Component: Water Leak Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Percentage|null $leak_ch1 Leak Channel 1 component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Percentage|null $leak_ch2 Leak Channel 2 component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Percentage|null $leak_ch3 Leak Channel 3 component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Percentage|null $leak_ch4 Leak Channel 4 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $leak_ch1 Leak Channel 1 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $leak_ch2 Leak Channel 2 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $leak_ch3 Leak Channel 3 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $leak_ch4 Leak Channel 4 component instance
  */
 
 ?>

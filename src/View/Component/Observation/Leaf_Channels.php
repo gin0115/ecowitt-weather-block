@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Leaf_Wetness;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The leaf wetness channels measurements component.
@@ -23,7 +23,7 @@ class Leaf_Channels extends Component {
 	/**
 	 * Array of leaf wetness channel measurements.
 	 *
-	 * @var array<array{leaf_wetness: Leaf_Wetness|null, channel_name: string}>
+	 * @var array<array{leaf_wetness: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -40,7 +40,7 @@ class Leaf_Channels extends Component {
 			);
 
 			if ( isset( $channel_data['leaf_wetness'] ) ) {
-				$channel['leaf_wetness'] = new Leaf_Wetness( $channel_data['leaf_wetness'], _x( 'Leaf Wetness', 'leaf channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['leaf_wetness'] = Measurement_Type::for_type( $channel_data['leaf_wetness'], _x( 'Leaf Wetness', 'leaf channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

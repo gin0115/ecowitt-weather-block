@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Humidity;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The temperature and humidity channels measurements component.
@@ -24,7 +23,7 @@ class Temp_And_Humidity_Channels extends Component {
 	/**
 	 * Array of temperature and humidity channel measurements.
 	 *
-	 * @var array<array{temperature: Temperature|null, humidity: Humidity|null, channel_name: string}>
+	 * @var array<array{temperature: Measurement_Type|null, humidity: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -47,11 +46,11 @@ class Temp_And_Humidity_Channels extends Component {
 			);
 
 			if ( isset( $channel_data['temperature'] ) ) {
-				$channel['temperature'] = new Temperature( $channel_data['temperature'], _x( 'Temperature', 'temp and humidity channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['temperature'] = Measurement_Type::for_type( $channel_data['temperature'], _x( 'Temperature', 'temp and humidity channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data['humidity'] ) ) {
-				$channel['humidity'] = new Humidity( $channel_data['humidity'], _x( 'Humidity', 'temp and humidity channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['humidity'] = Measurement_Type::for_type( $channel_data['humidity'], _x( 'Humidity', 'temp and humidity channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

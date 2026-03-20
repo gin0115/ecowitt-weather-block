@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Humidity;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The outdoor measurements component.
@@ -24,35 +23,35 @@ class Outdoor extends Component {
 	/**
 	 * Temperature component.
 	 *
-	 * @var Temperature|null
+	 * @var Measurement_Type|null
 	 */
 	public $temperature = null;
 
 	/**
 	 * Feels like temperature component.
 	 *
-	 * @var Temperature|null
+	 * @var Measurement_Type|null
 	 */
 	public $feels_like = null;
 
 	/**
 	 * Apparent temperature component.
 	 *
-	 * @var Temperature|null
+	 * @var Measurement_Type|null
 	 */
 	public $app_temp = null;
 
 	/**
 	 * Dew point temperature component.
 	 *
-	 * @var Temperature|null
+	 * @var Measurement_Type|null
 	 */
 	public $dew_point = null;
 
 	/**
 	 * Humidity component.
 	 *
-	 * @var Humidity|null
+	 * @var Measurement_Type|null
 	 */
 	public $humidity = null;
 
@@ -63,23 +62,23 @@ class Outdoor extends Component {
 	 */
 	public function __construct( array $outdoor_measurements = array() ) {
 		if ( isset( $outdoor_measurements['temperature'] ) ) {
-			$this->temperature = new Temperature( $outdoor_measurements['temperature'], _x( 'Temperature', 'outdoor measurement label', 'ecowitt-weather-block' ) );
+			$this->temperature = Measurement_Type::for_type( $outdoor_measurements['temperature'], _x( 'Temperature', 'outdoor measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $outdoor_measurements['feels_like'] ) ) {
-			$this->feels_like = new Temperature( $outdoor_measurements['feels_like'], _x( 'Feels Like', 'outdoor measurement label', 'ecowitt-weather-block' ) );
+			$this->feels_like = Measurement_Type::for_type( $outdoor_measurements['feels_like'], _x( 'Feels Like', 'outdoor measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $outdoor_measurements['app_temp'] ) ) {
-			$this->app_temp = new Temperature( $outdoor_measurements['app_temp'], _x( 'Perceived', 'outdoor measurement label', 'ecowitt-weather-block' ) );
+			$this->app_temp = Measurement_Type::for_type( $outdoor_measurements['app_temp'], _x( 'Perceived', 'outdoor measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $outdoor_measurements['dew_point'] ) ) {
-			$this->dew_point = new Temperature( $outdoor_measurements['dew_point'], _x( 'Dew Point', 'outdoor measurement label', 'ecowitt-weather-block' ) );
+			$this->dew_point = Measurement_Type::for_type( $outdoor_measurements['dew_point'], _x( 'Dew Point', 'outdoor measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $outdoor_measurements['humidity'] ) ) {
-			$this->humidity = new Humidity( $outdoor_measurements['humidity'], _x( 'Humidity', 'outdoor measurement label', 'ecowitt-weather-block' ) );
+			$this->humidity = Measurement_Type::for_type( $outdoor_measurements['humidity'], _x( 'Humidity', 'outdoor measurement label', 'ecowitt-weather-block' ) );
 		}
 	}
 }

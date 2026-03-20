@@ -4,8 +4,8 @@
  * Component: Lightning Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Distance|null $distance Distance component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Count|null $count Count component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $distance Distance component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $count Count component instance
  */
 
 ?>

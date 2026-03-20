@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Ecowitt_Weather_Block\Observation\Measurement;
 
+use PinkCrab\Ecowitt_Weather_Block\Ecowitt\Api\DTO\V3\Measurement;
+
 // @codeCoverageIgnoreStart
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,15 +27,13 @@ class Wind_Direction extends Base_Measurement {
 	/**
 	 * Unit constants for wind direction.
 	 */
-	public const UNIT_DEGREES  = '°';
+	public const UNIT_DEGREES  = 'deg';
 	public const UNIT_CARDINAL = 'cardinal';
 
 	/**
-	 * Get the measurement type identifier.
-	 *
-	 * @return string The measurement type.
+	 * @param Measurement $measurement_dto The measurement DTO from the API.
 	 */
-	public function get_type(): string {
-		return self::TYPE_WIND_DIRECTION;
+	public function __construct( Measurement $measurement_dto ) {
+		parent::__construct( $measurement_dto, self::TYPE_WIND_DIRECTION );
 	}
 }

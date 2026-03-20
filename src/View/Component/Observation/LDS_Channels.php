@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Distance;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Count;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The LDS channels measurements component.
@@ -24,7 +23,7 @@ class LDS_Channels extends Component {
 	/**
 	 * Array of LDS channel measurements.
 	 *
-	 * @var array<array{air: Distance|null, depth: Distance|null, ldsheat: Count|null, channel_name: string}>
+	 * @var array<array{air: Measurement_Type|null, depth: Measurement_Type|null, ldsheat: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -46,15 +45,15 @@ class LDS_Channels extends Component {
 			$channel_num = str_replace( array( 'ch_lds', 'air_ch', 'depth_ch', 'ldsheat_ch' ), '', $channel_key );
 
 			if ( isset( $channel_data[ 'air_ch' . $channel_num ] ) ) {
-				$channel['air'] = new Distance( $channel_data[ 'air_ch' . $channel_num ], _x( 'Air', 'lds channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['air'] = Measurement_Type::for_type( $channel_data[ 'air_ch' . $channel_num ], _x( 'Air', 'lds channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data[ 'depth_ch' . $channel_num ] ) ) {
-				$channel['depth'] = new Distance( $channel_data[ 'depth_ch' . $channel_num ], _x( 'Depth', 'lds channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['depth'] = Measurement_Type::for_type( $channel_data[ 'depth_ch' . $channel_num ], _x( 'Depth', 'lds channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data[ 'ldsheat_ch' . $channel_num ] ) ) {
-				$channel['ldsheat'] = new Count( $channel_data[ 'ldsheat_ch' . $channel_num ], _x( 'LDS Heat', 'lds channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['ldsheat'] = Measurement_Type::for_type( $channel_data[ 'ldsheat_ch' . $channel_num ], _x( 'LDS Heat', 'lds channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

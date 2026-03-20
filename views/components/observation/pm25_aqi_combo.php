@@ -4,9 +4,9 @@
  * Component: PM2.5 AQI Combo Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Air_Quality|null $real_time_aqi Real Time AQI component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Air_Quality|null $pm25 PM2.5 component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Air_Quality|null $pm25_24h_aqi 24h AQI component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $real_time_aqi Real Time AQI component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $pm25 PM2.5 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $pm25_24h_aqi 24h AQI component instance
  */
 
 ?>

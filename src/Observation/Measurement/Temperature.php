@@ -20,22 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // @codeCoverageIgnoreEnd
 
 /**
- * Temperature measurement class with Celsius, Fahrenheit, and Kelvin support.
+ * Temperature measurement class with Celsius and Fahrenheit support.
  */
 class Temperature extends Base_Measurement {
 
 	/**
 	 * Unit constants for temperature.
 	 */
-	public const UNIT_CELSIUS    = '℃';
-	public const UNIT_FAHRENHEIT = '℉';
+	public const UNIT_CELSIUS    = 'C';
+	public const UNIT_FAHRENHEIT = 'F';
 
 	/**
-	 * Get the measurement type identifier.
-	 *
-	 * @return string The measurement type.
+	 * @param Measurement $measurement_dto The measurement DTO from the API.
 	 */
-	public function get_type(): string {
-		return self::TYPE_TEMPERATURE;
+	public function __construct( Measurement $measurement_dto ) {
+		parent::__construct( $measurement_dto, self::TYPE_TEMPERATURE );
 	}
 }

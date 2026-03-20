@@ -33,7 +33,6 @@ class Settings_Connections extends Component {
 	 * @param array<int, mixed> $connections
 	 */
 	public function __construct( array $connections, string $device_base_path ) {
-		dump( $device_base_path );
 		$connections       = array_filter( $connections, fn( $connection ) => $connection instanceof Connection );
 		$this->connections = array_map( fn( $connection ) => new Settings_Connection( $connection, $device_base_path ), $connections );
 	}

@@ -214,23 +214,23 @@ class Conversion_Config implements Conversion_Config_Interface {
 					),
 				),
 				Base_Measurement::TYPE_WIND_DIRECTION  => array(
-					'base_unit'             => '°',
+					'base_unit'             => 'deg',
 					'base_unit_id'          => 1,
 					'units'                 => array(
-						1 => '°',
-						2 => 'compass',
+						1 => 'deg',
+						2 => 'cardinal',
 					),
 					'to_base_conversions'   => array(
-						'°'       => fn( $value ) => $value,
-						'compass' => array( $this, 'degrees_to_compass' ),
+						'deg'      => fn( $value ) => $value,
+						'cardinal' => array( $this, 'compass_to_degrees' ),
 					),
 					'from_base_conversions' => array(
-						'°'       => fn( $value ) => $value,
-						'compass' => array( $this, 'compass_to_degrees' ),
+						'deg'      => fn( $value ) => $value,
+						'cardinal' => array( $this, 'degrees_to_compass' ),
 					),
 					'format'                => array(
-						'°'       => fn( $value ) => (int) $value,
-						'compass' => fn( $value ) => $value,
+						'deg'      => fn( $value ) => (int) $value,
+						'cardinal' => fn( $value ) => $value,
 					),
 				),
 			);
@@ -242,7 +242,8 @@ class Conversion_Config implements Conversion_Config_Interface {
 	 * @param float $degrees The degree value (0-360).
 	 * @return string The compass direction.
 	 */
-	public function degrees_to_compass( float $degrees ): string {
+	public function degrees_to_compass( $degrees ): string {
+		$degrees = (float) $degrees;
 		$directions = array(
 			'N',
 			'NNE',

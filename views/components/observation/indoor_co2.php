@@ -4,8 +4,8 @@
  * Component: Indoor CO2 Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\CO2|null $co2 CO2 component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\CO2|null $co2_24h_average 24h Average component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $co2 CO2 component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $co2_24h_average 24h Average component instance
  */
 
 ?>

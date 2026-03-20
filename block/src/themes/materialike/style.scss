@@ -1,0 +1,253 @@
+/**
+ * Materialike theme styles.
+ *
+ * 3-tier CSS custom property cascade:
+ * .materialike          → theme defaults
+ * .materialike__group   → group overrides
+ * .materialike__chip    → measurement overrides
+ */
+
+/* ─── Theme defaults ──────────────────────────────── */
+.materialike {
+	--m-bg: #fafafa;
+	--m-text: #212121;
+	--m-accent: #1976d2;
+	--m-border: #e0e0e0;
+	--m-surface: #ffffff;
+	--m-radius: 8px;
+	--m-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+	--m-shadow-hover: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	color: var(--m-text);
+	background: var(--m-bg);
+	border-radius: var(--m-radius);
+	padding: 16px;
+}
+
+/* ─── Surface card ────────────────────────────────── */
+.materialike__surface {
+	background: var(--m-surface);
+	border-radius: var(--m-radius);
+	box-shadow: var(--m-shadow);
+	padding: 20px;
+	border: 1px solid var(--m-border);
+}
+
+/* ─── Header ──────────────────────────────────────── */
+.materialike__header {
+	margin-bottom: 16px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid var(--m-border);
+}
+
+.materialike__station-name {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 500;
+	color: var(--m-text);
+	letter-spacing: 0.01em;
+}
+
+/* ─── Grid layout ─────────────────────────────────── */
+.materialike__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 16px;
+}
+
+/* ─── Group card ──────────────────────────────────── */
+.materialike__group {
+	--m-group-bg: var(--m-surface);
+	--m-group-text: var(--m-text);
+	--m-group-accent: var(--m-accent);
+
+	background: var(--m-group-bg);
+	border-radius: var(--m-radius);
+	border: 1px solid var(--m-border);
+	overflow: hidden;
+}
+
+.materialike__group-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 14px;
+	background: color-mix(in srgb, var(--m-group-accent) 8%, transparent);
+	border-bottom: 1px solid var(--m-border);
+}
+
+.materialike__group-icon {
+	display: flex;
+	align-items: center;
+	color: var(--m-group-accent);
+}
+
+.materialike__group-title {
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--m-group-text);
+}
+
+.materialike__group-body {
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+/* ─── Measurement chip ────────────────────────────── */
+.materialike__chip {
+	--chip-text: var(--m-group-text);
+	--chip-accent: var(--m-group-accent);
+
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: calc(var(--m-radius) - 2px);
+	color: var(--chip-text);
+	transition: background-color 0.15s ease, box-shadow 0.15s ease;
+	user-select: none;
+
+	&:hover {
+		background: color-mix(in srgb, var(--chip-accent) 4%, transparent);
+	}
+}
+
+.materialike__chip--cyclable {
+	cursor: pointer;
+
+	&:hover {
+		background: color-mix(in srgb, var(--chip-accent) 8%, transparent);
+	}
+
+	&:active {
+		background: color-mix(in srgb, var(--chip-accent) 12%, transparent);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--chip-accent);
+		outline-offset: -2px;
+	}
+}
+
+.materialike__chip-icon {
+	display: flex;
+	align-items: center;
+	color: var(--chip-accent);
+	flex-shrink: 0;
+}
+
+.materialike__icon {
+	width: 18px;
+	height: 18px;
+}
+
+.materialike__chip-label {
+	font-size: 0.8125rem;
+	color: color-mix(in srgb, var(--chip-text) 70%, transparent);
+	flex: 1;
+	min-width: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.materialike__chip-value {
+	font-size: 0.9375rem;
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.materialike__chip-unit {
+	font-size: 0.75rem;
+	font-weight: 400;
+	margin-left: 2px;
+	color: color-mix(in srgb, var(--chip-text) 60%, transparent);
+}
+
+/* ─── Unit cycle dots ─────────────────────────────── */
+.materialike__chip-dots {
+	display: flex;
+	gap: 3px;
+	margin-left: 4px;
+	flex-shrink: 0;
+}
+
+.materialike__chip-dot {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--chip-accent) 25%, transparent);
+	transition: background-color 0.15s ease;
+}
+
+.materialike__chip-dot--active {
+	background: var(--chip-accent);
+}
+
+/* ─── Loading state ───────────────────────────────── */
+.materialike--loading {
+	.materialike__loader {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 40px 20px;
+		gap: 12px;
+		color: color-mix(in srgb, var(--m-text) 50%, transparent);
+	}
+}
+
+.materialike__spinner {
+	width: 32px;
+	height: 32px;
+	border: 3px solid var(--m-border);
+	border-top-color: var(--m-accent);
+	border-radius: 50%;
+	animation: materialike-spin 0.8s linear infinite;
+}
+
+@keyframes materialike-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* ─── Error state ─────────────────────────────────── */
+.materialike--error {
+	.materialike__error-text {
+		color: #d32f2f;
+		text-align: center;
+		padding: 20px;
+	}
+}
+
+/* ─── Empty / no fields ──────────────────────────── */
+.materialike__no-fields {
+	color: color-mix(in srgb, var(--m-text) 50%, transparent);
+	text-align: center;
+	padding: 20px;
+	font-style: italic;
+}
+
+/* ─── Responsive ──────────────────────────────────── */
+@media (max-width: 600px) {
+	.materialike {
+		padding: 8px;
+	}
+
+	.materialike__surface {
+		padding: 12px;
+	}
+
+	.materialike__grid {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+}

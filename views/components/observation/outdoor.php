@@ -4,11 +4,11 @@
  * Component: Outdoor Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature|null $temperature Temperature component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature|null $feels_like Feels like temperature component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature|null $app_temp Apparent temperature component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature|null $dew_point Dew point temperature component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Humidity|null $humidity Humidity component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $temperature Temperature component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $feels_like Feels like temperature component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $app_temp Apparent temperature component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $dew_point Dew point temperature component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $humidity Humidity component instance
  */
 
 ?>

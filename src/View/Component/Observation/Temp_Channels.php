@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The temperature channels measurements component.
@@ -23,7 +23,7 @@ class Temp_Channels extends Component {
 	/**
 	 * Array of temperature channel measurements.
 	 *
-	 * @var array<array{temperature: Temperature|null, channel_name: string}>
+	 * @var array<array{temperature: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -40,7 +40,7 @@ class Temp_Channels extends Component {
 			);
 
 			if ( isset( $channel_data['temperature'] ) ) {
-				$channel['temperature'] = new Temperature( $channel_data['temperature'], _x( 'Temperature', 'temp channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['temperature'] = Measurement_Type::for_type( $channel_data['temperature'], _x( 'Temperature', 'temp channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

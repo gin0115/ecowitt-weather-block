@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Temperature;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Humidity;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The indoor measurements component.
@@ -24,14 +23,14 @@ class Indoor extends Component {
 	/**
 	 * Temperature component.
 	 *
-	 * @var Temperature|null
+	 * @var Measurement_Type|null
 	 */
 	public $temperature = null;
 
 	/**
 	 * Humidity component.
 	 *
-	 * @var Humidity|null
+	 * @var Measurement_Type|null
 	 */
 	public $humidity = null;
 
@@ -42,11 +41,11 @@ class Indoor extends Component {
 	 */
 	public function __construct( array $measurements = array() ) {
 		if ( isset( $measurements['temperature'] ) ) {
-			$this->temperature = new Temperature( $measurements['temperature'], _x( 'Temperature', 'indoor measurement label', 'ecowitt-weather-block' ) );
+			$this->temperature = Measurement_Type::for_type( $measurements['temperature'], _x( 'Temperature', 'indoor measurement label', 'ecowitt-weather-block' ) );
 		}
 
 		if ( isset( $measurements['humidity'] ) ) {
-			$this->humidity = new Humidity( $measurements['humidity'], _x( 'Humidity', 'indoor measurement label', 'ecowitt-weather-block' ) );
+			$this->humidity = Measurement_Type::for_type( $measurements['humidity'], _x( 'Humidity', 'indoor measurement label', 'ecowitt-weather-block' ) );
 		}
 	}
 }

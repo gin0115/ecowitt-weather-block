@@ -64,7 +64,7 @@ class Live_Observation_Ajax extends Ajax {
 	 *
 	 * @var Connections
 	 */
-	protected Connections $connections;
+	protected ?Connections $connections;
 
 
 	/**
@@ -116,6 +116,11 @@ class Live_Observation_Ajax extends Ajax {
 			$args = $this->validate_args( $args );
 		} catch ( Ajax_Exception $e ) {
 			return $response_factory->failure( array( 'error' => esc_html( $e->getMessage() ) ) );
+		}
+
+		// If we dont have any connections, return a 404.
+		if ( ! $this->connections ) {
+			return $response_factory->not_found();
 		}
 
 		// Get the connection.

@@ -11,12 +11,8 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Voltage;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Percentage;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Battery as BatteryDTO;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Voltage as VoltageDTO;
-use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Percentage as PercentageDTO;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Battery as Battery_Type;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
+use PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement;
 
 /**
  * The battery measurements component.
@@ -28,7 +24,7 @@ class Battery extends Component {
 	/**
 	 * Battery measurements array.
 	 *
-	 * @var array<Battery_Type|Voltage|Percentage>
+	 * @var array<Measurement_Type>
 	 */
 	public $battery_measurements = array();
 
@@ -40,12 +36,7 @@ class Battery extends Component {
 	public function __construct( array $measurements = array() ) {
 		foreach ( $measurements as $key => $measurement ) {
 			$label = $this->get_battery_label( $key );
-			$type  = $this->get_battery_type( $measurement );
-
-			if ( $type ) {
-				// Pass the raw measurement data to the Type component
-				$this->battery_measurements[] = new $type( $measurement, $label );
-			}
+			$this->battery_measurements[] = Measurement_Type::for_type( $measurement, $label );
 		}
 	}
 
@@ -117,25 +108,5 @@ class Battery extends Component {
 		);
 
 		return $labels[ $key ] ?? ucwords( str_replace( '_', ' ', $key ) );
-	}
-
-	/**
-	 * Get the appropriate type class for a battery measurement.
-	 *
-	 * @param \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement $measurement Measurement data
-	 * @return string|null Type class name
-	 */
-	private function get_battery_type( \PinkCrab\Ecowitt_Weather_Block\Observation\Measurement\Base_Measurement $measurement ): ?string {
-
-		switch ( get_class( $measurement ) ) {
-			case BatteryDTO::class:
-				return Battery_Type::class;
-			case VoltageDTO::class:
-				return Voltage::class;
-			case PercentageDTO::class:
-				return Percentage::class;
-			default:
-				return null;
-		}
 	}
 }

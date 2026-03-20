@@ -4,8 +4,8 @@
  * Component: Solar Radiation and UV Index Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Solar|null $solar Solar radiation component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Uvi|null $uvi UV index component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $solar Solar radiation component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $uvi UV index component instance
  */
 
 ?>

@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // @codeCoverageIgnoreEnd
 
 /**
- * Abstract base class for all measurement objects with unit conversion capabilities.
+ * Base class for all measurement objects with unit conversion capabilities.
  */
-abstract class Base_Measurement implements JsonSerializable {
+class Base_Measurement implements JsonSerializable {
 
 	/**
 	 * Measurement type constants.
@@ -52,6 +52,34 @@ abstract class Base_Measurement implements JsonSerializable {
 	public const TYPE_PERCENTAGE      = 'percentage';
 	public const TYPE_COUNT           = 'count';
 
+	/**
+	 * Maps raw API unit strings to simple internal keys.
+	 *
+	 * The Ecowitt API may return complex Unicode symbols (e.g. °F, ℃, W/m²).
+	 * We normalise these to simple ASCII keys for internal use.
+	 * Display labels are handled separately via Unit_Converter_Service::UNIT_LABELS.
+	 *
+	 * @var array<string, string>
+	 */
+	private const UNIT_ALIASES = array(
+		'℃'    => 'C',
+		'°C'   => 'C',
+		'ºC'   => 'C',
+		'℉'    => 'F',
+		'°F'   => 'F',
+		'ºF'   => 'F',
+		'°'    => 'deg',
+		'º'    => 'deg',
+		'W/m²' => 'W/m2',
+		'm³'   => 'm3',
+	);
+
+	/**
+	 * The measurement type identifier.
+	 *
+	 * @var string
+	 */
+	protected $type;
 
 	/**
 	 * The value of the measurement.
@@ -78,11 +106,23 @@ abstract class Base_Measurement implements JsonSerializable {
 	 * Create a new measurement instance from a DTO.
 	 *
 	 * @param Measurement $measurement_dto The measurement DTO from the API.
+	 * @param string      $type            The measurement type identifier.
 	 */
-	public function __construct( Measurement $measurement_dto ) {
+	public function __construct( Measurement $measurement_dto, string $type = '' ) {
+		$this->type      = $type;
 		$this->value     = $measurement_dto->value;
-		$this->unit      = $measurement_dto->unit;
+		$this->unit      = self::normalize_unit( $measurement_dto->unit );
 		$this->timestamp = $this->parse_timestamp( $measurement_dto->timestamp );
+	}
+
+	/**
+	 * Normalise a raw API unit string to our simple internal key.
+	 *
+	 * @param string $unit The raw unit from the API.
+	 * @return string The normalised unit key.
+	 */
+	private static function normalize_unit( string $unit ): string {
+		return self::UNIT_ALIASES[ $unit ] ?? $unit;
 	}
 
 	/**
@@ -90,7 +130,9 @@ abstract class Base_Measurement implements JsonSerializable {
 	 *
 	 * @return string The measurement type (e.g., 'temperature', 'wind_speed').
 	 */
-	abstract public function get_type(): string;
+	public function get_type(): string {
+		return $this->type;
+	}
 
 	/**
 	 * Get the value.
@@ -136,7 +178,7 @@ abstract class Base_Measurement implements JsonSerializable {
 		}
 
 		return array(
-			'type'      => static::class,
+			'type'      => $this->get_type(),
 			'value'     => $this->value,
 			'unit'      => $this->unit,
 			'timestamp' => $utc_timestamp,

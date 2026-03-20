@@ -4,13 +4,13 @@
  * Component: Rainfall Measurements
  *
  * @var PinkCrab\Perique\Interfaces\Renderable $this The renderable instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rain_Rate|null $rain_rate Rain rate component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $daily Daily rainfall component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $event Event rainfall component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $hourly Hourly rainfall component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $weekly Weekly rainfall component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $monthly Monthly rainfall component instance
- * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Rainfall|null $yearly Yearly rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $rain_rate Rain rate component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $daily Daily rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $event Event rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $hourly Hourly rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $weekly Weekly rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $monthly Monthly rainfall component instance
+ * @var PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type|null $yearly Yearly rainfall component instance
  */
 
 ?>

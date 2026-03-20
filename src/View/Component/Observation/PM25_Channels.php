@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace PinkCrab\Ecowitt_Weather_Block\View\Component\Observation;
 
 use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\AQI;
-use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Gas;
+use PinkCrab\Ecowitt_Weather_Block\View\Component\Observation\Type\Measurement_Type;
 
 /**
  * The PM25 channels measurements component.
@@ -24,7 +23,7 @@ class PM25_Channels extends Component {
 	/**
 	 * Array of PM25 channel measurements.
 	 *
-	 * @var array<array{real_time_aqi: AQI|null, pm25: Gas|null, 24_hours_aqi: AQI|null, channel_name: string}>
+	 * @var array<array{real_time_aqi: Measurement_Type|null, pm25: Measurement_Type|null, 24_hours_aqi: Measurement_Type|null, channel_name: string}>
 	 */
 	public $channels = array();
 
@@ -43,15 +42,15 @@ class PM25_Channels extends Component {
 			);
 
 			if ( isset( $channel_data['real_time_aqi'] ) ) {
-				$channel['real_time_aqi'] = new AQI( $channel_data['real_time_aqi'], _x( 'Real Time AQI', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['real_time_aqi'] = Measurement_Type::for_type( $channel_data['real_time_aqi'], _x( 'Real Time AQI', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data['pm25'] ) ) {
-				$channel['pm25'] = new Gas( $channel_data['pm25'], _x( 'PM2.5', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['pm25'] = Measurement_Type::for_type( $channel_data['pm25'], _x( 'PM2.5', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			if ( isset( $channel_data['24_hours_aqi'] ) ) {
-				$channel['24_hours_aqi'] = new AQI( $channel_data['24_hours_aqi'], _x( '24h AQI', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
+				$channel['24_hours_aqi'] = Measurement_Type::for_type( $channel_data['24_hours_aqi'], _x( '24h AQI', 'pm25 channels measurement label', 'ecowitt-weather-block' ) );
 			}
 
 			$this->channels[] = $channel;

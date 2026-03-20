@@ -21,6 +21,9 @@
         "node": ">=18.0",
         "npm": ">=9.0"
     },
+    "dependencies": {
+        "recharts": "^2.15.0"
+    },
     "devDependencies": {
         "@csstools/postcss-sass": "^5.0.1",
         "@wordpress/browserslist-config": "^5.20.0",
